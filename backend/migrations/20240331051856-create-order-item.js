@@ -10,10 +10,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       amount: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: false
       },
       orderId:{
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Orders',
           key: 'id'
@@ -25,6 +28,7 @@ module.exports = {
       },
       fruitId:{
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Fruits',
           key: 'id'
