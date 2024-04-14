@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   OrderItem.init({
-    amount: DataTypes.INTEGER
+    amount: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'OrderItem',

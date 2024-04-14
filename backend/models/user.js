@@ -12,23 +12,40 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.Order);
-      User.belongsToMany(models.Fruit,{through:'shopping_carts'})
+      User.belongsToMany(models.Fruit,{through: models.ShoppingCart})
     }
   }
   User.init({
-    username: DataTypes.STRING,
-    firstName:          DataTypes.STRING,
-      lastName:           DataTypes.STRING,
-      profileImage:       DataTypes.STRING,
-      email: {
-        type:             DataTypes.STRING,
-        unique:           true,
-        allowNull:        false
-      },
-      
-      phoneNo:            DataTypes.STRING,
-      password:           DataTypes.STRING,
-      role:           DataTypes.STRING,
+
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    profileImage: {
+      type: DataTypes.STRING,
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false
+    },
+    phoneNo: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
+    
   }, {
     sequelize,
     modelName: 'User',

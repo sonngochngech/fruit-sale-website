@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   FruitImage.init({
-    link: DataTypes.STRING
+    link:{
+      type: DataTypes.STRING,
+      allowNull: false
+    } 
   }, {
     sequelize,
     modelName: 'FruitImage',

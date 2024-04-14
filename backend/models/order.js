@@ -16,16 +16,40 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Order.init({
-    title:              DataTypes.STRING,
-    phoneNo:            DataTypes.STRING,
-    email:              DataTypes.STRING,
-    address:            DataTypes.STRING,
-    status:{
+    code: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    
+    phoneNo: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    status: {
       type: DataTypes.STRING,
       defaultValue: "Request"
     },
-    productCost:        DataTypes.INTEGER,
-    shippingCost:       DataTypes.INTEGER,
+    productCost: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    shippingCost: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
     
   }, {
     sequelize,
