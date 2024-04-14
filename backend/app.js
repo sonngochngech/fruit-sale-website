@@ -4,20 +4,17 @@ const app=express()
 app.use(express.json())
 app.use(cors())
 
-const http=require('http')
-const socketIo=require('socket.io')
-const server=http.createServer(app)
-const io = socketIo(server);
+// const http=require('http')
+// const socketIo=require('socket.io')
+// const server=http.createServer(app)
+// const io = socketIo(server);
 
-io.on('connection',(socket)=>{
-  console.log('A client connected');
-})
+// io.on('connection',(socket)=>{
+//   console.log('A client connected');
+// })
 
 const router=require("./routes");
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-})
-global.io=io;
+// global.io=io;
 
 
 app.use("",router);
@@ -42,4 +39,4 @@ sequelize.authenticate().then(() => {
     console.error('Unable to connect to the database: ', error);
  });
 
- module.exports={app,server,io}
+ module.exports={app}
