@@ -11,7 +11,7 @@
 
 .product-table th {
   background-color: #f2f2f2;
-  text-align: left;
+  text-align: center;
   font-weight: bold;
 }
 
@@ -20,8 +20,8 @@
 }
 
 .product-table img {
-  max-width: 50px;
-  max-height: 50px;
+  max-width: 30px;
+  max-height: 30px;
 }
 
 .product-table .action-buttons button {
@@ -58,4 +58,12 @@
 .product-table .name-location-column .export-location {
   font-style: italic;
   font-weight: 100;
+}
+
+.product-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.product-table tr:hover {
+  background-color: #ddd;
 }

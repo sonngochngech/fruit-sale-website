@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ProductList from '../product/ProductList';
+import SearchProduct from '../product/SearchProduct';
 // import CreateNewProduct from '../components/CreateNewProduct';
 // import EditProductForm from '../components/EditProductForm';
 
@@ -35,6 +36,8 @@ const ProductsPage = () => {
     // Add more sample products here if needed
   ]);
 
+  const [searchedProduct, setSearchedProduct] = useState([]); // State to store search results
+
   const [isEditing, setIsEditing] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
 
@@ -42,7 +45,10 @@ const ProductsPage = () => {
   const handleCreateProduct = (newProduct) => {
     setProducts([...products, newProduct]);
   };
-
+    // Function to handle search
+    const handleSearchProduct = (searchedProduct) => {
+      setSearchedProduct(searchedProduct);
+    };
 
   const handleViewDetalProduct = (productId) => {
     // update
@@ -62,9 +68,10 @@ const ProductsPage = () => {
   return (
     <div>
       <h2>Products Page</h2>
+      <SearchProduct products={products} onSearch={handleSearchProduct} />
       {/* <CreateNewProduct onCreate={handleCreateProduct} /> */}
       <ProductList 
-        products={products} 
+        products={searchedProduct.length == 0 ? products : searchedProduct} 
         onViewDetail={handleViewDetalProduct}
         onDelete={handleDeleteProduct} 
         onEdit={handleEditProduct} 

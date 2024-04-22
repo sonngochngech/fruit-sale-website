@@ -6,12 +6,12 @@ const ProductList = ({ products, onViewDetail, onDelete, onEdit }) => {
     <table className="product-table">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Name / Export Location</th>
-          <th>Price/Unit</th>
-          <th>Unit</th>
-          <th>Quantity</th>
-          <th>Action</th>
+          <th style={{backgroundColor:'#212529', color:'white'}}>ID</th>
+          <th style={{backgroundColor:'#212529', color:'white'}}>Name / Export Location</th>
+          <th style={{backgroundColor:'#212529', color:'white'}}>Price/Unit</th>
+          <th style={{backgroundColor:'#212529', color:'white'}}>Unit</th>
+          <th style={{backgroundColor:'#212529', color:'white'}}>Quantity</th>
+          <th style={{backgroundColor:'#212529', color:'white'}}>Action</th>
         </tr>
       </thead>
       <tbody>
