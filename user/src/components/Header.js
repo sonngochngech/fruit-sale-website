@@ -34,29 +34,30 @@ const Header = () => {
 
   return (
     <>
-      <header className="header-top-strip py-3">
-        <div className="container-xxl">
-          <div className="row">
-            <div className="col-6">
-              <p className="text-white mb-0">Banner-Title</p>
+    <header className="header-top-strip py-3">
+    <div className="container-xxl">
+        <div className="row">
+            <div className="col-12 position-relative"> {/* Add position-relative class */}
+            <img src="./banner.jpg" alt="Banner" />  {/* Sử dụng inline style để áp dụng kiểu CSS */}
+                <p className="text-white mb-0"></p>
             </div>
-            <div className="col-6">
-              <p className="text-end text-white mb-0">
-                Hotline:
-                <a className="text-white" href="tel:+91 8264954234">
-                  00000000000
-                </a>
-              </p>
+            <div className="col-12">
+                <p className="text-end text-white mb-0">
+                    Hotline:
+                    <a className="text-white" href="tel:+91 8264954234">
+                    +91 8264954234
+                    </a>
+                </p>
             </div>
-          </div>
         </div>
-      </header>
+    </div>
+</header>
       <header className="header-upper py-3">
         <div className="container-xxl">
           <div className="row align-items-center">
             <div className="col-2">
               <h2>
-                <Link className="text-white">Fruit Store</Link>
+                <Link className="text-white">Fruit Shop</Link>
               </h2>
             </div>
             <div className="col-4">
@@ -167,12 +168,12 @@ const Header = () => {
                       aria-labelledby="dropdownMenuButton1"
                     >
                       <li>
-                        <Link className="dropdown-item text-white" to="">
-                          Product category 1
+                        <Link className="dropdown-item text-white" to="/productCategory1">
+                        Product category 1
                         </Link>
                       </li>
                       <li>
-                        <Link className="dropdown-item text-white" to="">
+                        <Link className="dropdown-item text-white" to="/productCategory2">
                           Product category 2
                         </Link>
                       </li>
@@ -187,7 +188,7 @@ const Header = () => {
                 <div className="menu-links">
                   <div className="d-flex align-items-center gap-30">
                     <NavLink to="/">Home</NavLink>
-                    <NavLink to="#">Our Store</NavLink>
+                    <NavLink to="#">About</NavLink>
                     <NavLink to="#">Contact</NavLink>
                     <NavLink to="#">Event</NavLink>
                   </div>
