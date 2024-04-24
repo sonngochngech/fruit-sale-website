@@ -8,7 +8,7 @@ export const createProduct = (product) => ({
 });
 
 
-export const deleteProduct = (productId) => ({
+export const deleteProduct = (product) => ({
   type: DELETE_PRODUCT,
-  payload: productId,
+  payload: product,
 });

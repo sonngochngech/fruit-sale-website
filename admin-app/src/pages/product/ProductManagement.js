@@ -1,7 +1,7 @@
 import React, { useState } from "react"; // Import the useState hook
 import ProductCard from "./ProductCard";
 import { useDispatch, useSelector } from 'react-redux';
-import { createProduct } from '../../redux/actions'; // Import the createProduct action creator
+import { createProduct, deleteProduct } from '../../redux/actions'; // Import the createProduct action creator
 
 import CreateProductForm from "./CreateProductForm";
 
@@ -23,9 +23,8 @@ const ProductManagement = () => {
     setShowCreateProductForm(false); // Close the create product form after creating the product
   };
 
-  const handleViewDetail = (productId) => {
+  const handleViewDetail = (productData) => {
     // Handle view detail action
-    console.log(`Viewing detail of product with ID ${productId}`);
   };
 
   const handleEdit = (productId) => {
@@ -35,7 +34,7 @@ const ProductManagement = () => {
 
   const handleDelete = (productId) => {
     // Handle delete action
-    console.log(`Deleting product with ID ${productId}`);
+    dispatch(deleteProduct(productId));
   };
 
   return (
