@@ -1,0 +1,10 @@
+/* AdminLayout.css */
+.admin-layout {
+  padding: 20px; /* Add padding to the main content */
+}
+
+/* Sidebar.css */
+.sidebar {
+  /* ... other styles */
+  flex-grow: 1;
+}

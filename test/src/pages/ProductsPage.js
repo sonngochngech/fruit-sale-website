@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ProductList from '../product/ProductList';
 import SearchProduct from '../product/SearchProduct';
-// import CreateNewProduct from '../components/CreateNewProduct';
+import CreateNewProduct from '../product/CreateNewProduct';
 // import EditProductForm from '../components/EditProductForm';
 
 const ProductsPage = () => {
@@ -38,21 +38,31 @@ const ProductsPage = () => {
 
   const [searchedProduct, setSearchedProduct] = useState([]); // State to store search results
 
+  const [isCreating, setIsCreating] = useState(false); // State to control create new product form
+
   const [isEditing, setIsEditing] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
 
   // Function to handle creation of a new product
   const handleCreateProduct = (newProduct) => {
     setProducts([...products, newProduct]);
+    setIsCreating(false); // Close create new product form after creation
   };
-    // Function to handle search
-    const handleSearchProduct = (searchedProduct) => {
-      setSearchedProduct(searchedProduct);
-    };
+
+  // Function to handle cancel create new product
+  const handleCancelCreate = () => {
+    setIsCreating(false);
+  };
+
+  // Function to handle search
+  const handleSearchProduct = (searchedProduct) => {
+    setSearchedProduct(searchedProduct);
+  };
 
   const handleViewDetalProduct = (productId) => {
     // update
   }
+
   // Function to handle deletion of a product
   const handleDeleteProduct = (productId) => {
     const updatedProducts = products.filter(product => product.id !== productId);
@@ -69,7 +79,12 @@ const ProductsPage = () => {
     <div>
       <h2>Products Page</h2>
       <SearchProduct products={products} onSearch={handleSearchProduct} />
-      {/* <CreateNewProduct onCreate={handleCreateProduct} /> */}
+      {!isCreating && (
+        <button onClick={() => setIsCreating(true)}>Create New Product</button>
+      )}
+      {isCreating && (
+        <CreateNewProduct products={products} onCreate={handleCreateProduct} onCancel={handleCancelCreate} />
+      )}
       <ProductList 
         products={searchedProduct.length == 0 ? products : searchedProduct} 
         onViewDetail={handleViewDetalProduct}
