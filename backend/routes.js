@@ -4,6 +4,7 @@ const ImageMiddleware=require("./middlewares/imageMiddleware")
 const FruitController=require("./controllers/fruitController")
 const OrderController=require("./controllers/orderController")
 const CategoryController=require("./controllers/categoryController")
+const cartController=require("./controllers/shoppingCartController")
 const AuthValidator=require("./validators/authValidator")
 const FruitValidator=require("./validators/fruitValidator")
 const OrderValidator=require("./validators/orderValidator")
@@ -53,7 +54,7 @@ const router = express.Router();
 
     router.post("/api/categories/create",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.createCategory);
 
-    router.delete("/api/categories/delete",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.deleteCategory);
+    router.delete("/api/categories/:categoryId/delete",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.deleteCategory);
 
 
     //order API
@@ -72,6 +73,15 @@ const router = express.Router();
     router.put("/api/orders/:orderId/changeStatus",AuthMiddleware.isAuthenticated,AuthMiddleware.isOrderOwner,OrderController.updateStatusOrder);
 
     router.delete("/api/order/:orderId/delete",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,OrderController.deleteOrder);
+
+
+    //cart API 
+
+    router.post("/api/carts/add",AuthMiddleware.isAuthenticated,cartController.addFruitToCart);
+    router.delete("/api/carts/remove",AuthMiddleware.isAuthenticated,cartController.removeFruitInCart);
+    router.get("/api/carts",AuthMiddleware.isAuthenticated,cartController.getFruitsInCart);
+    router.put("/api/carts/update",AuthMiddleware.isAuthenticated,cartController.updateCart);
+
 
     
 

@@ -9,15 +9,26 @@ module.exports = {
         allowNull: false
       },
       userId:{
-        type:Sequelize.INTEGER,
+        type: Sequelize.INTEGER,
+        primaryKey: true,
         allowNull: false,
-        primaryKey: true
+        references: {
+          model: 'Users',
+          key: 'id'
+        },  
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       fruitId:{
-        type:Sequelize.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true
-
+        primaryKey: true,
+        references: {
+          model: 'Fruits',
+          key: 'id'
+        },  
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
