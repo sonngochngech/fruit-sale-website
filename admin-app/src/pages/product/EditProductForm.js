@@ -116,7 +116,7 @@ const EditProductForm = ({ onClose, productToEdit }) => {
             )}
           </div>
 
-          <div className="form-group row">
+            <div className="form-group row">
   <label htmlFor="pricePerUnit" className="col-sm-3 col-form-label">
     Price Per Unit
   </label>

@@ -1,4 +1,4 @@
-import { CREATE_PRODUCT, DELETE_PRODUCT } from "./actions";
+import { CREATE_PRODUCT, DELETE_PRODUCT, SET_EDIT_PRODUCT } from "./actions";
 
 const initialState = {
   products: [], // Array to store product objects
@@ -22,9 +22,15 @@ const reducer = (state = initialState, action) => {
         temp, // Update the temp value in state
         products: [...state.products, newProduct],
       };
+    case SET_EDIT_PRODUCT:
+      console.log(action.payload)
+      return {
+        ...state,
+        editProduct: action.payload,
+      };
     case DELETE_PRODUCT:
       const productId = action.payload; // Lấy productId từ action
-      console.log(state)
+      console.log(state);
       return {
         ...state,
         products: state.products.filter((product) => product.id !== productId),

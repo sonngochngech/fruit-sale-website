@@ -1,15 +1,16 @@
 import React, { useState } from "react"; // Import the useState hook
 import ProductCard from "./ProductCard";
 import { useDispatch, useSelector } from 'react-redux';
-import { createProduct, deleteProduct } from '../../redux/actions'; // Import the createProduct action creator
-
+import { createProduct, deleteProduct, setEditProduct } from '../../redux/actions'; // Import the createProduct action creator
+import EditProductForm from "./EditProductForm";
 import CreateProductForm from "./CreateProductForm";
 
 const ProductManagement = () => {
-  const [showCreateProductForm, setShowCreateProductForm] = useState(false);
-  const dispatch = useDispatch();
   const products = useSelector((state) => state.products); // Get products from store state
-
+  const [showCreateProductForm, setShowCreateProductForm] = useState(false);
+  const [showEditProductForm, setShowEditProductForm] = useState(false); // Define state for showing the edit product form
+  const [editProduct, setEditProductLocal] = useState(null); // Define state for storing the product to edit
+  const dispatch = useDispatch();
   const handleCreateProductClick = () => {
     setShowCreateProductForm(true);
   };
@@ -28,8 +29,18 @@ const ProductManagement = () => {
   };
 
   const handleEdit = (productId) => {
-    // Handle edit action
-    console.log(`Editing product with ID ${productId}`);
+    // Tìm sản phẩm cần chỉnh sửa từ danh sách sản phẩm
+    const productToEdit = products.find((product) => product.id === productId);
+    // Dispatch action với thông tin sản phẩm cần chỉnh sửa
+    dispatch(setEditProduct(productToEdit));
+    console.log(productToEdit)
+    // Hiển thị form chỉnh sửa sản phẩm
+    setShowEditProductForm(true);
+  };
+
+  const handleCloseEditProductForm = () => {
+    setShowEditProductForm(false);
+    setEditProductLocal(null); // Reset the edit product state
   };
 
   const handleDelete = (productId) => {
@@ -44,6 +55,14 @@ const ProductManagement = () => {
       {showCreateProductForm && (
         <div className="product-create-form">
           <CreateProductForm onCreate={handleCreateProduct} onClose={handleCloseCreateProductForm} />
+        </div>
+      )}
+      {showEditProductForm && (
+        <div className="product-edit-form">
+          <EditProductForm
+            productToEdit={editProduct} // Pass the product to edit to the EditProductForm component
+            onClose={handleCloseEditProductForm}
+          />
         </div>
       )}
       <ProductCard
