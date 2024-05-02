@@ -14,27 +14,27 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
         </tr>
       </thead>
       <tbody>
-        {products.map((product) => (
+        { products && products.map((product) => (
           <tr key={product.id}>
             <td>{product.id}</td>
             <td className="name-location-column">
               <div className="d-flex align-items-center">
                 <img
                   src={product.image}
-                  alt={product.name}
+                  alt={product.title}
                   className="product-image"
                   style={{ width: "30px", height: "30px", marginRight: "10px" }}
                 />
                 <div className="product-info">
-                  <div>{product.name}</div>
+                  <div>{product.title}</div>
                   <div>{product.origin}</div>
                 </div>
               </div>
             </td>
 
-            <td>{product.pricePerUnit}</td>
-            <td>{product.unit}</td>
-            <td>{product.quantity}</td>
+            <td>{product.price}</td>
+            {/* <td>{product.unit}</td> */}
+            {/* <td>{product.quantity}</td> */}
             <td>
               <button
                 className="btn btn-primary"

@@ -54,7 +54,7 @@ const EditProductForm = ({ onClose, productToEdit }) => {
                 className="form-control"
                 id="productName"
                 name="name"
-                value={editedProduct.name}
+                value={editedProduct.title}
                 onChange={handleInputChange}
                 placeholder="Enter product name"
                 required

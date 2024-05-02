@@ -1,16 +1,26 @@
 import React, { useState } from "react"; // Import the useState hook
 import ProductCard from "./ProductCard";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { createProduct, deleteProduct, setEditProduct } from '../../redux/actions'; // Import the createProduct action creator
 import EditProductForm from "./EditProductForm";
 import CreateProductForm from "./CreateProductForm";
+import { fetchProducts } from "../../features/products/productSlice";
+import { store } from "../../app/store";
 
 const ProductManagement = () => {
-  const products = useSelector((state) => state.products); // Get products from store state
+  const products = useSelector((state) => state.products); 
+  const dispatch = useDispatch();
+  console.log('this is: ');
+  console.log(products);
   const [showCreateProductForm, setShowCreateProductForm] = useState(false);
   const [showEditProductForm, setShowEditProductForm] = useState(false); // Define state for showing the edit product form
   const [editProduct, setEditProductLocal] = useState(null); // Define state for storing the product to edit
-  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
   const handleCreateProductClick = () => {
     setShowCreateProductForm(true);
   };
