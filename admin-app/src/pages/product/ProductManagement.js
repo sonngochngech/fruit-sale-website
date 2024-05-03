@@ -1,21 +1,17 @@
-import React, { useState } from "react"; // Import the useState hook
+import React, { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { createProduct, deleteProduct, setEditProduct } from '../../redux/actions'; // Import the createProduct action creator
 import EditProductForm from "./EditProductForm";
 import CreateProductForm from "./CreateProductForm";
-import { fetchProducts } from "../../features/products/productSlice";
-import { store } from "../../app/store";
+import { fetchProducts, addNewProduct, updateProduct, deleteProduct } from "../../features/products/productSlice";
 
 const ProductManagement = () => {
-  const products = useSelector((state) => state.products); 
   const dispatch = useDispatch();
-  console.log('this is: ');
-  console.log(products);
+  const products = useSelector((state) => state.products.products); 
+  console.log(products)
   const [showCreateProductForm, setShowCreateProductForm] = useState(false);
-  const [showEditProductForm, setShowEditProductForm] = useState(false); // Define state for showing the edit product form
-  const [editProduct, setEditProductLocal] = useState(null); // Define state for storing the product to edit
+  const [showEditProductForm, setShowEditProductForm] = useState(false);
+  const [editProduct, setEditProductLocal] = useState(null);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -30,8 +26,8 @@ const ProductManagement = () => {
   };
 
   const handleCreateProduct = (productData) => {
-    dispatch(createProduct(productData)); // Dispatch the createProduct action with productData
-    setShowCreateProductForm(false); // Close the create product form after creating the product
+    dispatch(addNewProduct(productData));
+    setShowCreateProductForm(false);
   };
 
   const handleViewDetail = (productData) => {
@@ -39,22 +35,18 @@ const ProductManagement = () => {
   };
 
   const handleEdit = (productId) => {
-    // Tìm sản phẩm cần chỉnh sửa từ danh sách sản phẩm
     const productToEdit = products.find((product) => product.id === productId);
-    // Dispatch action với thông tin sản phẩm cần chỉnh sửa
-    dispatch(setEditProduct(productToEdit));
-    console.log(productToEdit)
-    // Hiển thị form chỉnh sửa sản phẩm
+    dispatch(updateProduct(productToEdit));
+    setEditProductLocal(productToEdit);
     setShowEditProductForm(true);
   };
 
   const handleCloseEditProductForm = () => {
     setShowEditProductForm(false);
-    setEditProductLocal(null); // Reset the edit product state
+    setEditProductLocal(null);
   };
 
   const handleDelete = (productId) => {
-    // Handle delete action
     dispatch(deleteProduct(productId));
   };
 
@@ -70,7 +62,7 @@ const ProductManagement = () => {
       {showEditProductForm && (
         <div className="product-edit-form">
           <EditProductForm
-            productToEdit={editProduct} // Pass the product to edit to the EditProductForm component
+            productToEdit={editProduct}
             onClose={handleCloseEditProductForm}
           />
         </div>

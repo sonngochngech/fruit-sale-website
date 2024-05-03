@@ -56,16 +56,21 @@ export const updateProduct = createAsyncThunk(
 // Khởi tạo trạng thái ban đầu của slice
 const initialState = {
   products: [],
-  isLoading: false,
-  isError: false,
-  errorMessage: ''
+  isError:false,
+  isSuccess:false,
+  isLoading:false,
+  message:'',
 };
 
 // Tạo slice Redux cho products
 export const productSlice = createSlice({
   name: 'products',
-  initialState,
-  reducers: {},
+  initialState:initialState,
+  reducers: {
+    setProducts: (state, action) => {
+      state.products = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -76,7 +81,7 @@ export const productSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.products = action.payload;
-        console(state.products)
+        // console(state.products)
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.isLoading = false;

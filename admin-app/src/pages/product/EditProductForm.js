@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setEditProduct } from "../../redux/actions"; // Import the editProduct action creator
+import { updateProduct } from "../../features/products/productSlice"
 import Modal from "react-bootstrap/Modal";
 
 const EditProductForm = ({ onClose, productToEdit }) => {
@@ -32,7 +32,7 @@ const EditProductForm = ({ onClose, productToEdit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(setEditProduct(editedProduct)); // Dispatch the editProduct action
+    dispatch(updateProduct(editedProduct)); // Dispatch the editProduct action
     onClose(); // Close the modal after submitting the form
   };
 
