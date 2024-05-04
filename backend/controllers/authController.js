@@ -8,6 +8,7 @@ const {config}=require("../config/mailConfig");
 const {trycatchWrapper}=require("../middlewares/tryCatchWrapper")
 const {  validationResult } = require('express-validator');
 const { sendMail } = require('../services/mailService');
+const{ConnectedIoEvent}=require('../services/IoService');
 require('dotenv').config()
 
 
@@ -87,6 +88,10 @@ const login=trycatchWrapper(async (req,res)=>{
                 error: 'Incorrect login information.'
             })  
         }
+        // ConnectedIoEvent(user.id);
+
+        
+
         res.status(200).send({
             user: user,
             jwt: generatejwt(user.id)

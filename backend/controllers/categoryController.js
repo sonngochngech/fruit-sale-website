@@ -1,5 +1,6 @@
 const { trycatchWrapper } = require("../middlewares/tryCatchWrapper");
 const{Category}=require("../models");
+const {  validationResult } = require('express-validator');
 
 const createCategory=trycatchWrapper(async (req,res)=>{
 

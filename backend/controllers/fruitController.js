@@ -6,7 +6,7 @@ const path = require('path');
 const { Op } = require('sequelize');
 const {trycatchWrapper}=require("../middlewares/tryCatchWrapper")
 const {  validationResult } = require('express-validator');
-
+const IoService =require('../services/IoService');
 const getAllFruits=trycatchWrapper(async (req,res)=>{
     const fruits=await Fruit.findAll({
         where:{
@@ -19,6 +19,8 @@ const getAllFruits=trycatchWrapper(async (req,res)=>{
         ],
         
     });
+    await IoService.sendNotification([1],"hello you");
+    
     res.status(200).send({
         fruits: fruits
     })
