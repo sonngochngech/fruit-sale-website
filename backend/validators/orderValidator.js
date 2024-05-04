@@ -1,15 +1,7 @@
 const { body } = require("express-validator");
 
 const createOrderValidator = [
-    body('code').notEmpty().withMessage('Order code is required.')
-                 .isString().withMessage('Order code must be a string.')
-                 .custom(async (value, { req }) => {
-                     const existingOrder = await Order.findOne({ where: { code: value } });
-                     if (existingOrder) {
-                         throw new Error('Order code already exists.');
-                     }
-                     return true;
-                 }),
+    body('fruitIds').notEmpty().withMessage('The fruits are required'),
     body('title').notEmpty().withMessage('Title is required.'),
     body('phoneNo').notEmpty().withMessage('Phone number is required.'),
     body('email').notEmpty().withMessage('Email is required.').isEmail().withMessage('Invalid email format.'),
