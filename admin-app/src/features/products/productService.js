@@ -15,14 +15,12 @@ const showList = async () => {
 const addProduct = async (newProductData) => {
   try {
     const response = await axios.post(`${base_url}products`, newProductData);
-    if (response.data.success) {
-      return response.data.product; 
-    } else {
-      throw new Error(response.data.message);       }
+    return response.data;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error.message); 
   }
-}
+};
+
 
 // Xóa sản phẩm
 const removeProduct = async (productId) => {
@@ -38,26 +36,20 @@ const removeProduct = async (productId) => {
     }
   }
   
-  // Chỉnh sửa thông tin sản phẩm
-const editProduct = async (productId, updatedProductData) => {
+  const updateProduct = async (productId, updatedProductData) => {
     try {
-      const response = await axios.put(`${base_url}products/${productId}`, updatedProductData);
-      if (response.data.success) {
-        return response.data.product; // Trả về thông tin sản phẩm đã được chỉnh sửa
-      } else {
-        throw new Error(response.data.message); // Xử lý lỗi từ API
-      }
+      const response = await axios.patch(`${base_url}products/${productId}`, updatedProductData);
+      return response.data; // Trả về thông tin sản phẩm đã được chỉnh sửa
     } catch (error) {
       throw new Error(error.message); // Xử lý các lỗi khác (ví dụ: lỗi mạng, lỗi không xác định)
     }
-  }
-  
+  };
 
 const productService = {
     showList,
     addProduct,
     removeProduct,
-    editProduct
+    updateProduct
 };
 
 export default productService;

@@ -7,6 +7,7 @@ export const fetchProducts = createAsyncThunk(
   async () => {
     try {
       const products = await productService.showList();
+      console.log(products);
       return products;
     } catch (error) {
       throw new Error(error.message);
@@ -20,6 +21,7 @@ export const addNewProduct = createAsyncThunk(
   async (newProductData) => {
     try {
       const newProduct = await productService.addProduct(newProductData);
+      console.log(newProduct);
       return newProduct;
     } catch (error) {
       throw new Error(error.message);
@@ -45,7 +47,7 @@ export const updateProduct = createAsyncThunk(
   'products/updateProduct',
   async ({ productId, updatedProductData }) => {
     try {
-      const updatedProduct = await productService.editProduct(productId, updatedProductData);
+      const updatedProduct = await productService.updateProduct(productId, updatedProductData);
       return updatedProduct;
     } catch (error) {
       throw new Error(error.message);

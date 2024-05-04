@@ -7,9 +7,11 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
         <tr>
           <th>ID</th>
           <th>Name / Export Location</th>
+          <th>Category</th>
           <th>Price/Unit</th>
-          <th>Unit</th>
-          <th>Quantity</th>
+          <th>Rate</th>
+          {/* <th>Unit</th>
+          <th>Quantity</th> */}
           <th>Action</th>
         </tr>
       </thead>
@@ -31,8 +33,10 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
                 </div>
               </div>
             </td>
+            <td>{product.category}</td>
 
             <td>{product.price}</td>
+            <td>{product.price}/5.0</td> {/*need fix*/}
             {/* <td>{product.unit}</td> */}
             {/* <td>{product.quantity}</td> */}
             <td>
