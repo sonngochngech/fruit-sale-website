@@ -1,6 +1,6 @@
 const { where } = require("sequelize");
 const { trycatchWrapper } = require("../middlewares/tryCatchWrapper");
-const {Fruit,ShoppingCart}=require("../models");
+const {Fruit,ShoppingCart,FruitImage}=require("../models");
 
 
 const addFruitToCart=trycatchWrapper(async(req,res)=>{
@@ -40,7 +40,7 @@ const addFruitToCart=trycatchWrapper(async(req,res)=>{
     })
 })
 
-const updateCart=async(req,res)=>{
+const updateCart=trycatchWrapper(async(req,res)=>{
     const {fruitId,amount}=req.body;
     let  cart=await ShoppingCart.findOne({
         where:{
@@ -53,13 +53,13 @@ const updateCart=async(req,res)=>{
             error:"Cart is not found"
         })
     }
-    cart.amount+=amount;
+    cart.amount=parseInt(amount);
     await cart.save();
     res.status(200).send({
         cart:cart
     })
     
-}
+})
 
 const getFruitsInCart=trycatchWrapper(
     async(req,res)=>{
@@ -69,7 +69,13 @@ const getFruitsInCart=trycatchWrapper(
         },
         order: [["createdAt", "DESC"]],
         include:[
-            {model: Fruit},
+            {model: Fruit,
+                include: [
+                    {
+                        model: FruitImage // Include FruitImage model
+                    }
+                ]
+            },
             
         ],
     }
