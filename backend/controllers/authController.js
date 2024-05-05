@@ -44,10 +44,10 @@ const sendToken=trycatchWrapper(async (req,res)=>{
         const  mailOptions = {
             from: process.env.MAILER,
             to: email,
-            subject: "Email verification code to register",
+            subject: "Email verification code",
             text:'Welcome to fruit market !\n\n' +
                 'Your email verification code is: ' + token + '\n\n' +
-                'Use this code to complete the registration process.\n\n' +
+                'Use this code to complete the  process.\n\n' +
                 'Enjoy using your account!\n'
         }
 

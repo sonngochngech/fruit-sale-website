@@ -122,9 +122,12 @@ const createOrder=async (req,res)=>{
             }
         });
         const admins = users ? users.map(admin => admin.id) : [];
-        console.log("hello");
-                console.log(admins);
-        await ioService.sendNotification([admins],`A order ${order.code} is created`)
+        try{
+            await ioService.sendNotification([admins],`A order ${order.code} is created`)
+        }catch(error){
+            console.log(error);
+        }
+      
         await notiService.createNoti(`A order ${order.code} is created`,'gsgdgsdgsdgdsgdsgdfgdfgdfgdfgdfgdfgfdgdfgdfgdgdgfd',admins);
     
         return res.status(200).send({
@@ -205,10 +208,20 @@ const updateStatusOrder=trycatchWrapper(async (req,res)=>{
         });
         const admins = users ? users.map(admin => admin.id) : [];
          if(user.role !=="Admin"){
-            await ioService.sendNotification([admins],`A order ${order.code} is updated`)
+            try{
+                await ioService.sendNotification([admins],`A order ${order.code} is updated`)
+            }catch(error){
+                console.log(error);
+            }
+         
             await notiService.createNoti(`A order ${order.code} is updated`,'sfgsfsdgsdg ssdgf sdfsdf dsfsdf sdf',[admins])
          }else{
-            await ioService.sendNotification([...admins,order.UserId],`A order ${order.code} is updated`)
+            try{
+                await ioService.sendNotification([...admins,order.UserId],`A order ${order.code} is updated`)
+            }catch(error){
+                console.log(error);
+            }
+            
             await notiService.createNoti(`A order ${order.code} is updated`,'sfgsfsdgsdg ssdgf sdfsdf dsfsdf sdf',[...admins,order.UserId])
          }
 

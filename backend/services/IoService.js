@@ -23,15 +23,9 @@ async function EmitEvent(userIds,event,message){
         }
     } 
 }
-// async function orderNofication(){
-//     const admins=await User.findAll({
-//         where:{
-//             role:"Admin"
-//         }
-//     })?.map(admin=>admin.id);
-//     await EmitEvent(admins,'order',message);
 
-// }
+
+
 async function sendNotification(userIds,message){
     await EmitEvent(userIds,'new notification',message);
 }
