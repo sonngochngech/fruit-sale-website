@@ -45,7 +45,7 @@ const Login = () => {
 
   return (
     <>
-      <Meta title={'Login'} />
+      {/* <Meta title={'Login'} /> */}
       <BreadCrumb title="Login" />
 
       <Container class1="login-wrapper py-5 home-wrapper-2">

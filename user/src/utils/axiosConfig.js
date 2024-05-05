@@ -11,3 +11,5 @@ export const config = {
     Accept: "application/json",
   },
 };
+
+export const base_domain="http://localhost:8081/"
