@@ -21,8 +21,6 @@ function App() {
           <Route path="login" element={<OpenRoutes><Login /></OpenRoutes>}></Route>
           <Route path="forgot-password" element={<Forgotpassword />} />
           <Route path="reset-password" element={<Resetpassword />} />
-          <Route path="productCategory1" element={<ProductCategory1 />} />
-         
         </Route>
       </Routes>
     </BrowserRouter>

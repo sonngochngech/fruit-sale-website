@@ -7,28 +7,43 @@ import Container from "../components/Container";
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import CustomInput from "../components/CustomInput";
+import TimeCounter from "../components/TimeCounter";
 import { base_url } from "../utils/axiosConfig";
 import { toast } from 'react-toastify';
 import {  useNavigate } from 'react-router-dom';
 const Forgotpassword = () => {
   const [email, setEmail] = useState("");
   const [token,setToken]=useState("");
+  const [counter,setCounter]=useState(false);
   const navigate = useNavigate();
 
   const sendVerifyCode= async(email)=>{
-    try {
-      const tokenData={
-         email: email,
-         type:"PASSWORD"
+    setCounter((prevCounter) => !prevCounter);
+
+     try {
+      const tokenData = {
+        email: email,
+        type: "PASSWORD"
+      }; 
+      const response =await  axios.post(`${base_url}auth/requestToken`, tokenData);     
+      if (response.data) {
+        console.log(response);
+      } else {
+        console.log('Request timed out');
       }
-      const response = await axios.post(`${base_url}auth/requestToken`, tokenData);
-      console.log(response);
-    }catch(error){
-        toast.error('fail sending email');
-      
+    } catch (error) {
+      console.error(error);
     }
-  
+   
+
+  setTimeout(() => {
+    setCounter((prevCounter) => !prevCounter);
+  }, 100000);
+
   }
+  
+
+  
 
   const submit = async (e) => {
     try {
@@ -49,7 +64,7 @@ const Forgotpassword = () => {
   };
   return (
     <>
-      <Meta title={"Forgot Password"} />
+      {/* <Meta title={"Forgot Password"} /> */}
       <BreadCrumb title="Forgot Password" />
       <Container class1="login-wrapper py-5 home-wrapper-2">
         <div className="row">
@@ -62,7 +77,7 @@ const Forgotpassword = () => {
               </p>
               <form action="" className="d-flex flex-column gap-15">
                 <InputGroup>
-                    <div style={{width: "75%"}} > 
+                    <div style={{width: "70%"}} > 
                         
                         <CustomInput
                             type="text"
@@ -72,7 +87,15 @@ const Forgotpassword = () => {
                             onChange={(e)=>setEmail(e.target.value)}
                             />
                     </div>
-                    <Button variant="light"  style={{width: "25%"}}  onClick={()=>sendVerifyCode(email)} >Send code</Button>
+                    <div style={{width:"5%"}}>
+
+                    </div>
+                    <div style={{width: "25%"}}>
+                    <Button variant="light"    onClick={()=>sendVerifyCode(email)} disabled={counter}>Send code</Button>
+                    { counter && <TimeCounter></TimeCounter>}
+
+                    </div>
+                    
                 </InputGroup>
                    <input
                             type="text"

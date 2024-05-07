@@ -4,9 +4,12 @@ const ImageMiddleware=require("./middlewares/imageMiddleware")
 const FruitController=require("./controllers/fruitController")
 const OrderController=require("./controllers/orderController")
 const CategoryController=require("./controllers/categoryController")
+const cartController=require("./controllers/shoppingCartController")
+const notiController=require("./controllers/notificationController")
 const AuthValidator=require("./validators/authValidator")
 const FruitValidator=require("./validators/fruitValidator")
 const OrderValidator=require("./validators/orderValidator")
+
 const express = require("express");
 const router = express.Router();
 
@@ -49,11 +52,11 @@ const router = express.Router();
 
 
     //categoryAPI 
-    router.get("/api/categories",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.getCategories);
+    router.get("/api/categories",CategoryController.getCategories);
 
     router.post("/api/categories/create",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.createCategory);
 
-    router.delete("/api/categories/delete",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.deleteCategory);
+    router.delete("/api/categories/:categoryId/delete",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.deleteCategory);
 
 
     //order API
@@ -72,6 +75,24 @@ const router = express.Router();
     router.put("/api/orders/:orderId/changeStatus",AuthMiddleware.isAuthenticated,AuthMiddleware.isOrderOwner,OrderController.updateStatusOrder);
 
     router.delete("/api/order/:orderId/delete",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,OrderController.deleteOrder);
+
+
+    //cart API 
+
+    router.post("/api/carts/add",AuthMiddleware.isAuthenticated,cartController.addFruitToCart);
+    router.delete("/api/carts/remove",AuthMiddleware.isAuthenticated,cartController.removeFruitInCart);
+    router.get("/api/carts",AuthMiddleware.isAuthenticated,cartController.getFruitsInCart);
+    router.put("/api/carts/update",AuthMiddleware.isAuthenticated,cartController.updateCart);
+
+    //notification API 
+    router.get("/api/notifications",AuthMiddleware.isAuthenticated,notiController.getNotification);
+    router.get("/api/noitifications/unread",AuthMiddleware.isAuthenticated,notiController.getUnreadNoti);
+    router.delete("/api/notifications/deleteAll",AuthMiddleware.isAuthenticated,notiController.deleteAllNotifications);
+    router.get("/api/notifications/:notiId/setIsRead",AuthMiddleware.isAuthenticated,AuthMiddleware.isNotiOwner,notiController.updateIsRead);
+    router.delete("/api/notifications/:notiId/delete",AuthMiddleware.isAuthenticated,AuthMiddleware.isNotiOwner,notiController.deleteNotification);
+ 
+    
+
 
     
 

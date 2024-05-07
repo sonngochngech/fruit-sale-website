@@ -1,5 +1,6 @@
 const { trycatchWrapper } = require("../middlewares/tryCatchWrapper");
 const{Category}=require("../models");
+const {  validationResult } = require('express-validator');
 
 const createCategory=trycatchWrapper(async (req,res)=>{
 
@@ -28,13 +29,13 @@ const getCategories=trycatchWrapper(async(req,res)=>{
 })
 
 const deleteCategory=trycatchWrapper(async(req,res)=>{
-    const category=await Order.findByPk(req.params.categoryId);
+    const category=await Category.findByPk(req.params.categoryId);
     if(!category){
         return res.status(400).send({
             error:"Category is not found"
         })
     }
-    await order.destroy();
+    await category.destroy();
     return res.status(200).send({
         message:"Category is deleted successfully"
     })

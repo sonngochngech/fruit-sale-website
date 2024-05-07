@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const {User,Order}=require("../models");
+const {User,Order,Notification}=require("../models");
 
 require('dotenv').config();
 
@@ -34,7 +34,7 @@ const isAdmin=async (req,res,next)=>{
 }
 
 const isOrderOwner=async(req,res,next)=>{
-    // try{
+    try{
         const order= await Order.findByPk(req.params.orderId);
         if(!order){
             return res.status(403).send({
@@ -50,11 +50,28 @@ const isOrderOwner=async(req,res,next)=>{
             return res.status(401).send({ 
                 error: "Permission denied"});
         }
-    // }catch(error){
-    //     res.status(500).send({
-    //         error: "There is some trouble in server"});
-    // }
+    }catch(error){
+        res.status(500).send({
+            error: "There is some trouble in server"});
+    }
     
 }
 
-module.exports={isAuthenticated,isAdmin,isOrderOwner}    
+const isNotiOwner=async(req,res,next)=>{
+    try{
+    const noti=await Notification.findByPk(req.params.notiId);
+    if(!noti)
+    return res.status(403).send({
+        error:"Order is not found"
+    })
+    if(noti.UserId===req.user.id) next();
+    else
+     return res.status(401).send({ 
+        error: "Permission denied"});
+     }catch(error){
+        res.status(500).send({
+            error: "There is some trouble in server"});
+     }
+}
+
+module.exports={isAuthenticated,isAdmin,isOrderOwner,isNotiOwner}    

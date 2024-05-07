@@ -2,15 +2,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ShoppingCarts', {
-      amount: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
-        allowNull: false
+    await queryInterface.createTable('Notifications', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      title: {
+        type: Sequelize.STRING
+      },
+      description: {
+        type: Sequelize.TEXT
       },
       userId:{
         type: Sequelize.INTEGER,
-        primaryKey: true,
         allowNull: false,
         references: {
           model: 'Users',
@@ -19,16 +25,9 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      fruitId:{
+      isRead:{
         type: Sequelize.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        references: {
-          model: 'Fruits',
-          key: 'id'
-        },  
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        defaultValue: 0
       },
       createdAt: {
         allowNull: false,
@@ -41,6 +40,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('ShoppingCarts');
+    await queryInterface.dropTable('Notifications');
   }
 };

@@ -8,6 +8,7 @@ const {config}=require("../config/mailConfig");
 const {trycatchWrapper}=require("../middlewares/tryCatchWrapper")
 const {  validationResult } = require('express-validator');
 const { sendMail } = require('../services/mailService');
+const{ConnectedIoEvent}=require('../services/IoService');
 require('dotenv').config()
 
 
@@ -43,10 +44,10 @@ const sendToken=trycatchWrapper(async (req,res)=>{
         const  mailOptions = {
             from: process.env.MAILER,
             to: email,
-            subject: "Email verification code to register",
+            subject: "Email verification code",
             text:'Welcome to fruit market !\n\n' +
                 'Your email verification code is: ' + token + '\n\n' +
-                'Use this code to complete the registration process.\n\n' +
+                'Use this code to complete the  process.\n\n' +
                 'Enjoy using your account!\n'
         }
 
@@ -87,6 +88,10 @@ const login=trycatchWrapper(async (req,res)=>{
                 error: 'Incorrect login information.'
             })  
         }
+        // ConnectedIoEvent(user.id);
+
+        
+
         res.status(200).send({
             user: user,
             jwt: generatejwt(user.id)

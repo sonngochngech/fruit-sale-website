@@ -1,9 +1,12 @@
 // const { io } = require("../app");
 const { trycatchWrapper } = require("../middlewares/tryCatchWrapper");
-const {Order,OrderItem,Fruit}=require("../models");
+const {Order,OrderItem,Fruit,FruitImage,User}=require("../models");
 const { Op } = require('sequelize');
 const db=require("../models/index")
 const crypto = require("crypto")
+const {  validationResult } = require('express-validator');
+const ioService=require("../services/IoService")
+const notiService=require("../services/notiService")
 
 const getOrder=trycatchWrapper(async(req,res)=>{
     return res.status(200).send({
@@ -16,6 +19,13 @@ const getUserOrderList=trycatchWrapper(async(req,res)=>{
         where:{
             UserId: req.user.id
         },
+        include:[
+            {model: Fruit,
+            include:[
+                {model:FruitImage}
+            ]},
+
+        ],
         order: [["createdAt", "DESC"]],
     }
     )
@@ -71,7 +81,6 @@ const createOrder=async (req,res)=>{
 
     const errors=validationResult(req);
     if(!errors.isEmpty()) {
-         deleteUploadedFiles(req.files);
         return res.status(403).send({errors: errors.array()})
     }
 
@@ -100,14 +109,26 @@ const createOrder=async (req,res)=>{
         const orderItems=await OrderItem.bulkCreate(fruitsWithOrderId);
     
     
-        fruitIds.map(async(id)=>{
-            const fruit=await Fruit.findByPk(id);
-            fruit.sales+=1;
-            await fruit.save();
-    
-    
-        })
-        // global.io.emit('order creation',{order: order});
+        for (const fruitIdObj of fruitIds) {
+            const fruitId = fruitIdObj.FruitId;
+            const fruit = await Fruit.findByPk(fruitId);
+            
+                fruit.sales += 1;
+                await fruit.save();
+        }
+        const users = await User.findAll({
+            where: {
+                role: "Admin"
+            }
+        });
+        const admins = users ? users.map(admin => admin.id) : [];
+        try{
+            await ioService.sendNotification([admins],`A order ${order.code} is created`)
+        }catch(error){
+            console.log(error);
+        }
+      
+        await notiService.createNoti(`A order ${order.code} is created`,'gsgdgsdgsdgdsgdsgdfgdfgdfgdfgdfgdfgfdgdfgdfgdgdgfd',admins);
     
         return res.status(200).send({
             order: order,
@@ -119,7 +140,7 @@ const createOrder=async (req,res)=>{
             await transaction.rollback();
         }
         res.status(500).send({
-            error: 'An error occured when trying to sign in.'
+            error: 'An error occured when trying to create order.'
         })
     }
    
@@ -128,7 +149,7 @@ const createOrder=async (req,res)=>{
 
 
 const deleteOrder=trycatchWrapper(async (req,res)=>{
-    const  orderId=res.params.fruitId;
+    const  orderId=res.params.orderId;
 
     const order=await Order.findByPk(orderId);
 
@@ -143,7 +164,6 @@ const updateBasicInformationOrder=trycatchWrapper(async (req,res)=>{
     
     const errors=validationResult(req);
     if(!errors.isEmpty()) {
-         deleteUploadedFiles(req.files);
         return res.status(403).send({errors: errors.array()})
     }
 
@@ -154,42 +174,72 @@ const updateBasicInformationOrder=trycatchWrapper(async (req,res)=>{
     await order.update(req.body);
 
 
+
      res.status(200).send(
         {order: order})
 
 })
 
 
-const updateStatusOrder=async (req,res)=>{
-   let transaction;
-   try{
-        transaction=await db.sequelize.transaction();
-        const{status}=req.body;
-        const  orderId=req.params.orderId;
+const updateStatusOrder=trycatchWrapper(async (req,res)=>{
+    let transaction;
+    try{
+         transaction=await db.sequelize.transaction();
+         const{status}=req.body;
+         const  orderId=req.params.orderId;
+ 
+         const order=await Order.findByPk(orderId);
+         if(order.status==="Delivering" && status==="Cancel"){
+             return res.status(200).send({
+                 error:" You can't change the status"
+             })
+         }
+         order.status=status;
+         await order.save();
+ 
+         
+         
 
-        const order=await Order.findByPk(orderId);
-        if(order.status==="Delivering" && status==="Cancel"){
-            return res.status(200).send({
-                error:" You can't change the status"
-            })
-        }
-        order.status=status;
-        await order.save();
+         const user=await User.findByPk(req.user.id);
+         const users = await User.findAll({
+            where: {
+                role: "Admin"
+            }
+        });
+        const admins = users ? users.map(admin => admin.id) : [];
+         if(user.role !=="Admin"){
+            try{
+                await ioService.sendNotification([admins],`A order ${order.code} is updated`)
+            }catch(error){
+                console.log(error);
+            }
+         
+            await notiService.createNoti(`A order ${order.code} is updated`,'sfgsfsdgsdg ssdgf sdfsdf dsfsdf sdf',[admins])
+         }else{
+            try{
+                await ioService.sendNotification([...admins,order.UserId],`A order ${order.code} is updated`)
+            }catch(error){
+                console.log(error);
+            }
+            
+            await notiService.createNoti(`A order ${order.code} is updated`,'sfgsfsdgsdg ssdgf sdfsdf dsfsdf sdf',[...admins,order.UserId])
+         }
 
-        await  transaction.commit();
-        res.status(200).send(
-            {order: order})
+         await  transaction.commit();
 
-   }catch(error){
-        if (transaction) {
-            await transaction.rollback();
-        }
-        res.status(500).send({
-            error: 'An error occured when trying to sign in.'
-        })
-   }
-
-}
+         res.status(200).send(
+             {order: order})
+ 
+    }catch(error){
+         if (transaction) {
+             await transaction.rollback();
+         }
+         res.status(500).send({
+             error: 'An error occured when trying to update order.'
+         })
+    }
+ 
+ })
 
 module.exports={createOrder,
                 deleteOrder,
