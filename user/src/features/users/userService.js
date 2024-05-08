@@ -9,7 +9,7 @@ const register = async (userData) => {
         localStorage.setItem("customer", JSON.stringify(response.data?.user));
         localStorage.setItem("jwt",response.data?.jwt);
       }
-      console.log(response.data);
+      
       return response.data;
     }
   } catch (error) {
@@ -33,6 +33,132 @@ const login = async (userData) => {
 };
 
 
+const getUserOrder = async () => {
+  try {
+    const response = await axios.get(`${base_url}orders/getUserOrderList`, config);
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+const addToCart = async (cartData) => {
+  const response = await axios.post(`${base_url}carts/add`, cartData, config);
+  if (response.data) {
+    return response.data;
+  }
+};
+
+const createAnOrder = async (orderData) => {
+  const response = await axios.post(
+    `${base_url}orders/create`,
+    orderData,
+    config
+  );
+  if (response.data) {
+    return response.data;
+  }
+};
+
+const getCart = async () => {
+  const response = await axios.get(`${base_url}carts`, config);
+
+  if (response.data) {
+    return response.data;
+  }
+};
+const removeFruitFromCart = async (fruitId) => {
+  const response = await axios.delete(
+    `${base_url}carts/remove?fruitId=${fruitId}`,
+    config
+  );
+  if (response.data) {
+    return response.data;
+  }
+};
+const updateFruitFromCart = async (cartDetail) => {
+  const response = await axios.put(
+    `${base_url}carts/update`,
+    cartDetail,
+    config
+  );
+  if (response.data) {
+    return response.data;
+  }
+};
+
+const cancelOrder=async(id)=>{
+  const response=await axios.put(
+    `${base_url}orders/${id}/changeStatus`,{
+      status:'Cancel'
+    },
+    config
+  );
+  if (response.data) {
+    return response.data;
+  }
+}
+
+const getNotifications=async()=>{
+  try {
+    const response = await axios.get(`${base_url}notifications`, config);
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+
+}
+
+const getUnReadNotiCount=async()=>{
+  try {
+    const response = await axios.get(`${base_url}noitifications/unread`, config);
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+
+}
+
+const setIsReadNoti=async(notiId)=>{
+  try {
+    const response = await axios.get(`${base_url}notifications/${notiId}/setIsRead`, config);
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+const deleteANoti=async(notiId)=>{
+  try {
+    const response = await axios.delete(`${base_url}notifications/${notiId}/delete`, config);
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+const deleteAllNoti=async()=>{
+  try {
+    const response = await axios.delete(`${base_url}notifications/deleteAll`, config);
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+
+
 const logout = async () => {
   try {
     // Xóa dữ liệu đăng nhập từ lưu trữ trình duyệt
@@ -50,5 +176,21 @@ const logout = async () => {
 export const authService = {
   register,
   login,
-  logout
+  logout,
+  addToCart,
+  getCart,
+  removeFruitFromCart,
+  updateFruitFromCart,
+  createAnOrder,
+  cancelOrder,
+  logout,
+  getUserOrder,
+  getNotifications,
+  deleteAllNoti,
+  deleteANoti,
+  setIsReadNoti,
+ getUnReadNotiCount
+
+
+
 };
