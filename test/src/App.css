@@ -1,0 +1,393 @@
+/* App.css */
+
+.layout {
+  display: grid;
+  grid-template-rows: 1fr 10fr ;
+  grid-template-columns: 1fr 5fr ;
+  grid-template-areas: 
+    "header header "
+    "nav main "
+    "footer main";
+  grid-gap: 10px; /* Thay đổi giá trị grid-gap */
+}
+/* HEADER */
+header{
+  grid-area: header;
+  background-color: #222831;
+  color: white;
+  padding: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+}
+
+.header-action-button {
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.user-name {
+  font-size: 16px;
+}
+
+
+/* Notifications */
+.header-actions {
+  position: relative;
+}
+
+.notification-popup {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: block;
+  max-height: 200px; /* Chiều cao cố định cho phần popup */
+  overflow: auto; /* Cho phép cuộn nếu nội dung vượt quá chiều cao */
+}
+
+.notification-content {
+  padding: 10px;
+  color: #000;
+}
+
+.header-action {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.header-action span {
+  margin-right: 10px;
+}
+
+.header-action .badge {
+  background-color: red;
+  color: white;
+  padding: 3px 5px;
+  border-radius: 50%;
+  font-size: 10px;
+}
+
+/* User */
+.user-options {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  background-color: white;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: none;
+}
+
+.user-profile:hover .user-options {
+  display: block;
+  cursor: pointer;
+}
+
+.user-options div {
+  padding: 10px;
+}
+
+.user-options div:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+
+/* LEFT SIDE BAR */
+
+.left-sidebar {
+  background-color: #eee;
+  width: 200px;
+  transition: width 0.3s ease; /* Hiệu ứng thu nhỏ mềm mại */
+}
+
+.left-sidebar.collapsed {
+  width: 50px;
+  content: none;
+}
+
+.left-sidebar {
+  position: relative; /* Cho phép sử dụng vị trí tuyệt đối cho nút Collapse */
+}
+
+.collapse-button {
+  position: absolute;
+  top: 5px; /* Vị trí phía trên cùng */
+  right: 5px; /* Vị trí bên phải với khoảng cách 5px từ biên phải */
+}
+
+.content {
+  padding-top: 20px; /* Đảm bảo nội dung không bị che bởi nút Collapse */
+}
+
+/* MAIN CONTENT */
+
+.main-content {
+  flex-grow: 1; /* Phóng to để điền vào không gian còn trống */
+  transition: margin-left 0.4s ease; /* Hiệu ứng dịch chuyển mềm mại */
+}
+
+.main-content.collapsed {
+  /* margin-left: 10px; */
+  flex-grow: 2; /* Điều chỉnh kích thước phóng to của MainContent */
+  width: auto;
+}
+
+.menu,
+.submenu-items {
+  list-style-type: none; /* Loại bỏ bullet trong danh sách */
+  padding: 0; /* Loại bỏ padding mặc định của danh sách */
+  margin: 0; /* Loại bỏ margin mặc định của danh sách */
+}
+
+.menu-item {
+  display: block;
+  padding: 15px;
+  text-decoration: none;
+  color: #000; /* Đặt màu chữ cho mục menu */
+  cursor: pointer; /* Biến con trỏ chuột thành hình bàn tay khi di chuột vào */
+}
+
+.submenu {
+  position: relative;
+}
+
+.submenu-items {
+  display: block;
+  position: absolute;
+  top: 100%; /* Hiển thị submenu bên dưới "Application" */
+  left: 0;
+  background-color: #eee; /* Đặt màu nền cho submenu */
+  padding-left: 20px;
+}
+
+.submenu-items li {
+  padding: 10px;
+}
+
+.menu-item li:hover, .submenu-items li:hover {
+  background-color: #ccc; /* Đặt màu nền khi hover vào mục submenu */
+}
+
+
+
+
+/* USER PAGE */
+/* styles.css */
+
+.category-table, .user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.category-table, .user-table th, .user-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.category-table, .user-table th {
+  background-color: #f2f2f2;
+}
+
+.user-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.category-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.user-table tr:hover {
+  background-color: #ddd;
+}
+
+.category-table tr:hover {
+  background-color: #ddd;
+}
+
+.user-actions button {
+  margin-right: 5px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: #007bff;
+}
+
+.user-actions button:hover {
+  text-decoration: underline;
+}
+
+
+/* SEARCH */
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.search-button {
+  margin-left: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+.no-results-message {
+  position: fixed; /* Đặt vị trí cố định để hiển thị trên cùng */
+  top: 32%; /* Đặt top là 50% */
+  left: 50%; /* Đặt left là 50% */
+  transform: translate(-50%, -50%); /* Dịch chuyển ngược lại 50% của chiều rộng và chiều cao của phần tử */
+  display: block; /* Ẩn ban đầu */
+  background-color: #f44336; /* Màu nền */
+  color: white; /* Màu chữ */
+  padding: 10px; /* Khoảng cách giữa lề và nội dung */
+  border-radius: 5px; /* Bo tròn các góc */
+  animation: fadeInOut 3s ease; /* Hiệu ứng fade in và fade out trong 3 giây */
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; } /* Bắt đầu với độ mờ */
+  10% { opacity: 1; } /* Hiển thị trong 10% thời gian */
+  90% { opacity: 1; } /* Hiển thị đến 90% thời gian */
+  100% { opacity: 0; } /* Mờ dần đi */
+}
+
+
+.edit-category-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: #f2f2f2; /* Light gray background */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.edit-category-form h2 {
+  margin-bottom: 15px;
+  font-size: 1.4em;
+  color: #333333; /* Dark gray heading */
+}
+
+.edit-category-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333333; /* Dark gray labels */
+}
+
+.edit-category-form input[type="text"],
+.edit-category-form input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  background-color: #f8f9fa; /* Slightly lighter background for inputs */
+}
+
+.edit-category-form input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #f8f9fa; /* Slightly lighter background for inputs */
+}
+
+.edit-category-form button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #007bff; /* Primary color for CTA buttons */
+  color: white;
+}
+
+.edit-category-form button:hover {
+  background-color: #0067cc; /* Adjust hover color for CTA buttons */
+}
+
+.edit-category-form .button-primary {
+  background-color: #007bff; /* Primary color for CTA buttons */
+  color: white;
+}
+
+.edit-category-form .button-primary:hover {
+  background-color: #0067cc; /* Adjust hover color for primary buttons */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add subtle shadow on hover */
+}
+
+.edit-category-form .button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.edit-category-form img {
+  display: block;
+  margin-bottom: 10px;
+  width: 25px;
+  height: 25px;
+}
+
+.edit-category-form .error-message {
+  color: #ff0000; /* Red for error highlighting */
+  font-weight: bold;
+}
