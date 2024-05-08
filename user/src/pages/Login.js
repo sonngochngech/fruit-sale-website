@@ -9,6 +9,8 @@ import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { loginUser} from '../features/users/userSlice';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const loginSchema = yup.object({
   email: yup
@@ -34,7 +36,7 @@ const Login = () => {
       dispatch(loginUser(values))
         .unwrap() // Unwrap the promise returned by loginUser
         .then(() => {
-          navigate('/');
+          navigate('/fruits');
           window.location.reload();
         })
         .catch((error) => {
@@ -47,7 +49,6 @@ const Login = () => {
     <>
       {/* <Meta title={'Login'} /> */}
       <BreadCrumb title="Login" />
-
       <Container class1="login-wrapper py-5 home-wrapper-2">
         <div className="row">
           <div className="col-12">
@@ -98,6 +99,18 @@ const Login = () => {
           </div>
         </div>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 };
