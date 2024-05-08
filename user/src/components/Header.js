@@ -1,16 +1,45 @@
+
 import React, { useEffect, useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { BsSearch } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-const { logoutUser } = require('../features/users/userSlice');
+import { io } from "socket.io-client";
+const { logoutUser, getNotifications, getUnreadNotificationCount } = require('../features/users/userSlice');
+
+
+
 
 const Header = () => {
+  const URL= "http://localhost:8081";
+  const socket=io(URL,{autoConnect:true});
+  socket.on('new notification',()=>{
+    dispatch(getUnreadNotificationCount());
+
+    setTimeout(() => {
+      dispatch(getNotifications());
+    }, 200);
+
+
+
+  })
+
+  useEffect(()=>{
+    dispatch(getUnreadNotificationCount());
+  },[])
+
   const dispatch = useDispatch();
-  const cartState = useSelector((state) => state?.auth?.cartProducts);
+  const cartState = useSelector((state) => state?.auth?.cartFruits);
   const authState = useSelector((state) => state.auth);
+  const notificationState=useSelector((state)=>state?.auth?.unreadNotification);
   const [total, setTotal] = useState(null);
   const navigate = useNavigate();
+
+  const [value, setValue] = useState('');
+  const handleSearch = () => {
+    // Navigate to the fruits page with the search query parameter
+    navigate(`/fruits?title=${value}`);
+  };
 
   useEffect(() => {
     let sum = 0;
@@ -20,11 +49,20 @@ const Header = () => {
       for (let index = 0; index < cartState?.length; index++) {
         sum =
           sum +
-          Number(cartState[index]?.quantity) * Number(cartState[index]?.price);
+          Number(cartState[index]?.quantity) * Number(cartState[index]?.Fruit.price);
         setTotal(sum);
       }
     }
-  });
+  
+    
+  },[cartState]);
+
+  useEffect(()=>{
+    console.log("hello",authState.user);
+    if(authState.user.id!==null){
+      socket.emit('authenticated',authState.user);
+    }
+  },[])
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -34,30 +72,29 @@ const Header = () => {
 
   return (
     <>
-    <header className="header-top-strip py-3">
-    <div className="container-xxl">
-        <div className="row">
-            <div className="col-12 position-relative"> {/* Add position-relative class */}
-            <img src="./banner.jpg" alt="Banner" />  {/* Sử dụng inline style để áp dụng kiểu CSS */}
-                <p className="text-white mb-0"></p>
+      <header className="header-top-strip py-3">
+        <div className="container-xxl">
+          <div className="row">
+            <div className="col-6">
+              <p className="text-white mb-0">Banner-Title</p>
             </div>
-            <div className="col-12">
-                <p className="text-end text-white mb-0">
-                    Hotline:
-                    <a className="text-white" href="tel:+91 8264954234">
-                    +91 8264954234
-                    </a>
-                </p>
+            <div className="col-6">
+              <p className="text-end text-white mb-0">
+                Hotline:
+                <a className="text-white" href="tel:+91 8264954234">
+                  00000000000
+                </a>
+              </p>
             </div>
+          </div>
         </div>
-    </div>
-</header>
+      </header>
       <header className="header-upper py-3">
         <div className="container-xxl">
           <div className="row align-items-center">
             <div className="col-2">
               <h2>
-                <Link className="text-white">Fruit Shop</Link>
+                <Link className="text-white">Fruit Store</Link>
               </h2>
             </div>
             <div className="col-4">
@@ -68,9 +105,11 @@ const Header = () => {
                   placeholder="Search Product Here..."
                   aria-label="Search Product Here..."
                   aria-describedby="basic-addon2"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)} 
                 />
                 <span className="input-group-text p-3" id="basic-addon2">
-                  <BsSearch className="fs-6" />
+                  <BsSearch className="fs-6" onClick={handleSearch} />
                 </span>
               </div>
             </div>
@@ -78,29 +117,29 @@ const Header = () => {
               <div className="header-upper-links d-flex align-items-center justify-content-between">
                 <div>
                   <Link
-                    to="#"
+                    to="/notification"
                     className="d-flex align-items-center gap-10 text-white"
                   >
                     <img src="images/compare.svg" alt="compare" />
                     <p className="mb-0">
-                      Compare <br /> Products
+                      Notification
                     </p>
                   </Link>
                 </div>
                 <div>
                   <Link
-                    to="#"
+                    to="/cart"
                     className="d-flex align-items-center gap-10 text-white"
                   >
                     <img src="images/wishlist.svg" alt="wishlist" />
                     <p className="mb-0">
-                      Favourite <br /> wishlist
+                      Your <br /> cart
                     </p>
                   </Link>
                 </div>
                 <div>
                   <Link
-                    to="#"
+                    to="/order"
                     className="d-flex align-items-center gap-10 text-white"
                   >
                     <img src="images/compare.svg" alt="order" />
@@ -150,7 +189,13 @@ const Header = () => {
             <div className="col-12">
               <div className="menu-bottom d-flex align-items-center gap-30">
                 <div>
-                  <div className="dropdown">
+                 <div className="dropdown">
+                 <span
+                            style={{ top: "-10px", left: "2px" }}
+                            className="badge bg-secondary text-white rounded-circle p-2 position-absolute"
+                          >
+                           { notificationState?.notificationCount}
+                          </span>
                     <button
                       className="btn btn-secondary dropdown-toggle bg-transparent border-0 gap-15 d-flex align-items-center"
                       type="button"
@@ -158,39 +203,32 @@ const Header = () => {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <img src="images/menu.svg" alt="" />
+                      
+                        
+                      <img src="images/notifications.svg"  width="20" height="20" alt="" />
                       <span className="me-5 d-inline-block">
-                        Shop Categories
+                       Notification
                       </span>
                     </button>
                     <ul
                       className="dropdown-menu"
                       aria-labelledby="dropdownMenuButton1"
+
                     >
-                      <li>
-                        <Link className="dropdown-item text-white" to="/productCategory1">
-                        Product category 1
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item text-white" to="/productCategory2">
-                          Product category 2
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item text-white" to="">
-                          Product category 3
-                        </Link>
-                      </li>
+                       {notificationState?.unreadNotification?.map((item, index) => (
+                          <li key={index} className="list-group-item bg-dark">
+                            <Link className="text-white">
+                              {item?.title}
+                            </Link>
+                          </li>
+                        ))}
                     </ul>
-                  </div>
+                  </div> 
+             
                 </div>
                 <div className="menu-links">
                   <div className="d-flex align-items-center gap-30">
-                    <NavLink to="/">Home</NavLink>
-                    <NavLink to="#">About</NavLink>
-                    <NavLink to="#">Contact</NavLink>
-                    <NavLink to="#">Event</NavLink>
+                    <NavLink to="/fruits">Our Store</NavLink>
                   </div>
                 </div>
               </div>
