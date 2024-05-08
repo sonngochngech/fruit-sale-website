@@ -11,6 +11,8 @@ import TimeCounter from "../components/TimeCounter";
 import { base_url } from "../utils/axiosConfig";
 import { toast } from 'react-toastify';
 import {  useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Forgotpassword = () => {
   const [email, setEmail] = useState("");
   const [token,setToken]=useState("");
@@ -123,6 +125,18 @@ const Forgotpassword = () => {
           </div>
         </div>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 };
