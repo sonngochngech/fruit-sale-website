@@ -12,6 +12,8 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import { base_url } from "../utils/axiosConfig";
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import TimeCounter from "../components/TimeCounter";
 const signUpSchema = yup.object({
@@ -46,7 +48,7 @@ const Signup = () => {
       dispatch(registerUser(values))
         .unwrap()
         .then(() => {
-          navigate('/');
+          navigate('/fruits');
           window.location.reload();
         })
         .catch((error) => {
@@ -183,6 +185,18 @@ const sendVerifyCode= async(email)=>{
           </div>
         </div>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 };
