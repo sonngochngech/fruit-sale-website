@@ -8,6 +8,8 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Resetpassword from './pages/Resetpassword';
 import Forgotpassword from './pages/Forgotpassword';
+import ProductCategory1 from './pages/productCategory1';
+
 function App() {
   return (
     <>
