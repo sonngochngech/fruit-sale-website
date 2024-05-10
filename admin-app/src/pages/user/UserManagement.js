@@ -4,29 +4,12 @@ import UserCard from './UserCard'; // Import UserCard for individual user displa
 
 const UserManagement = () => {
   const users = [ // Replace with data fetching logic (API call or Redux state)
-    { id: 1, name: 'John Doe', email: 'john.doe@example.com', role: 'admin' },
-    { id: 2, name: 'Jane Doe', email: 'jane.doe@example.com', role: 'user' },
+    { id: 1, name: 'John Doe', email: 'john.doe@example.com', role: 'admin', isActive:true },
+    { id: 2, name: 'Jane Doe', email: 'jane.doe@example.com', role: 'user', isActive:false },
   ];
 
   return (
-    <div className="user-management">
-      <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <UserCard key={user.id} user={user} />
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <UserCard users={users}/>
   );
 };
 

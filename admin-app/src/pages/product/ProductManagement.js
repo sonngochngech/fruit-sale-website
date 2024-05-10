@@ -21,7 +21,7 @@ const ProductManagement = () => {
 
   useEffect(() => {
     dispatch(fetchProducts());
-    // console.log(products);
+    console.log(products);
   }, [dispatch]);
 
   useEffect(() => {

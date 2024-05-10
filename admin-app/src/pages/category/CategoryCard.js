@@ -1,45 +1,29 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 
-import "./UserCard.css";
+import "./CategoryCard.css";
 
-const UserCard = ({ users, onViewDetail, onDelete, onEdit }) => {
+const CategoryCard = ({ categories, onDelete, onEdit }) => {
   const [pageNumber, setPageNumber] = useState(0);
-  const usersPerPage = 10;
-  const pagesVisited = pageNumber * usersPerPage;
+  const categoriesPerPage = 10;
+  const pagesVisited = pageNumber * categoriesPerPage;
 
-  const displayUsers = users
-   .slice(pagesVisited, pagesVisited + usersPerPage)
-   .map((user) => (
-      <tr key={user.id}>
-        <td>{user.id}</td>
-        <td>{user.firstName} {user.lastName}</td>
+  const displayCategories = categories
+    .slice(pagesVisited, pagesVisited + categoriesPerPage)
+    .map((category) => (
+      <tr key={category.id}>
+        <td>{category.id}</td>
+        <td>{category.name}</td>
         <td>
-          <img
-            src={user.profileImage}
-            alt={`${user.firstName} ${user.lastName}`}
-            className="user-profile-image"
-          />
-        </td>
-        <td>{user.email}</td>
-        <td>{user.phoneNo}</td>
-        <td>{user.role}</td>
-        <td>
-          <button
-            className="btn btn-primary"
-            onClick={() => onViewDetail(user.id)}
-          >
-            Details
-          </button>
           <button
             className="btn btn-secondary"
-            onClick={() => onEdit(user.id)}
+            onClick={() => onEdit(category.id)}
           >
             Edit
           </button>
           <button
             className="btn btn-danger"
-            onClick={() => onDelete(user.id)}
+            onClick={() => onDelete(category.id)}
           >
             Delete
           </button>
@@ -47,13 +31,9 @@ const UserCard = ({ users, onViewDetail, onDelete, onEdit }) => {
       </tr>
     ));
 
-  const pageCount = Math.ceil(users.length / usersPerPage);
+  const pageCount = Math.ceil(categories.length / categoriesPerPage);
 
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * usersPerPage) % users.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setPageNumber(event.selected);
   };
 
@@ -64,14 +44,10 @@ const UserCard = ({ users, onViewDetail, onDelete, onEdit }) => {
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Profile Image</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Role</th>
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>{displayUsers}</tbody>
+        <tbody>{displayCategories}</tbody>
       </table>
 
       <ReactPaginate
@@ -98,4 +74,4 @@ const UserCard = ({ users, onViewDetail, onDelete, onEdit }) => {
   );
 };
 
-export default UserCard;
+export default CategoryCard;

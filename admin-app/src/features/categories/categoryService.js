@@ -1,20 +1,20 @@
 import axios from "axios";
 import { base_url, config } from "../../utils/axiosConfig";
 
-// Lấy danh sách sản phẩm
+// Lấy danh sách danh mục
 const showList = async () => {
   try {
-    const response = await axios.get(`${base_url}products`);
+    const response = await axios.get(`${base_url}products/categories`);
     return response.data;
   } catch (error) {
     throw new Error(error.message);
   }
 }
 
-// Thêm sản phẩm mới
-const addProduct = async (newProductData) => {
+// Thêm danh mục mới
+const addCategory = async (newCategoryData) => {
   try {
-    const response = await axios.post(`${base_url}products`, newProductData, config);
+    const response = await axios.post(`${base_url}products/categories`, newCategoryData, config);
     return response.data;
   } catch (error) {
     throw new Error(error.message); 
@@ -22,10 +22,10 @@ const addProduct = async (newProductData) => {
 };
 
 
-// Xóa sản phẩm
-const removeProduct = async (productId) => {
+// Xóa danh mục
+const removeCategory = async (categoryId) => {
     try {
-      const response = await axios.delete(`${base_url}products/${productId}`);
+      const response = await axios.delete(`${base_url}products/categories/${categoryId}`);
       if (response.data.success) {
         return response.data.message; // Trả về thông báo thành công từ API
       } else {
@@ -36,20 +36,20 @@ const removeProduct = async (productId) => {
     }
   }
   
-  const updateProduct = async (productId, updatedProductData) => {
+  const updateCategory = async (categoryId, updatedCategoryData) => {
     try {
-      const response = await axios.patch(`${base_url}products/${productId}`, updatedProductData);
-      return response.data; // Trả về thông tin sản phẩm đã được chỉnh sửa
+      const response = await axios.patch(`${base_url}products/categories/${categoryId}`, updatedCategoryData);
+      return response.data; // Trả về thông tin danh mục đã được chỉnh sửa
     } catch (error) {
       throw new Error(error.message); // Xử lý các lỗi khác (ví dụ: lỗi mạng, lỗi không xác định)
     }
   };
 
-const productService = {
+const categoryService = {
     showList,
-    addProduct,
-    removeProduct,
-    updateProduct
+    addCategory,
+    removeCategory,
+    updateCategory
 };
 
-export default productService;
+export default categoryService;
