@@ -1,16 +1,14 @@
 const jwt = require("jsonwebtoken");
-const {User}=require("../models");
+const {User,Order,Notification}=require("../models");
+
 require('dotenv').config();
 
 const isAuthenticated=async (req,res,next)=>{
     let token;
     if(req?.headers?.authorization?.startsWith('Bearer')){
         token=req.headers.authorization.split(" ")[1];
-        console.log(token);
         try{
             const decodedToken=await jwt.verify(token,process.env.JWT_SECRET);
-            console.log("hello");
-            console.log(decodedToken);
             req.user= await User.findByPk(decodedToken?.id);
             next();
         }catch (error){
@@ -24,10 +22,56 @@ const isAuthenticated=async (req,res,next)=>{
 const isAdmin=async (req,res,next)=>{
     try{
         if(req.user.role==="Admin")  next();
+        else{
+            return res.status(401).send({
+                error: "Permission denied"});
+
+        }
     }catch (error){
-        return res.status(401).send({
-            error: "Permission denied"});
+        return res.status(500).send({
+            error: "There is some trouble in server"});
     }
 }
 
-module.exports={isAuthenticated,isAdmin}    
+const isOrderOwner=async(req,res,next)=>{
+    try{
+        const order= await Order.findByPk(req.params.orderId);
+        if(!order){
+            return res.status(403).send({
+                error:"Order is not found"
+            })
+        }
+        console.log(order);
+        if(req.user.role==="Admin" || req.user.id === order.UserId) {
+            req.order=order;
+            next();
+        }
+        else{
+            return res.status(401).send({ 
+                error: "Permission denied"});
+        }
+    }catch(error){
+        res.status(500).send({
+            error: "There is some trouble in server"});
+    }
+    
+}
+
+const isNotiOwner=async(req,res,next)=>{
+    try{
+    const noti=await Notification.findByPk(req.params.notiId);
+    if(!noti)
+    return res.status(403).send({
+        error:"Order is not found"
+    })
+    if(noti.UserId===req.user.id) next();
+    else
+     return res.status(401).send({ 
+        error: "Permission denied"});
+     }catch(error){
+        res.status(500).send({
+            error: "There is some trouble in server"});
+     }
+}
+
+module.exports={isAuthenticated,isAdmin,isOrderOwner,isNotiOwner}    

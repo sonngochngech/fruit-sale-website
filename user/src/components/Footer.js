@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BsLinkedin, BsGithub, BsYoutube, BsInstagram } from 'react-icons/bs';
+import { BsLinkedin, BsFacebook, BsYoutube, BsInstagram } from 'react-icons/bs';
 
 const Footer = () => {
   return (
@@ -45,63 +45,65 @@ const Footer = () => {
                   href="tel:+91 8264954234"
                   className="mt-3 d-block mb-1 text-white"
                 >
-                  +0000000000
+                   Hotline: +91 8264954234
                 </a>
                 <a
                   href="mailto:navdeepdahiya753@gmail.com"
                   className="mt-2 d-block mb-0 text-white"
                 >
-                  bachkhoahanoi4743@gmail.com
+                  Email: bachkhoahanoi4743@gmail.com
                 </a>
-                <div className="social_icons d-flex align-items-center gap-30 mt-4">
-                  <a className="text-white" href="/">
-                    <BsLinkedin className="fs-4" />
-                  </a>
-                  <a className="text-white" href="/">
-                    <BsInstagram className="fs-4" />
-                  </a>
-                  <a className="text-white" href="/">
-                    <BsGithub className="fs-4" />
-                  </a>
-                  <a className="text-white" href="/">
-                    <BsYoutube className="fs-4" />
-                  </a>
-                </div>
+                
               </div>
             </div>
             <div className="col-3">
               <h4 className="text-white mb-4">Information</h4>
               <div className="footer-link d-flex flex-column">
                 <Link to="#" className="text-white py-2 mb-1">
-                  Privacy Policy
+                  Company Information :
+                  Fresh Fruit trading and investment joint stock company.
                 </Link>
                 <Link to="#" className="text-white py-2 mb-1">
-                  Refund Policy
+                  Refund Policy :
+                  Return within 48 hours.
                 </Link>
                 <Link to="#" className="text-white py-2 mb-1">
-                  Shipping Policy
+                  Shipping Policy : Free delivery within Hanoi and Ho Chi Minh City.
                 </Link>
                 <Link to="#" className="text-white py-2 mb-1">
-                  Terms & Conditions
+                  Customer care Email : FreshFruits@gmail.com
                 </Link>
-                <Link className="text-white py-2 mb-1">Blogs</Link>
+                <Link className="text-white py-2 mb-1"></Link>
               </div>
             </div>
             <div className="col-3">
-              <h4 className="text-white mb-4">Account</h4>
+              <h4 className="text-white mb-4">My Social Network</h4>
               <div className="footer-link d-flex flex-column">
-                <Link className="text-white py-2 mb-1">About Us</Link>
-                <Link className="text-white py-2 mb-1">Faq</Link>
-                <Link className="text-white py-2 mb-1">Contact</Link>
+                <Link className="text-white py-2 mb-1">Facebook : FreshFruit</Link>
+                <Link className="text-white py-2 mb-1">Instagram : OurFreshFruit</Link>
+                <Link className="text-white py-2 mb-1">Youtube :  Fresh Fruit Channel
+                
+                </Link>
+                
               </div>
             </div>
             <div className="col-2">
               <h4 className="text-white mb-4">Quick Links</h4>
               <div className="footer-link d-flex flex-column">
-                <Link className="text-white py-2 mb-1">About us</Link>
-                <Link className="text-white py-2 mb-1">Guarantee</Link>
-                <Link className="text-white py-2 mb-1">Advice</Link>
-                <Link className="text-white py-2 mb-1">Inspiration</Link>
+              <div className="social_icons d-flex align-items-center gap-30 mt-4">
+              <a className="text-white" href="/">
+                <BsLinkedin className="fs-4" />
+              </a>
+              <a className="text-white" href="/">
+                <BsInstagram className="fs-4" />
+              </a>
+              <a className="text-white" href="/">
+                <BsFacebook className="fs-4" />
+              </a>
+              <a className="text-white" href="/">
+              <BsYoutube className="fs-4" />
+            </a>
+            </div>
               </div>
             </div>
           </div>
@@ -112,7 +114,7 @@ const Footer = () => {
           <div className="row">
             <div className="col-12">
               <p className="text-center mb-0 text-white">
-                &copy; {new Date().getFullYear()}; Powered by Fruit Store
+                &copy; {new Date().getFullYear()}; Powered by Fresh Fruit
               </p>
             </div>
           </div>

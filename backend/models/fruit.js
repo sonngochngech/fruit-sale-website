@@ -13,23 +13,53 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Fruit.belongsTo(models.Category);
       Fruit.hasMany(models.FruitImage);
-      Fruit.belongsToMany(models.User,{through:'shopping_cart'})
+      Fruit.belongsToMany(models.User,{through:models.ShoppingCart})
       Fruit.belongsToMany(models.Order, { through: models.OrderItem });
     }
   }
   Fruit.init({
-      code: {
-        type: DataTypes.STRING,
-        unique: true
-      },
-      title:            DataTypes.STRING,
-      description:      DataTypes.TEXT,
-      amount:           DataTypes.INTEGER,
-      rating:           DataTypes.FLOAT,
-      peopleRated:      DataTypes.INTEGER,
-      price:            DataTypes.INTEGER,
-      sales:            DataTypes.INTEGER,
-      isDeleted:        DataTypes.INTEGER,
+    code: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    amount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
+    rating: {
+      type: DataTypes.FLOAT,
+      defaultValue: 0
+    },
+    peopleRated: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
+    sales: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    isDeleted: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    deletedAt: {
+      type: DataTypes.DATE
+    }
   }, {
     sequelize,
     modelName: 'Fruit',

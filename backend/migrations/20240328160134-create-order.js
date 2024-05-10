@@ -9,27 +9,52 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      code: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        unique:true
+      },
       phoneNo: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull:false
       },
       title: {
         type: Sequelize.STRING
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull:false
       },
       address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull:false
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull:false,
+        defaultValue: "REQUEST"
       },
       productCost: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        defaultValue: 0
       },
       shippingCost: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        defaultValue: 0
       },
+      userId:{
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id'
+        },  
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

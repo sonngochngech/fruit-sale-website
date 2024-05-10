@@ -10,10 +10,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       code: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       type:{
-        type:Sequelize.STRING
+        type:Sequelize.STRING,
+        allowNull: false
       },
       email:{
         type:Sequelize.STRING,

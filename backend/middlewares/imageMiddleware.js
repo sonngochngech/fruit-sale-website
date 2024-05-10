@@ -32,22 +32,24 @@ const upload = multer({
   },
   fileFilter: fileFilter,
 }).array("files", 10);
+const uploadFruitImage= async (req, res, next) => {
+  try {
+    // what is actual code
+    await upload(req, res, function (err) {
+      if (err) {
+        return res.send("An error occured on uploading images");
+      } else {
+        next();
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      error: "An error2 occured when uploading product image.",
+    });
+  }
+}
+
 
 module.exports = {
-  async uploadFruitImage(req, res, next) {
-    try {
-      // what is actual code
-      await upload(req, res, function (err) {
-        if (err) {
-          return res.send("An error occured on uploading images");
-        } else {
-          next();
-        }
-      });
-    } catch (error) {
-      res.status(500).send({
-        error: "An error2 occured when uploading product image.",
-      });
-    }
-  },
+  uploadFruitImage
 };

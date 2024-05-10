@@ -4,7 +4,10 @@ require('dotenv').config()
 const fs=require("fs")
 const path = require('path');
 const { Op } = require('sequelize');
-const getAllFruits=async (req,res)=>{
+const {trycatchWrapper}=require("../middlewares/tryCatchWrapper")
+const {  validationResult } = require('express-validator');
+const IoService =require('../services/IoService');
+const getAllFruits=trycatchWrapper(async (req,res)=>{
     const fruits=await Fruit.findAll({
         where:{
             isDeleted:0
@@ -16,10 +19,14 @@ const getAllFruits=async (req,res)=>{
         ],
         
     });
-    res.send(fruits)
-}
+    await IoService.sendNotification([1],"hello you");
+    
+    res.status(200).send({
+        fruits: fruits
+    })
+})
 
-const getFruit=async(req,res)=>{
+const getFruit=trycatchWrapper(async(req,res)=>{
     const fruit= await Fruit.findByPk(req.params.fruitId,{
         include:[
             {model: Category},
@@ -32,81 +39,57 @@ const getFruit=async(req,res)=>{
         })
     }
 
-    res.send(fruit);
-    
-}
-const getFruitImage=async(req,res)=>{
-    const fruit= await Fruit.findByPk(req.params.fruitId,{
-        // include:[
-        //     {model: Category},
-        //     {model: FruitImage}
-        // ]
+    res.status(200).send({
+        fruit:fruit
     });
-    // if(!fruit || fruit.isDeleted===1){
-    //     return res.status(403).send({
-    //         error:"Fruit is not found"
-    //     })
-    // }
-
-    res.send(fruit);
     
-}
+})
+const createFruit=trycatchWrapper(async (req,res)=>{
+    const errors=validationResult(req);
+    if(!errors.isEmpty()) {
+         deleteUploadedFiles(req.files);
+        return res.status(403).send({errors: errors.array()})
+    }
 
-const createFruit=async (req,res)=>{
     let transaction;
     try{
         transaction=await db.sequelize.transaction();
         console.log(req.body);
 
-    let images=[];
-    const fruit=await Fruit.create({
-        code:req.body.code,
-        title: req.body.title,
-        description: req.body.description,
-        amount: req.body.amount,
-        price: req.body.price, 
-        sales: req.body.sales,
-        CategoryId: req.body.categoryId,
-        isDeleted:0
-    })
-    
-    if(fruit){
-        let fruitId=fruit.id;
-        if(req.files!= undefined){
-            req.files.forEach(element => {
-                images.push({link:element.path,FruitId: fruitId});
-            });  
+        let images=[];
+        const fruit=await Fruit.create({
+            code:req.body.code,
+            title: req.body.title,
+            description: req.body.description,
+            amount: req.body.amount,
+            price: req.body.price, 
+            sales: req.body.sales,
+            CategoryId: req.body.categoryId
+        })
+        
+        if(fruit){
+            let fruitId=fruit.id;
+            if(req.files!= undefined){
+                req.files.forEach(element => {
+                    images.push({link:element.path,FruitId: fruitId});
+                });  
+            }
+        
+            await FruitImage.bulkCreate(images);
         }
-       
-        await FruitImage.bulkCreate(images);
-    }
-    await  transaction.commit();
-    res.send({fruit:fruit});
+        await  transaction.commit();
+        res.send({fruit:fruit});
     }catch(error){
         if (transaction) {
             await transaction.rollback();
           }
-        if(req.files!= undefined){
-            req.files.forEach(element => {
-                const filePath = path.resolve(__dirname, '..', element.path);
-                
-                if (fs.existsSync(filePath)) {
-                    fs.unlink(filePath, (err) => {
-                        if (err) {
-                            console.error(err);
-                        } 
-                    });
-                } else {
-                   console.log('Image not found')
-                }
-            });  
-        }
+         deleteUploadedFiles(req.files);
         res.status(500).send({
             error: 'An error occured when trying to sign in.'
         })
     }
-}
-const deleteFruit=async (req,res)=>{
+})
+const deleteFruit=trycatchWrapper(async (req,res)=>{
     const  deletedFruit=await Fruit.findByPk(req.params.fruitId);
     if(!deletedFruit || deletedFruit.isDeleted!==0){
         return res.status(403).send({
@@ -120,9 +103,13 @@ const deleteFruit=async (req,res)=>{
     })
     
 
-}
+})
 
-const updateFruitInf=async (req,res)=>{
+const updateFruitInf=trycatchWrapper(async (req,res)=>{
+    const errors=validationResult(req);
+    if(!errors.isEmpty()) {
+        return res.status(403).send({errors: errors.array()})
+    }
     const newData=req.body;
     const updatedFruit= await Fruit.findByPk(req.params.fruitId);
     
@@ -136,11 +123,13 @@ const updateFruitInf=async (req,res)=>{
         fruit: updatedFruit
     })
 
-}
+})
 
 const addFruitImages= async(req,res)=>{
+    try{
     const updatedFruit= await Fruit.findByPk(req.params.fruitId);
     if(!updatedFruit || updatedFruit.isDeleted===1){
+        await deleteUploadedFiles(req.files);
         return res.status(403).send({
             error:"Fruit is not found"
         })
@@ -156,10 +145,16 @@ const addFruitImages= async(req,res)=>{
     return res.status(200).send({
         fruitImages: fruitImages
     })
+    }catch(error){
+        await deleteUploadedFiles(req.files);
+        return res.status(500).send({
+            errors: error
+        })
+    }
 
 }
 
-const deleteFruitImages=async (req,res)=>{
+const deleteFruitImages=trycatchWrapper(async (req,res)=>{
     const imageIds=req.body.imageIds;
     imageIds.forEach(async(element)=>{
         const image=await FruitImage.findByPk(element);
@@ -189,15 +184,16 @@ const deleteFruitImages=async (req,res)=>{
 
     const deletedCount=await FruitImage.destroy({where: {id: {[Op.in]: imageIds}}});
     return res.status(200).send({
-        deletedCount:deletedCount
+        message:"Deleted successfully"
     })
-}
-const searchFruit=async (req,res)=>{
-    const searchString=req.params.title;
+})
+const searchFruit=trycatchWrapper(async (req,res)=>{
+    const searchString=req.query.title;
+    console.log("hello",searchString);
 
     const whereCondition = searchString ? {
         [Op.or]: [
-            { name: { [Op.like]: `%${searchString}%` } },
+            { title: { [Op.like]: `%${searchString}%` } },
         ],
         isDeleted: 0
     } : {};
@@ -213,14 +209,15 @@ const searchFruit=async (req,res)=>{
     res.status(200).send({ fruits: fruits });
 
 
-}
+})
 
-const filterFruit=async (req,res)=>{
+const filterFruit=trycatchWrapper(async (req,res)=>{
 
-    const { pricestart,priceEnd } = req.params;
+    const { priceStart,priceEnd } = req.query;
+    
         let whereCondition = {};
-        if (pricestart && priceEnd) {
-            whereCondition.price = { [Op.between]: [pricestart, priceEnd] };
+        if (priceStart && priceEnd) {
+            whereCondition.price = { [Op.between]: [priceStart, priceEnd] };
         }
         whereCondition.isDeleted = 0;
         const fruits = await Fruit.findAll({
@@ -233,7 +230,45 @@ const filterFruit=async (req,res)=>{
         });
 
         // Send the response with the fetched fruits
-        res.status(200).json({ fruits });
+        res.status(200).send({ fruits:fruits });
 
-}
-module.exports={getAllFruits,getFruit,createFruit,deleteFruit,updateFruitInf,addFruitImages,deleteFruitImages,filterFruit,searchFruit,getFruitImage}
+})
+const getFruitsByCategory=trycatchWrapper(async(req,res)=>{
+    const categoryId = req.query.categoryId;
+    console.log("HELLO: ",categoryId);
+
+    
+    const fruits = await Fruit.findAll({
+        where: {
+            isDeleted: 0,
+            CategoryId: categoryId
+        },
+        include:[
+            {model: Category},
+            {model: FruitImage}
+        ],
+    });
+    return res.status(200).send({
+        fruits: fruits
+    });
+
+})
+
+
+const deleteUploadedFiles =async (files) => {
+    if (files) {
+        files.forEach(file => {
+            const filePath = path.resolve(__dirname, '..', file.path);
+            if (fs.existsSync(filePath)) {
+                fs.unlink(filePath, err => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            } else {
+                console.log('Image not found');
+            }
+        });
+    }
+};
+module.exports={getAllFruits,getFruit,createFruit,deleteFruit,updateFruitInf,addFruitImages,deleteFruitImages,filterFruit,searchFruit,getFruitsByCategory}

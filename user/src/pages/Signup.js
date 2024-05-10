@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import BreadCrumb from "../components/BreadCrumb";
 import { Link, useNavigate } from 'react-router-dom';
 import Meta from "../components/Meta";
@@ -12,7 +12,10 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import { base_url } from "../utils/axiosConfig";
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import TimeCounter from "../components/TimeCounter";
 const signUpSchema = yup.object({
   firstname: yup.string().required("First name is required"),
   lastname: yup.string().default("").required("Last name is required"),
@@ -27,6 +30,7 @@ const signUpSchema = yup.object({
 });
 
 const Signup = () => {
+  const [counter,setCounter]=useState(false);
   const authState = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,7 +48,7 @@ const Signup = () => {
       dispatch(registerUser(values))
         .unwrap()
         .then(() => {
-          navigate('/');
+          navigate('/fruits');
           window.location.reload();
         })
         .catch((error) => {
@@ -55,6 +59,8 @@ const Signup = () => {
 
 
 const sendVerifyCode= async(email)=>{
+  setCounter((prevCounter) => !prevCounter);
+
   try {
     const tokenData={
        email: email,
@@ -66,12 +72,16 @@ const sendVerifyCode= async(email)=>{
     console.log(error);
   }
 
+  setTimeout(() => {
+    setCounter((prevCounter) => !prevCounter);
+  }, 100000);
+
 }
 
 
   return (
     <>
-      <Meta title={"Sign Up"} />
+      {/* <Meta title={"Sign Up"} /> */}
       <BreadCrumb title="Sign Up" />
       <Container class1="login-wrapper py-5 home-wrapper-2">
         <div className="row">
@@ -107,7 +117,7 @@ const sendVerifyCode= async(email)=>{
                 </div> 
                 
                 <InputGroup>
-                <div style={{width: "75%"}} > 
+                <div style={{width: "70%"}} > 
                  <CustomInput 
                   type="email"
                   name="email"
@@ -118,8 +128,16 @@ const sendVerifyCode= async(email)=>{
                 />
 
                  </div>
+                 <div style={{width: "5%"}} >
+
+                 </div>
                 
-                <Button variant="light"  style={{width: "25%"}}  onClick={() => sendVerifyCode(formik.values.email)}>Send code</Button>
+
+                <div style={{width: "25%"}}>
+                    <Button variant="light"    onClick={()=>sendVerifyCode(formik.values.email)} disabled={counter}>Send code</Button>
+                    { counter && <TimeCounter/>}
+
+                    </div>
                 </InputGroup>
                 <div className="error">
                   {formik.touched.email && formik.errors.email}
@@ -167,6 +185,18 @@ const sendVerifyCode= async(email)=>{
           </div>
         </div>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 };

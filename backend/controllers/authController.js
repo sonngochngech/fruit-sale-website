@@ -5,20 +5,25 @@ const generatejwt=require('../config/jwtgenerator')
 const crypto = require("crypto")
 const nodemailer=require("nodemailer");
 const {config}=require("../config/mailConfig");
-
-
+const {trycatchWrapper}=require("../middlewares/tryCatchWrapper")
+const {  validationResult } = require('express-validator');
+const { sendMail } = require('../services/mailService');
+const{ConnectedIoEvent}=require('../services/IoService');
 require('dotenv').config()
 
 
-const sendToken=async (req,res)=>{
-    try{
-        const {email,type}=req.body;
-        console.log(type);
+const sendToken=trycatchWrapper(async (req,res)=>{
+        const errors=validationResult(req);
+        if(!errors.isEmpty()) {
+            return res.status(403).send({errors: errors.array()})
+        }
         
+        const {email,type}=req.body;
+     
 
         if((!email) || (type!== "PASSWORD" && type!=="REGISTER")){
             return res.status(403).send({
-                error: 'Incorrect login information 1 .'
+                error: 'Incorrect login information .'
             })
         }
 
@@ -39,26 +44,15 @@ const sendToken=async (req,res)=>{
         const  mailOptions = {
             from: process.env.MAILER,
             to: email,
-            subject: "Email verification code to register",
+            subject: "Email verification code",
             text:'Welcome to fruit market !\n\n' +
                 'Your email verification code is: ' + token + '\n\n' +
-                'Use this code to complete the registration process.\n\n' +
+                'Use this code to complete the  process.\n\n' +
                 'Enjoy using your account!\n'
         }
 
-        const transporter= await nodemailer.createTransport(config);
-        await transporter.sendMail(mailOptions  ,(err,info)=>{
-            if(err){
-                console.log("hello",err)
-                return res.status(403).send({
-                    error: "An error occured when trying to send an email for request password token"
-                });
-               
-            }else {
-                console.log(info.response);
-               
-            }
-        });
+       
+        await sendMail(mailOptions);
 
         const newToken=await TemporaryToken.create({
             code: token,
@@ -68,19 +62,16 @@ const sendToken=async (req,res)=>{
         return  res.status(200).send({
             temporaryToken: newToken
         })
-    }
-    catch(err){
-        res.status(500).send({
-            error: 'An error occured when trying to sign in.'
-        })
-    }
-}
+})  
 
 
 
 
-const login=async (req,res)=>{
-    try{
+const login=trycatchWrapper(async (req,res)=>{
+        const errors=validationResult(req);
+        if(!errors.isEmpty()) {
+            return res.status(403).send({errors: errors.array()})
+        }
         const {email,password}=req.body;
         const user=await User.findOne({
             where: {
@@ -97,19 +88,23 @@ const login=async (req,res)=>{
                 error: 'Incorrect login information.'
             })  
         }
+        // ConnectedIoEvent(user.id);
+
+        
+
         res.status(200).send({
             user: user,
             jwt: generatejwt(user.id)
         })
-    }catch(err){
-        res.status(500).send({
-            error: 'An error occured when trying to sign in.'
-        })
-    }
-}
+   
+})
 
-const register= async (req,res)=>{
-//    try{
+const register=trycatchWrapper( async (req,res)=>{
+    const errors=validationResult(req);
+    if(!errors.isEmpty()) {
+        return res.status(403).send({errors: errors.array()})
+    }
+
     const {email,password,firstname,lastname,mobile,token}=req.body;
 
     const storedToken=await TemporaryToken.findOne({
@@ -136,15 +131,10 @@ const register= async (req,res)=>{
         user:user,
         jwt: await generatejwt(user.id)
     })
-//    }catch(err){
-//         res.status(500).send({
-//             error: 'An error occured when trying to sign in.'
-//         })
-//    }
-}
+})
 
-const verifyPasswordToken= async(req,res)=>{
-    try{
+const verifyPasswordToken=trycatchWrapper( async(req,res)=>{
+
         const {token}=req.body;
     const storedToken=await TemporaryToken.findOne({
         where:{
@@ -167,17 +157,9 @@ const verifyPasswordToken= async(req,res)=>{
         jwt: await generatejwt(user.id) 
 
     })
+})
 
-    }catch(error){
-        res.status(500).send({
-            error: 'An error occured when trying to sign in.'
-        })
-    }
-
-}
-
-const updatePassword=async(req,res)=>{
-    try{
+const updatePassword=trycatchWrapper(async(req,res)=>{
         const {  oldPassword, newPassword } = req.body;
         const currentUser=await User.findByPk(req.user.id);
         if (currentUser && (await bcrypt.compare(oldPassword,currentUser.password))) {
@@ -193,17 +175,12 @@ const updatePassword=async(req,res)=>{
                 jwt: generatejwt(currentUser.id)
             });
         } else {
-            res.status(401).send({
+            res.status(403).send({
                 message: 'Invalid credentials or old password does not match',
             });
         }
-    }catch(error){
-        res.status(500).send({
-            error: 'An error occured when trying to change password'
-        })
-    }
-}
-const resetPassword=async(req,res)=>{
+})
+const resetPassword=trycatchWrapper(async(req,res)=>{
     const {password}=req.body;
     const currentUser=await User.findByPk(req.user.id);
         if (currentUser) {
@@ -219,11 +196,11 @@ const resetPassword=async(req,res)=>{
                 jwt: generatejwt(currentUser.id)
             });
         } else {
-            res.status(401).send({
+            res.status(403).send({
                 message: 'Invalid credentials or old password does not match',
             });
         }
 
-}
+})
 
 module.exports={register,login,sendToken,updatePassword,verifyPasswordToken,resetPassword}

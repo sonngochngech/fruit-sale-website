@@ -16,10 +16,11 @@ module.exports = (sequelize, DataTypes) => {
   TemporaryToken.init({
     code: {
       type: DataTypes.STRING,
-      unique:true
+      allowNull: false
     },
     type:{
       type: DataTypes.STRING,
+      allowNull: false
     },
     email:{
       type: DataTypes.STRING,

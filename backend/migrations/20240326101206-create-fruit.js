@@ -1,5 +1,6 @@
 'use strict';
 const { DataTypes } = require('sequelize');
+const { defaultValueSchemable } = require('sequelize/lib/utils');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -12,28 +13,38 @@ module.exports = {
       },
       code: {
         type: Sequelize.STRING,
+        allowNull: false,
         unique: true 
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       description: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: false
       },
       amount: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue:0
       },
       rating: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
+        defaultValue: 0
       },
       peopleRated: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue:0
       },
       price: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue:0
       },
       sales: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue:0
       },
       isDeleted: {
         type: Sequelize.INTEGER,
