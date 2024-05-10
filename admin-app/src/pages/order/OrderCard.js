@@ -52,7 +52,7 @@ const OrderCard = ({ orders, onViewDetail, onDelete, onEdit }) => {
 
   return (
     <div>
-      <table className="table table-striped">
+      <table className="table table-striped table-hover">
         <thead>
           <tr>
             <th>ID</th>
