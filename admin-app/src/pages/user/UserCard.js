@@ -13,16 +13,16 @@ const UserCard = ({ users, onViewDetail, onDelete, onEdit }) => {
    .map((user) => (
       <tr key={user.id}>
         <td>{user.id}</td>
-        <td>{user.firstName} {user.lastName}</td>
+        <td>{user.name.firstname} {user.name.lastname}</td>
         <td>
           <img
             src={user.profileImage}
-            alt={`${user.firstName} ${user.lastName}`}
+            alt={`${user.name.firstname} ${user.name.lastname}`}
             className="user-profile-image"
           />
         </td>
         <td>{user.email}</td>
-        <td>{user.phoneNo}</td>
+        <td>{user.phone}</td>
         <td>{user.role}</td>
         <td>
           <button
