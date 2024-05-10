@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addNewCategory } from "../../features/categories/categorySlice";
 import Modal from "react-bootstrap/Modal";
+import AlertMessage from "./AlertMessage"; // Import component AlertMessage
 
 const CreateCategoryForm = ({ onClose }) => {
   const [newCategory, setNewCategory] = useState({
     name: "",
   });
+  const [showAlert, setShowAlert] = useState(false); // State để hiển thị thông báo
 
   const dispatch = useDispatch();
+  const categories = useSelector((state) => state.categories.categories);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -17,8 +20,15 @@ const CreateCategoryForm = ({ onClose }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(addNewCategory(newCategory));
-    onClose();
+    const isCategoryExist = categories.some((category) => category.name === newCategory.name);
+    if (isCategoryExist) {
+      // Hiển thị thông báo nếu category đã tồn tại
+      setShowAlert(true);
+    } else {
+      // Thêm mới category nếu chưa tồn tại
+      dispatch(addNewCategory(newCategory));
+      onClose();
+    }
   };
 
   return (
@@ -27,6 +37,7 @@ const CreateCategoryForm = ({ onClose }) => {
         <Modal.Title>Add new category</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {showAlert && <AlertMessage message="Category already exists" />} {/* Hiển thị thông báo */}
         <form onSubmit={handleSubmit}>
           <div className="form-group row">
             <label htmlFor="categoryName" className="col-sm-3 col-form-label">
