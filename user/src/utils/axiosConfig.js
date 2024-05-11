@@ -1,4 +1,4 @@
-export const base_url = "http://localhost:8081/api/";
+export const base_url = "https://fruit-sale-v1-2-0.onrender.com/api/";
 const getTokenFromLocalStorage = localStorage.getItem("customer")
   ? JSON.parse(localStorage.getItem("customer"))
   : null;
@@ -12,4 +12,4 @@ export const config = {
   },
 };
 
-export const base_domain="http://localhost:8081/"
+export const base_domain="https://fruit-sale-v1-2-0.onrender.com/"

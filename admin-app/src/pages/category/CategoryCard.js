@@ -8,7 +8,13 @@ const CategoryCard = ({ categories, onDelete, onEdit }) => {
   const categoriesPerPage = 10;
   const pagesVisited = pageNumber * categoriesPerPage;
 
-  const displayCategories = categories
+  // Kiểm tra nếu categories không phải là mảng hoặc categories.rỗng
+  if (!Array.isArray(categories?.categories) || categories.categories.length === 0) {
+    return <div></div>;
+  }
+
+  // Lấy danh sách các categories trên trang hiện tại
+  const displayCategories = categories.categories
     .slice(pagesVisited, pagesVisited + categoriesPerPage)
     .map((category) => (
       <tr key={category.id}>
@@ -31,8 +37,10 @@ const CategoryCard = ({ categories, onDelete, onEdit }) => {
       </tr>
     ));
 
-  const pageCount = Math.ceil(categories.length / categoriesPerPage);
+  // Tính số trang
+  const pageCount = Math.ceil(categories.categories.length / categoriesPerPage);
 
+  // Xử lý sự kiện chuyển trang
   const handlePageClick = (event) => {
     setPageNumber(event.selected);
   };

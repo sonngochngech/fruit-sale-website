@@ -1,28 +1,47 @@
 // App.js
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
 import AdminLayout from './components/AdminLayout';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { PrivateRoutes } from './routing/PrivateRoutes';
+import { OpenRoutes } from './routing/OpenRoutes';
+import Login from './pages/Login';
+import Resetpassword from './pages/Resetpassword';
+import Forgotpassword from './pages/Forgotpassword';
 import Dashboard from './pages/Dashboard';
 import UserList from './pages/user/UserManagement';
 import ProductList from './pages/product/ProductManagement';
 import CategoryList from './pages/category/CategoryManagement';
 import OrderList from './pages/order/OrderManagement';
 
-const App = () => {
-    return (
-        <Router>
-            <AdminLayout>
-                <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/users" element={<UserList />} />
-                    <Route path="/products" element={<ProductList />} />
-                    <Route path="/categories" element={<CategoryList />} />
-                    <Route path="/orders" element={<OrderList />} />
-                </Routes>
-            </AdminLayout>
-        </Router>
-    );
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="login" element={<OpenRoutes><Login /></OpenRoutes>} />
+        <Route path="forgot-password" element={<OpenRoutes><Forgotpassword /></OpenRoutes>} />
+        <Route path="reset-password" element={<OpenRoutes><Resetpassword /></OpenRoutes>} />
+
+        {/* Regular user routes */}
+        <Route element={<PrivateRoutes><Layout /></PrivateRoutes>}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="users" element={<UserList />} />
+          <Route path="products" element={<ProductList />} />
+          <Route path="categories" element={<CategoryList />} />
+          <Route path="orders" element={<OrderList />} />
+        </Route>
+
+        {/* Admin routes */}
+        {/* <Route path="admin" element={<PrivateRoutes><AdminLayout /></PrivateRoutes>}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="users" element={<UserList />} />
+          <Route path="products" element={<ProductList />} />
+          <Route path="categories" element={<CategoryList />} />
+          <Route path="orders" element={<OrderList />} />
+        </Route> */}
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

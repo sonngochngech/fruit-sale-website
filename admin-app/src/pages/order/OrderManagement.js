@@ -53,6 +53,7 @@ const OrderManagement = () => {
   };
 
   return (
+    <>
     <div className="order-management">
       <h2>Orders</h2>
       <div className="row">
@@ -92,6 +93,7 @@ const OrderManagement = () => {
         onDelete={handleDelete}
       />
     </div>
+    </>
   );
 };
 

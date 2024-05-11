@@ -12,7 +12,7 @@ import {
 
 const CategoryManagement = () => {
   const dispatch = useDispatch();
-  const categories = useSelector((state) => state.categories.categories);
+  const categories = useSelector((state) => state?.categories?.categories);
   const [showCreateCategoryForm, setShowCreateCategoryForm] = useState(false);
   const [showUpdateCategoryForm, setShowUpdateCategoryForm] = useState(false);
   const [updateCategoryData, setUpdateCategoryData] = useState(null);
@@ -21,7 +21,6 @@ const CategoryManagement = () => {
 
   useEffect(() => {
     dispatch(fetchCategories());
-    console.log(categories)
   }, [dispatch]);
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const CategoryManagement = () => {
   };
 
   const handleCreateCategory = (categoryData) => {
-    dispatch(addNewCategory(categoryData));
+    // dispatch(addNewCategory(categoryData));
     setShowCreateCategoryForm(false);
   };
 

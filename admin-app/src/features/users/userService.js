@@ -1,6 +1,38 @@
 import axios from "axios";
 import { base_url, config } from "../../utils/axiosConfig";
 
+
+
+
+const login = async (userData) => {
+  try {
+    const response = await axios.post(`${base_url}auth/login`, userData);
+    if (response.data?.jwt) {
+      localStorage.setItem("customer", JSON.stringify(response.data?.user));
+      return response.data;
+    } else {
+      alert("Sai thông tin tài khoản, vui lòng đăng nhập lại!");
+    }
+  } catch (error) {
+    // Handle any exceptions that occurred during the registration process
+    throw new Error(error.message);
+  }
+};
+
+const logout = async () => {
+  try {
+    // Xóa dữ liệu đăng nhập từ lưu trữ trình duyệt
+    localStorage.removeItem("customer");
+    localStorage.removeItem("jwt");
+
+    // Trả về thành công nếu không có lỗi xảy ra
+    return;
+  } catch (error) {
+    // Xử lý các ngoại lệ xảy ra trong quá trình đăng xuất
+    throw new Error(error.message);
+  }
+};
+
 // Lấy danh sách người dùng
 const showList = async () => {
   try {
@@ -34,10 +66,12 @@ const removeUser = async (userId) => {
     }
   };
 
-const userService = {
+const authService = {
     showList,
     removeUser,
-    updateUser
+    updateUser,
+    login,
+    logout,
 };
 
-export default userService;
+export default authService;

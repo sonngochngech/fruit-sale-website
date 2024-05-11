@@ -15,13 +15,12 @@ const ProductManagement = () => {
   const products = useSelector((state) => state.products.products);
   const [showCreateProductForm, setShowCreateProductForm] = useState(false);
   const [showUpdateProductForm, setShowUpdateProductForm] = useState(false);
-  const [updateProduct, setUpdateProductLocal] = useState(null);
+  const [updateProductData, setUpdateProductData] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     dispatch(fetchProducts());
-    console.log(products);
   }, [dispatch]);
 
   useEffect(() => {
@@ -45,7 +44,9 @@ const ProductManagement = () => {
   };
 
   const handleCreateProduct = (productData) => {
-    dispatch(addNewProduct(productData));
+    dispatch(addNewProduct(productData))
+      .then(() => dispatch(fetchProducts()))
+      .catch((error) => console.error("Error adding product:", error));
     setShowCreateProductForm(false);
   };
 
@@ -55,24 +56,24 @@ const ProductManagement = () => {
 
   const handleUpdate = (productId) => {
     const productToUpdate = products.find((product) => product.id === productId);
-    // dispatch(updateProduct(productId, productToUpdate));
-    setUpdateProductLocal(productToUpdate);
+    setUpdateProductData(productToUpdate);
     setShowUpdateProductForm(true);
   };
 
   const handleCloseUpdateProductForm = () => {
     setShowUpdateProductForm(false);
-    setUpdateProductLocal(null);
+    setUpdateProductData(null);
   };
 
   const handleDelete = (productId) => {
     dispatch(deleteProduct(productId))
-    .then(() => {
-      dispatch(fetchProducts()); // Sau khi xóa sản phẩm, tải lại danh sách sản phẩm từ server
-    })
-    .catch((error) => {
-      console.error("Error deleting product:", error);
-    });
+      .then(() => {
+        const updatedProducts = products.filter(
+          (product) => product.id !== productId
+        );
+        setFilteredProducts(updatedProducts);
+      })
+      .catch((error) => console.error("Error deleting product:", error));
   };
 
   return (
@@ -120,7 +121,7 @@ const ProductManagement = () => {
       {showUpdateProductForm && (
         <div className="product-edit-form">
           <UpdateProductForm
-            productToUpdate={updateProduct}
+            productToUpdate={updateProductData}
             onClose={handleCloseUpdateProductForm}
           />
         </div>

@@ -21,13 +21,12 @@ export const addNewCategory = createAsyncThunk(
   async (newCategoryData) => {
     try {
       const newCategory = await categoryService.addCategory(newCategoryData);
-      console.log(newCategory);
       return newCategory;
     } catch (error) {
       throw new Error(error.message);
     }
   }
-);
+);  
 
 // Action thực hiện xóa danh mục
 export const deleteCategory = createAsyncThunk(

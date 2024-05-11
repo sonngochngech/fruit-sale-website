@@ -18,17 +18,18 @@ const CreateCategoryForm = ({ onClose }) => {
     setNewCategory((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const isCategoryExist = categories.some((category) => category.name === newCategory.name);
-    if (isCategoryExist) {
-      // Hiển thị thông báo nếu category đã tồn tại
-      setShowAlert(true);
-    } else {
+    // const isCategoryExist = categories.some((category) => category.name === newCategory.name);
+    // if (isCategoryExist) {
+    //   // Hiển thị thông báo nếu category đã tồn tại
+    //   setShowAlert(true);
+    // } else {
       // Thêm mới category nếu chưa tồn tại
-      dispatch(addNewCategory(newCategory));
+      console.log(newCategory);
+      await dispatch(addNewCategory(newCategory));
       onClose();
-    }
+    // }
   };
 
   return (

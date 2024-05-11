@@ -1,5 +1,5 @@
 import React from "react";
-import {  DropdownButton, Dropdown } from 'react-bootstrap';
+import { DropdownButton, Dropdown } from 'react-bootstrap';
 
 const Header = () => {
   return (
@@ -17,28 +17,21 @@ const Header = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          {/* Search Box */}
-          <form className="d-flex me-auto ms-3">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
+          {/* Image and User Profile Dropdown */}
+          <div className="d-flex align-items-center me-auto ms-3">
+            <img
+              src="/path_to_your_image"
+              alt="User Avatar"
+              className="rounded-circle me-2"
+              style={{ width: "40px", height: "40px" }}
             />
-            <button className="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
+            <span>Email@example.com</span>
+          </div>
           {/* User Profile Dropdown */}
           <DropdownButton
             id="dropdownMenuButton"
             variant="success"
-            title={
-              <span>
-                <span className="me-2">Admin</span>
-                <i className="fas fa-user-circle"></i>
-              </span>
-            }
+            title={<i className="fas fa-cog"></i>}
             menuAlign="end"
           >
             <Dropdown.Item href="#">Profile</Dropdown.Item>

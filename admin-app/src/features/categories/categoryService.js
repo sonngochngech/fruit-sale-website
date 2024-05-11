@@ -4,7 +4,7 @@ import { base_url, config } from "../../utils/axiosConfig";
 // Lấy danh sách danh mục
 const showList = async () => {
   try {
-    const response = await axios.get(`${base_url}products/categories`);
+    const response = await axios.get(`${base_url}categories`);
     return response.data;
   } catch (error) {
     throw new Error(error.message);
@@ -14,7 +14,7 @@ const showList = async () => {
 // Thêm danh mục mới
 const addCategory = async (newCategoryData) => {
   try {
-    const response = await axios.post(`${base_url}products/categories`, newCategoryData, config);
+    const response = await axios.post(`${base_url}categories/create`, newCategoryData, config);
     return response.data;
   } catch (error) {
     throw new Error(error.message); 
