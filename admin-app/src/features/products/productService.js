@@ -14,6 +14,7 @@ const showList = async () => {
 // Thêm sản phẩm mới
 const addProduct = async (newProductData) => {
   try {
+    console.log(newProductData);
     const response = await axios.post(`${base_url}fruits/create`, newProductData, config);
     return response.data;
   } catch (error) {

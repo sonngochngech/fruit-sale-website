@@ -20,8 +20,8 @@ export const addNewProduct = createAsyncThunk(
   async (newProductData) => {
     try {
       const newProduct = await productService.addProduct(newProductData);
-      console.log(newProduct);
-      return newProduct;
+      const products = await productService.showList();
+      return products;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -96,7 +96,7 @@ export const productSlice = createSlice({
       })
       .addCase(addNewProduct.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products.push(action.payload);
+        state.products=action.payload;
       })
       .addCase(addNewProduct.rejected, (state, action) => {
         state.isLoading = false;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewProduct } from "../../features/products/productSlice";
-import { fetchCategories } from "../../features/categories/categorySlice"; 
+import { fetchCategories } from "../../features/categories/categorySlice";
 import Modal from "react-bootstrap/Modal";
 
 const CreateProductForm = ({ onClose }) => {
@@ -10,69 +10,42 @@ const CreateProductForm = ({ onClose }) => {
     title: "",
     description: "",
     amount: 0,
-    rating: 0,
     price: 0,
-    sales: 0,
-    categoryId: "", // Updated to match the structure
-    categoryName: "", // Updated to match the structure
-    imageLink: "",
+    CategoryId: "", 
+    files: []
   });
 
-  const [files, setFiles] = useState([]); 
+  const [selectedCategory, setSelectedCategory] = useState(""); // For category selection
   const dispatch = useDispatch();
-  const categories = useSelector(
-    (state) => state?.categories?.categories
-  );
-
-  console.log(categories.categories);
+  const categories = useSelector((state) => state?.categories?.categories);
 
   useEffect(() => {
     dispatch(fetchCategories());
-  }, [dispatch]); 
+  }, [dispatch]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewProduct((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const packFiles = (files) => {
-    const data = new FormData();
-    [...files].forEach((file, i) => {
-      data.append(`file-${i}`, file, file.name);
-    });
-    return data;
+  const handleUploadImage = () => {
+    const formData = new FormData();
+    newProduct.files.forEach((file, i) => formData.append(`file-${i}`, file, file.name)); 
+    setNewProduct((prevData) => ({
+      ...prevData,
+      files: formData
+    }));
   };
 
-  const uploadFiles = (data) => {
-    // Upload logic
-  };
-  
-  const handleImageUpload = (event) => {
-    const uploadedFiles = event.target.files;
-    if (uploadedFiles) {
-      Promise.all(
-        [...uploadedFiles].map((file) => {
-          return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-              resolve(reader.result);
-            };
-            reader.onerror = (error) => {
-              reject(error);
-            };
-          });
-        })
-      ).then((results) => {
-        setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
-        const data = packFiles(uploadedFiles); 
-        uploadFiles(data); 
-      });
-    }
+  const handleCategoryChange = (event) => {
+    const { value } = event.target;
+    setSelectedCategory(value);
+    setNewProduct((prevData) => ({ ...prevData, CategoryId: value }));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(newProduct);
     dispatch(addNewProduct(newProduct));
     onClose();
   };
@@ -110,37 +83,18 @@ const CreateProductForm = ({ onClose }) => {
               <select
                 className="form-control"
                 id="category"
-                name="categoryId" // Updated to match the structure
-                value={newProduct.categoryId} // Updated to match the structure
-                onChange={handleInputChange}
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+                required
               >
                 <option value="">Select Category</option>
                 {categories.categories.map((category) => (
-                  <option key={category.id} value={category.id}>{category.name}</option> // Updated to match the structure
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
                 ))}
               </select>
             </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="images">Images</label>
-            <input type="file" multiple onChange={handleImageUpload} />
-            {newProduct.images && newProduct.images.length > 0 && (
-              <div className="d-flex flex-wrap mt-2">
-                {newProduct.images.map((imageUrl, index) => (
-                  <img
-                    key={index}
-                    src={imageUrl}
-                    alt={`Image ${index}`}
-                    style={{
-                      maxWidth: "100px",
-                      maxHeight: "100px",
-                      margin: "5px",
-                    }}
-                  />
-                ))}
-              </div>
-            )}
           </div>
 
           <div className="form-group row">
@@ -161,6 +115,74 @@ const CreateProductForm = ({ onClose }) => {
             </div>
           </div>
 
+          <div className="form-group row">
+            <label htmlFor="productAmount" className="col-sm-3 col-form-label">
+              Amount
+            </label>
+            <div className="col-sm-9">
+              <input
+                type="number"
+                className="form-control"
+                id="productAmount"
+                name="amount"
+                value={newProduct.amount}
+                onChange={handleInputChange}
+                placeholder="Enter product amount"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-group row">
+            <label htmlFor="productCode" className="col-sm-3 col-form-label">
+              Product Code
+            </label>
+            <div className="col-sm-9">
+              <input
+                type="text"
+                className="form-control"
+                id="productCode"
+                name="code"
+                value={newProduct.code}
+                onChange={handleInputChange}
+                placeholder="Enter product code"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-group row">
+            <label htmlFor="productImage" className="col-sm-3 col-form-label">
+              Product Image
+            </label>
+            <div className="col-sm-9">
+              <input
+                type="file"
+                className="form-control"
+                id="productImage"
+                name="image" // Use a descriptive name like "image"
+                multiple // Allow selecting multiple images (optional)
+                onChange={handleUploadImage}
+              />
+            </div>
+            {newProduct.files.length > 0 && (
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label"></label>
+              <div className="col-sm-9">
+                {Array.from(newProduct.files).map((file, i) => (
+                  <img 
+                    key={i} 
+                    src={URL.createObjectURL(file)} 
+                    alt={`Preview of ${file.name}`} 
+                    style={{ maxWidth: "100px", maxHeight: "100px", margin: "5px" }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+          </div>
+
+
           <div className="form-group">
             <label htmlFor="description">Description</label>
             <textarea
@@ -176,7 +198,7 @@ const CreateProductForm = ({ onClose }) => {
 
           <div className="text-center">
             <button className="btn btn-primary" type="submit">
-              Save Changes
+              Create new
             </button>
           </div>
         </form>
