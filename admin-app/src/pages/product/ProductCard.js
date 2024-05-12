@@ -8,15 +8,19 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
   const productsPerPage = 10;
   const pagesVisited = pageNumber * productsPerPage;
 
-  const displayProducts = products
-   .slice(pagesVisited, pagesVisited + productsPerPage)
-   .map((product) => (
+  if (!Array.isArray(products?.fruits) || products.fruits.length === 0) {
+    return <div></div>;
+  }
+  
+  const displayProducts = products?.fruits
+    .slice(pagesVisited, pagesVisited + productsPerPage)
+    .map((product) => (
       <tr key={product.id}>
         <td>{product.id}</td>
         <td className="name-location-column">
           <div className="d-flex align-items-center">
             <img
-              src={product.image}
+              src={product.FruitImages.length > 0 ? product.FruitImages[0].link : ''}
               alt={product.title}
               className="product-image"
               style={{
@@ -27,15 +31,13 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
             />
             <div className="product-info">
               <div>{product.title}</div>
-              <div>{product.origin}</div>
+              <div>{product.Category.name}</div>
             </div>
           </div>
         </td>
-        <td>{product.category}</td>
+        <td>{product.Category.name}</td>
         <td>{product.price}</td>
-        <td>{product.price}/5.0</td> {/*need fix*/}
-        {/* <td>{product.unit}</td> */}
-        {/* <td>{product.quantity}</td> */}
+        <td>{product.rating}/5.0</td>
         <td>
           <button
             className="btn btn-primary"
@@ -61,16 +63,8 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
 
   const pageCount = Math.ceil(products.length / productsPerPage);
 
-  const changePage = ({ selected }) => {
-    setPageNumber(selected);
-  };
-
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * productsPerPage) % products.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
-    setPageNumber(event.selected);
+  const handlePageClick = (data) => {
+    setPageNumber(data.selected);
   };
 
   return (
@@ -79,12 +73,10 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Name / Export Location</th>
+            <th>Name / Category</th>
             <th>Category</th>
-            <th>Price/Unit</th>
+            <th>Price</th>
             <th>Rate</th>
-            {/* <th>Unit</th>
-            <th>Quantity</th> */}
             <th>Action</th>
           </tr>
         </thead>
