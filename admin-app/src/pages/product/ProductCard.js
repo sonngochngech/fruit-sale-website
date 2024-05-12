@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
+import {base_url} from '../../utils/axiosConfig'
 
 import "./ProductCard.css";
 
@@ -20,7 +21,7 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
         <td className="name-location-column">
           <div className="d-flex align-items-center">
             <img
-              src={product.FruitImages.length > 0 ? product.FruitImages[0].link : ''}
+              src={base_url + product.FruitImages.link}
               alt={product.title}
               className="product-image"
               style={{

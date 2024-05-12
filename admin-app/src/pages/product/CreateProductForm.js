@@ -1,23 +1,28 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addNewProduct } from "../../features/products/productSlice";
+import { fetchCategories } from "../../features/categories/categorySlice"; // Import selector
 import Modal from "react-bootstrap/Modal";
 
 const CreateProductForm = ({ onClose }) => {
   const [newProduct, setNewProduct] = useState({
     title: "",
-    price: 0,
     description: "",
-    rating: {
-      rate: 0,
-      count: 0,
-    },
-    image: "https://i.pravatar.cc",
+    amount: 0,
+    price: 0,
+    rating: 0,
+    peopleRated: 0,
     category: "",
     images: [],
   });
   
   const dispatch = useDispatch();
+  const categories = useSelector((state) => state?.categories?.categories.categories);
+
+  useEffect(() => {
+    // Dispatch action to fetch categories when component mounts
+    dispatch(fetchCategories());
+  }, [dispatch]); // This effect runs only once when the component mounts
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -55,7 +60,6 @@ const CreateProductForm = ({ onClose }) => {
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={handleSubmit}>
-          {/* Input fields for product data */}
           <div className="form-group row">
             <label htmlFor="productName" className="col-sm-3 col-form-label">
               Product Name
@@ -87,10 +91,11 @@ const CreateProductForm = ({ onClose }) => {
                 onChange={handleInputChange}
               >
                 <option value="">Select Category</option>
-                <option value="fruit">Fruit</option>
-                <option value="water">Water</option>
-                <option value="electronic">Electronic</option>
-                {/* Add more options as needed */}
+                {categories.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
