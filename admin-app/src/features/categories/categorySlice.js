@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import categoryService from './categoryService';
+import { toast } from 'react-toastify';
 
 // Action thực hiện lấy danh sách danh mục
 export const fetchCategories = createAsyncThunk(
@@ -7,7 +8,6 @@ export const fetchCategories = createAsyncThunk(
   async () => {
     try {
       const categories = await categoryService.showList();
-      console.log(categories);
       return categories;
     } catch (error) {
       throw new Error(error.message);
@@ -21,7 +21,8 @@ export const addNewCategory = createAsyncThunk(
   async (newCategoryData) => {
     try {
       const newCategory = await categoryService.addCategory(newCategoryData);
-      return newCategory;
+      const categories = await categoryService.showList();
+      return categories;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -34,20 +35,7 @@ export const deleteCategory = createAsyncThunk(
   async (categoryId) => {
     try {
       const message = await categoryService.removeCategory(categoryId);
-      return message;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-);
-
-// Action thực hiện chỉnh sửa thông tin danh mục
-export const updateCategory = createAsyncThunk(
-  'categories/updateCategory',
-  async ({ categoryId, updatedCategoryData }) => {
-    try {
-      const updatedCategory = await categoryService.updateCategory(categoryId, updatedCategoryData);
-      return updatedCategory;
+      return { categoryId, message };
     } catch (error) {
       throw new Error(error.message);
     }
@@ -67,11 +55,7 @@ const initialState = {
 export const categorySlice = createSlice({
   name: 'categories',
   initialState:initialState,
-  reducers: {
-    setCategories: (state, action) => {
-      state.categories = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchCategories.pending, (state) => {
@@ -95,7 +79,7 @@ export const categorySlice = createSlice({
       })
       .addCase(addNewCategory.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.categories.push(action.payload);
+        state.categories = action.payload;
       })
       .addCase(addNewCategory.rejected, (state, action) => {
         state.isLoading = false;
@@ -112,25 +96,6 @@ export const categorySlice = createSlice({
         state.categories = state.categories.filter(category => category.id !== action.payload.categoryId);
       })
       .addCase(deleteCategory.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.error.message;
-      })
-      .addCase(updateCategory.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.errorMessage = '';
-      })
-      .addCase(updateCategory.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.categories = state.categories.map(category => {
-          if (category.id === action.payload.id) {
-            return action.payload;
-          }
-          return category;
-        });
-      })
-      .addCase(updateCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.error.message;

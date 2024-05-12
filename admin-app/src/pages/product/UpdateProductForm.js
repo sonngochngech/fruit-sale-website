@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { updateProduct } from "../../features/products/productSlice";
 import Modal from "react-bootstrap/Modal";
 import * as Yup from "yup";
+import { fetchProducts } from "../../features/products/productSlice";
 
 // Tạo schema để xác thực dữ liệu
 const schema = Yup.object().shape({
@@ -36,7 +37,9 @@ const UpdateProductForm = ({ onClose, productToUpdate }) => {
     try {
       // Kiểm tra dữ liệu trước khi gửi lên server
       await schema.validate(updatedProduct, { abortEarly: false });
-      dispatch(updateProduct({ productId: updatedProduct.id, updatedProductData: updatedProduct }));
+      dispatch(updateProduct({ productId: updatedProduct.id, updatedProductData: updatedProduct }))
+      .then(() => dispatch(fetchProducts()))
+      .catch((error) => console.error("Error adding product:", error));;
       onClose();
     } catch (error) {
       // Xử lý lỗi và hiển thị thông báo

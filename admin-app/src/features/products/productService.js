@@ -14,7 +14,7 @@ const showList = async () => {
 // Thêm sản phẩm mới
 const addProduct = async (newProductData) => {
   try {
-    const response = await axios.post(`${base_url}fruits`, newProductData, config);
+    const response = await axios.post(`${base_url}fruits/create`, newProductData, config);
     return response.data;
   } catch (error) {
     throw new Error(error.message); 
@@ -25,7 +25,7 @@ const addProduct = async (newProductData) => {
 // Xóa sản phẩm
 const removeProduct = async (productId) => {
     try {
-      const response = await axios.delete(`${base_url}fruits/${productId}`);
+      const response = await axios.delete(`${base_url}fruits/delete/${productId}`);
       if (response.data.success) {
         return response.data.message; // Trả về thông báo thành công từ API
       } else {

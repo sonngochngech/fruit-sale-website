@@ -32,16 +32,16 @@ function App() {
     //   </Routes>
     // </BrowserRouter>
     <Router>
-    <AdminLayout>
-        <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/users" element={<UserList />} />
-            <Route path="/products" element={<ProductList />} />
-            <Route path="/categories" element={<CategoryList />} />
-            <Route path="/orders" element={<OrderList />} />
-        </Routes>
-    </AdminLayout>
-</Router>
+        <AdminLayout>
+            <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/users" element={<UserList />} />
+                <Route path="/products" element={<ProductList />} />
+                <Route path="/categories" element={<CategoryList />} />
+                <Route path="/orders" element={<OrderList />} />
+            </Routes>
+        </AdminLayout>
+    </Router>
   );
 }
 

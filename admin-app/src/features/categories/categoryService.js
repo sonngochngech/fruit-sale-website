@@ -21,11 +21,10 @@ const addCategory = async (newCategoryData) => {
   }
 };
 
-
 // Xóa danh mục
 const removeCategory = async (categoryId) => {
     try {
-      const response = await axios.delete(`${base_url}products/categories/${categoryId}`);
+      const response = await axios.delete(`${base_url}categories/delete/${categoryId}`);
       if (response.data.success) {
         return response.data.message; // Trả về thông báo thành công từ API
       } else {
@@ -34,22 +33,12 @@ const removeCategory = async (categoryId) => {
     } catch (error) {
       throw new Error(error.message); // Xử lý các lỗi khác (ví dụ: lỗi mạng, lỗi không xác định)
     }
-  }
-  
-  const updateCategory = async (categoryId, updatedCategoryData) => {
-    try {
-      const response = await axios.patch(`${base_url}products/categories/${categoryId}`, updatedCategoryData);
-      return response.data; // Trả về thông tin danh mục đã được chỉnh sửa
-    } catch (error) {
-      throw new Error(error.message); // Xử lý các lỗi khác (ví dụ: lỗi mạng, lỗi không xác định)
-    }
-  };
+};
 
 const categoryService = {
     showList,
     addCategory,
-    removeCategory,
-    updateCategory
+    removeCategory
 };
 
 export default categoryService;

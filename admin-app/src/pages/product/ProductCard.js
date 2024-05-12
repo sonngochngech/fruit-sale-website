@@ -9,11 +9,11 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
   const productsPerPage = 10;
   const pagesVisited = pageNumber * productsPerPage;
 
-  if (!Array.isArray(products?.fruits) || products.fruits.length === 0) {
+  if (!Array.isArray(products) || products.length === 0) {
     return <div></div>;
   }
   
-  const displayProducts = products?.fruits
+  const displayProducts = products
     .slice(pagesVisited, pagesVisited + productsPerPage)
     .map((product) => (
       <tr key={product.id}>
@@ -21,7 +21,7 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
         <td className="name-location-column">
           <div className="d-flex align-items-center">
             <img
-              src={base_url + product.FruitImages.link}
+              src={base_url + product.FruitImages[0].link}
               alt={product.title}
               className="product-image"
               style={{

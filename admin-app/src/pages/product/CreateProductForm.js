@@ -1,49 +1,73 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewProduct } from "../../features/products/productSlice";
-import { fetchCategories } from "../../features/categories/categorySlice"; // Import selector
+import { fetchCategories } from "../../features/categories/categorySlice"; 
 import Modal from "react-bootstrap/Modal";
 
 const CreateProductForm = ({ onClose }) => {
   const [newProduct, setNewProduct] = useState({
+    code: "",
     title: "",
     description: "",
     amount: 0,
-    price: 0,
     rating: 0,
-    peopleRated: 0,
-    category: "",
-    images: [],
+    price: 0,
+    sales: 0,
+    categoryId: "", // Updated to match the structure
+    categoryName: "", // Updated to match the structure
+    imageLink: "",
   });
-  
+
+  const [files, setFiles] = useState([]); 
   const dispatch = useDispatch();
-  const categories = useSelector((state) => state?.categories?.categories.categories);
+  const categories = useSelector(
+    (state) => state?.categories?.categories
+  );
+
+  console.log(categories.categories);
 
   useEffect(() => {
-    // Dispatch action to fetch categories when component mounts
     dispatch(fetchCategories());
-  }, [dispatch]); // This effect runs only once when the component mounts
+  }, [dispatch]); 
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewProduct((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const packFiles = (files) => {
+    const data = new FormData();
+    [...files].forEach((file, i) => {
+      data.append(`file-${i}`, file, file.name);
+    });
+    return data;
+  };
+
+  const uploadFiles = (data) => {
+    // Upload logic
+  };
+  
   const handleImageUpload = (event) => {
-    const files = event.target.files;
-    if (files) {
-      const imageUrls = [];
-      for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          imageUrls.push(e.target.result);
-          setNewProduct((prevData) => ({
-            ...prevData,
-            images: [...prevData.images, e.target.result],
-          }));
-        };
-        reader.readAsDataURL(files[i]);
-      }
+    const uploadedFiles = event.target.files;
+    if (uploadedFiles) {
+      Promise.all(
+        [...uploadedFiles].map((file) => {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+              resolve(reader.result);
+            };
+            reader.onerror = (error) => {
+              reject(error);
+            };
+          });
+        })
+      ).then((results) => {
+        setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
+        const data = packFiles(uploadedFiles); 
+        uploadFiles(data); 
+      });
     }
   };
 
@@ -86,15 +110,13 @@ const CreateProductForm = ({ onClose }) => {
               <select
                 className="form-control"
                 id="category"
-                name="category"
-                value={newProduct.category}
+                name="categoryId" // Updated to match the structure
+                value={newProduct.categoryId} // Updated to match the structure
                 onChange={handleInputChange}
               >
                 <option value="">Select Category</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.name}>
-                    {category.name}
-                  </option>
+                {categories.categories.map((category) => (
+                  <option key={category.id} value={category.id}>{category.name}</option> // Updated to match the structure
                 ))}
               </select>
             </div>

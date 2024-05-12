@@ -23,13 +23,14 @@ const ProductManagement = () => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
+  console.log(products);
   useEffect(() => {
     setFilteredProducts(products);
   }, [products]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
-    const filtered = products.filter((product) =>
+    const filtered = products.fruits.filter((product) =>
       product.title.toLowerCase().includes(event.target.value.toLowerCase())
     );
     setFilteredProducts(filtered);
@@ -44,9 +45,7 @@ const ProductManagement = () => {
   };
 
   const handleCreateProduct = (productData) => {
-    dispatch(addNewProduct(productData))
-      .then(() => dispatch(fetchProducts()))
-      .catch((error) => console.error("Error adding product:", error));
+    dispatch(addNewProduct(productData));
     setShowCreateProductForm(false);
   };
 
@@ -127,7 +126,7 @@ const ProductManagement = () => {
         </div>
       )}
       <ProductCard
-        products={filteredProducts}
+        products={filteredProducts.length > 0 ? filteredProducts : products}
         onViewDetail={handleViewDetail}
         onEdit={handleUpdate}
         onDelete={handleDelete}

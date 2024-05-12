@@ -7,7 +7,6 @@ export const fetchProducts = createAsyncThunk(
   async () => {
     try {
       const products = await productService.showList();
-      console.log(products);
       return products;
     } catch (error) {
       throw new Error(error.message);
