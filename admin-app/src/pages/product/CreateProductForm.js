@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewProduct } from "../../features/products/productSlice";
+import { addNewProduct, addProductImage } from "../../features/products/productSlice";
 import { fetchCategories } from "../../features/categories/categorySlice";
 import Modal from "react-bootstrap/Modal";
 
@@ -11,11 +11,12 @@ const CreateProductForm = ({ onClose }) => {
     description: "",
     amount: 0,
     price: 0,
-    CategoryId: "", 
-    files: []
+    CategoryId: "",
+    files:[]
   });
 
   const [selectedCategory, setSelectedCategory] = useState(""); // For category selection
+  const [files, setFiles] = useState([])
   const dispatch = useDispatch();
   const categories = useSelector((state) => state?.categories?.categories);
 
@@ -28,13 +29,8 @@ const CreateProductForm = ({ onClose }) => {
     setNewProduct((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleUploadImage = () => {
-    const formData = new FormData();
-    newProduct.files.forEach((file, i) => formData.append(`file-${i}`, file, file.name)); 
-    setNewProduct((prevData) => ({
-      ...prevData,
-      files: formData
-    }));
+  const handleUploadImage = (event) => {
+    setFiles(Array.from(event.target.files));
   };
 
   const handleCategoryChange = (event) => {
@@ -43,13 +39,19 @@ const CreateProductForm = ({ onClose }) => {
     setNewProduct((prevData) => ({ ...prevData, CategoryId: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(newProduct);
-    dispatch(addNewProduct(newProduct));
-    onClose();
+    try {
+      console.log(newProduct);
+      await dispatch(addNewProduct(newProduct));
+      
+      dispatch(addProductImage({ productId:32, files: files }));
+      
+      onClose();
+    } catch (error) {
+      console.error("Error adding product:", error);
+    }
   };
-
   return (
     <Modal show={true} onHide={onClose}>
       <Modal.Header closeButton>

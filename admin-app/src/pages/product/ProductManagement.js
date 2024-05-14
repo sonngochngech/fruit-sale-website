@@ -3,6 +3,8 @@ import ProductCard from "./ProductCard";
 import { useDispatch, useSelector } from "react-redux";
 import UpdateProductForm from "./UpdateProductForm";
 import CreateProductForm from "./CreateProductForm";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import {
   fetchProducts,
   addNewProduct,
@@ -19,23 +21,28 @@ const ProductManagement = () => {
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [searchTerm, setSearchTerm] = useState("");
 
+  console.log(products)
+  
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  console.log(products);
   useEffect(() => {
     setFilteredProducts(products);
   }, [products]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
-    const filtered = products.fruits.filter((product) =>
-      product.title.toLowerCase().includes(event.target.value.toLowerCase())
+    const filtered = (products.fruits).filter((product) => {
+      return product.title.toLowerCase().includes(event.target.value.toLowerCase())
+    }
     );
     setFilteredProducts(filtered);
+    if (filtered.length === 0) {
+      // Show toast notification
+      toast.warn("No products found with this search term.");
+    }
   };
-
   const handleCreateProductClick = () => {
     setShowCreateProductForm(true);
   };
@@ -54,7 +61,7 @@ const ProductManagement = () => {
   };
 
   const handleUpdate = (productId) => {
-    const productToUpdate = products.find((product) => product.id === productId);
+    const productToUpdate = products.fruits.find((product) => product.id === productId);
     setUpdateProductData(productToUpdate);
     setShowUpdateProductForm(true);
   };
@@ -67,10 +74,8 @@ const ProductManagement = () => {
   const handleDelete = (productId) => {
     dispatch(deleteProduct(productId))
       .then(() => {
-        const updatedProducts = products.filter(
-          (product) => product.id !== productId
-        );
-        setFilteredProducts(updatedProducts);
+        dispatch(fetchProducts())
+        // setFilteredProducts(updatedProducts);
       })
       .catch((error) => console.error("Error deleting product:", error));
   };
@@ -78,6 +83,7 @@ const ProductManagement = () => {
   return (
     <div className="product-management">
       <h2>Products</h2>
+      <ToastContainer />
       <div className="row">
         <div className="col-md-6 mb-3">
           <div className="input-group">
@@ -126,7 +132,7 @@ const ProductManagement = () => {
         </div>
       )}
       <ProductCard
-        products={filteredProducts.length > 0 ? filteredProducts : products}
+        products={filteredProducts.length > 0 ? filteredProducts : products.fruits}
         onViewDetail={handleViewDetail}
         onEdit={handleUpdate}
         onDelete={handleDelete}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateProduct } from "../../features/products/productSlice";
 import Modal from "react-bootstrap/Modal";
 import * as Yup from "yup";
@@ -20,16 +20,54 @@ const schema = Yup.object().shape({
 const UpdateProductForm = ({ onClose, productToUpdate }) => {
   const [updatedProduct, setUpdatedProduct] = useState(productToUpdate);
   const [errors, setErrors] = useState({}); // State để lưu trữ các lỗi
-
+  const [selectedCategory, setSelectedCategory] = useState("");
   const dispatch = useDispatch();
+  const categories = useSelector((state) => state?.categories?.categories);
 
+  console.log(updatedProduct);
+  console.log(productToUpdate);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUpdatedProduct((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleImageUpload = (event) => {
-    // Xử lý upload ảnh
+  const handleUploadImage = (event) => {
+    const files = event.target.files;
+    console.log(updatedProduct.files);
+    console.log(files)
+    if (!files || files.length === 0) {
+      console.error("No files selected");
+      return;
+    }
+  
+    const formData = new FormData();
+  
+    try {
+      for (let i = 0; i < files.length; i++) {
+        formData.append(`image`, files[i]);
+      }
+      console.log(formData);
+      setUpdatedProduct((prevData) => ({
+        ...prevData,
+        files: formData,
+      }));
+    } catch (error) {
+      console.error("Error creating FormData:", error);
+    }
+  };
+  console.log(categories); 
+    
+  const getCategoryNameById = (categoryId) => {
+    // console.log(categories.categories); 
+    console.log(categoryId);
+    const category = categories.categories.find((cat) => cat.id === categoryId);
+    return category ? category.name : "";
+  };
+
+  const handleCategoryChange = (event) => {
+    const { value } = event.target;
+    setSelectedCategory(value);
+    setUpdatedProduct((prevData) => ({ ...prevData, CategoryId: value }));
   };
 
   const handleSubmit = async (event) => {
@@ -60,8 +98,6 @@ const UpdateProductForm = ({ onClose, productToUpdate }) => {
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={handleSubmit}>
-          {/* Input fields for product data */}
-          {/* Input fields for product data */}
           <div className="form-group row">
             <label htmlFor="productName" className="col-sm-3 col-form-label">
               Product Name
@@ -89,53 +125,17 @@ const UpdateProductForm = ({ onClose, productToUpdate }) => {
                 className="form-control"
                 id="category"
                 name="category"
-                value={updatedProduct.category}
+                value={getCategoryNameById(updatedProduct.CategoryId)}
                 onChange={handleInputChange}
               >
                 <option value="">Select Category</option>
-                <option value="fruit">Fruit</option>
-                <option value="water">Water</option>
-                {/* Add more options as needed */}
+                {categories.categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </div>
-          </div>
-
-          {/* <div className="form-group row">
-            <label htmlFor="origin" className="col-sm-3 col-form-label">
-              Origin
-            </label>
-            <div className="col-sm-9">
-              <input
-                type="text"
-                className="form-control"
-                id="origin"
-                name="origin"
-                value={editedProduct.origin}
-                onChange={handleInputChange}
-                placeholder="Enter product origin"
-              />
-            </div>
-          </div> */}
-
-          <div className="form-group">
-            <label htmlFor="images">Images</label>
-            <input type="file" multiple onChange={handleImageUpload} />
-            {updatedProduct.images && updatedProduct.images.length > 0 && (
-              <div className="d-flex flex-wrap mt-2">
-                {updatedProduct.images.map((imageUrl, index) => (
-                  <img
-                    key={index}
-                    src={imageUrl}
-                    alt={`Image ${index}`}
-                    style={{
-                      maxWidth: "100px",
-                      maxHeight: "100px",
-                      margin: "5px",
-                    }}
-                  />
-                ))}
-              </div>
-            )}
           </div>
 
           <div className="form-group row">
@@ -146,52 +146,64 @@ const UpdateProductForm = ({ onClose, productToUpdate }) => {
               <input
                 type="number"
                 className="form-control"
-                id="price"
+                id="pricePerUnit"
                 name="price"
                 value={updatedProduct.price}
                 onChange={handleInputChange}
                 placeholder="Enter price per unit"
+                required
               />
             </div>
           </div>
 
           <div className="form-group row">
-            <label htmlFor="unit" className="col-sm-3 col-form-label">
-              Unit
-            </label>
-            <div className="col-sm-9">
-              <select
-                className="form-control"
-                id="unit"
-                name="unit"
-                value={updatedProduct.unit}
-                onChange={handleInputChange}
-              >
-                <option value="">Select Unit</option>
-                <option value="pcs">Pieces</option>
-                <option value="kg">Kilograms</option>
-                <option value="l">Liters</option>
-                {/* Add more options as needed */}
-              </select>
-            </div>
-          </div>
-
-          <div className="form-group row">
-            <label htmlFor="quantity" className="col-sm-3 col-form-label">
-              Quantity
+            <label htmlFor="productAmount" className="col-sm-3 col-form-label">
+              Amount
             </label>
             <div className="col-sm-9">
               <input
                 type="number"
                 className="form-control"
-                id="quantity"
-                name="quantity"
-                value={updatedProduct.quantity}
+                id="productAmount"
+                name="amount"
+                value={updatedProduct.amount}
                 onChange={handleInputChange}
-                placeholder="Enter quantity"
+                placeholder="Enter product amount"
                 required
               />
             </div>
+          </div>
+
+          <div className="form-group row">
+            <label htmlFor="productImage" className="col-sm-3 col-form-label">
+              Product Image
+            </label>
+            <div className="col-sm-9">
+              <input
+                type="file"
+                className="form-control"
+                id="productImage"
+                value={updatedProduct.files}
+                name="image" // Use a descriptive name like "image"
+                multiple // Allow selecting multiple images (optional)
+                onChange={handleUploadImage}
+              />
+            </div>
+            {updatedProduct.FruitImages.length > 0 && (
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label"></label>
+              <div className="col-sm-9">
+                {Array.from(updateProduct.files).map((file, i) => (
+                  <img 
+                    key={i} 
+                    src={URL.createObjectURL(file)} 
+                    alt={`Preview of ${file.name}`} 
+                    style={{ maxWidth: "100px", maxHeight: "100px", margin: "5px" }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
           </div>
 
           <div className="form-group">
@@ -206,9 +218,12 @@ const UpdateProductForm = ({ onClose, productToUpdate }) => {
               placeholder="Enter product description"
             />
           </div>
-          <button variant="primary" type="submit">
-            Save Changes
-          </button>
+
+          <div className="text-center">
+            <button className="btn btn-primary" type="submit">
+              Update
+            </button>
+          </div>
         </form>
       </Modal.Body>
     </Modal>

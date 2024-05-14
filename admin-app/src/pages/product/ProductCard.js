@@ -8,7 +8,7 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
   const [pageNumber, setPageNumber] = useState(0);
   const productsPerPage = 10;
   const pagesVisited = pageNumber * productsPerPage;
-
+  // console.log(products)
   if (!Array.isArray(products) || products.length === 0) {
     return <div></div>;
   }
@@ -21,7 +21,7 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
         <td className="name-location-column">
           <div className="d-flex align-items-center">
             <img
-              src={base_url + product.FruitImages[0].link}
+              src={base_url + product.FruitImages[0]}
               alt={product.title}
               className="product-image"
               style={{
@@ -32,11 +32,12 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
             />
             <div className="product-info">
               <div>{product.title}</div>
-              <div>{product.Category.name}</div>
+              {/* <div>{product.Category.name}</div> */}
             </div>
           </div>
         </td>
-        <td>{product.Category.name}</td>
+        {/* <td>{product.Category.name}</td> */}
+        <td>{product.title}</td>
         <td>{product.price}</td>
         <td>{product.rating}/5.0</td>
         <td>

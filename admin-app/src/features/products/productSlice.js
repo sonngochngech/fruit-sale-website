@@ -34,7 +34,9 @@ export const deleteProduct = createAsyncThunk(
   async (productId) => {
     try {
       const message = await productService.removeProduct(productId);
-      return message;
+      const products = await productService.showList();
+      return products;
+      // return message;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -48,6 +50,18 @@ export const updateProduct = createAsyncThunk(
     try {
       const updatedProduct = await productService.updateProduct(productId, updatedProductData);
       return updatedProduct;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+);
+
+export const addProductImage = createAsyncThunk(
+  'products/addProductImage',
+  async ({ productId, files }) => {
+    try {
+      const message = await productService.addImage(productId, files);
+      return message;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -110,12 +124,17 @@ export const productSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products = state.products.filter(product => product.id !== action.payload.productId);
+        state.products=action.payload;
+        // state.products = state.products.filter(product => product.id !== action.payload.productId);
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.errorMessage = action.error.message;
+        if (action.error.message.includes('404')) {
+          state.errorMessage = 'Product not found.';
+        } else {
+          state.errorMessage = action.error.message;
+        }
       })
       .addCase(updateProduct.pending, (state) => {
         state.isLoading = true;
@@ -132,6 +151,20 @@ export const productSlice = createSlice({
         });
       })
       .addCase(updateProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(addProductImage.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = '';
+      })
+      .addCase(addProductImage.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload;
+      })
+      .addCase(addProductImage.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.error.message;

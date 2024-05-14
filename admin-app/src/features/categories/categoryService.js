@@ -24,7 +24,7 @@ const addCategory = async (newCategoryData) => {
 // Xóa danh mục
 const removeCategory = async (categoryId) => {
     try {
-      const response = await axios.delete(`${base_url}categories/delete/${categoryId}`);
+      const response = await axios.delete(`${base_url}categories/${categoryId}/delete`);
       if (response.data.success) {
         return response.data.message; // Trả về thông báo thành công từ API
       } else {
