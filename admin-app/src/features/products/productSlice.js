@@ -14,6 +14,18 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+export const getProduct = createAsyncThunk(
+  'products/getProduct',
+  async (productId) => {
+    try {
+      const product = await productService.getProduct(productId);
+      return product;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+)
+
 // Action thực hiện thêm sản phẩm mới
 export const addNewProduct = createAsyncThunk(
   'products/addNewProduct',
@@ -36,7 +48,6 @@ export const deleteProduct = createAsyncThunk(
       const message = await productService.removeProduct(productId);
       const products = await productService.showList();
       return products;
-      // return message;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -49,19 +60,8 @@ export const updateProduct = createAsyncThunk(
   async ({ productId, updatedProductData }) => {
     try {
       const updatedProduct = await productService.updateProduct(productId, updatedProductData);
-      return updatedProduct;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-);
-
-export const addProductImage = createAsyncThunk(
-  'products/addProductImage',
-  async ({ productId, files }) => {
-    try {
-      const message = await productService.addImage(productId, files);
-      return message;
+      const products = await productService.showList();
+      return products;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -71,16 +71,16 @@ export const addProductImage = createAsyncThunk(
 // Khởi tạo trạng thái ban đầu của slice
 const initialState = {
   products: [],
-  isError:false,
-  isSuccess:false,
-  isLoading:false,
-  message:'',
+  isError: false,
+  isSuccess: false,
+  isLoading: false,
+  message: '',
 };
 
 // Tạo slice Redux cho products
 export const productSlice = createSlice({
   name: 'products',
-  initialState:initialState,
+  initialState: initialState,
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload;
@@ -96,7 +96,6 @@ export const productSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.products = action.payload;
-        // console(state.products)
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.isLoading = false;
@@ -110,9 +109,23 @@ export const productSlice = createSlice({
       })
       .addCase(addNewProduct.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products=action.payload;
+        state.products = action.payload;
       })
       .addCase(addNewProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(getProduct.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = '';
+      })
+      .addCase(getProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.products = action.payload;
+      })
+      .addCase(getProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.error.message;
@@ -124,8 +137,7 @@ export const productSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products=action.payload;
-        // state.products = state.products.filter(product => product.id !== action.payload.productId);
+        state.products = action.payload;
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.isLoading = false;
@@ -143,28 +155,9 @@ export const productSlice = createSlice({
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products = state.products.map(product => {
-          if (product.id === action.payload.id) {
-            return action.payload;
-          }
-          return product;
-        });
+        state.products = action.payload;
       })
       .addCase(updateProduct.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.error.message;
-      })
-      .addCase(addProductImage.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.errorMessage = '';
-      })
-      .addCase(addProductImage.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.message = action.payload;
-      })
-      .addCase(addProductImage.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.error.message;

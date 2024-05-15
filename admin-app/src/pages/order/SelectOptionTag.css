@@ -1,0 +1,46 @@
+.select-option-tag {
+    position: relative;
+    width: 150px;
+    margin-bottom: 10px;
+  }
+  
+  .select-option-button {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .select-option-button span {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .select-option-button i {
+    font-size: 16px;
+    color: #999;
+  }
+  
+  .select-option-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: none;
+    z-index: 1000;
+  }
+  
+  .select-option-list li {
+    margin-bottom: 5px;
+  }
+  
+  .select-option-tag:hover .select-option-list {
+    display: block;
+  }
+  

@@ -15,20 +15,6 @@ export const fetchOrders = createAsyncThunk(
   }
 );
 
-// Action thực hiện thêm đơn hàng mới
-export const addNewOrder = createAsyncThunk(
-  'orders/addNewOrder',
-  async (newOrderData) => {
-    try {
-      const newOrder = await orderService.addOrder(newOrderData);
-      console.log(newOrder);
-      return newOrder;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-);
-
 // Action thực hiện xóa đơn hàng
 export const deleteOrder = createAsyncThunk(
   'orders/deleteOrder',
@@ -45,10 +31,11 @@ export const deleteOrder = createAsyncThunk(
 // Action thực hiện chỉnh sửa thông tin đơn hàng
 export const updateOrder = createAsyncThunk(
   'orders/updateOrder',
-  async ({ orderId, updatedOrderData }) => {
+  async ({ orderId, newStatus }) => {
     try {
-      const updatedOrder = await orderService.updateOrder(orderId, updatedOrderData);
-      return updatedOrder;
+      const updatedOrder = await orderService.updateOrder(orderId, newStatus);
+      const orders = await orderService.showList();
+      return orders;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -89,20 +76,6 @@ export const orderSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.error.message;
       })
-      .addCase(addNewOrder.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.errorMessage = '';
-      })
-      .addCase(addNewOrder.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.orders.push(action.payload);
-      })
-      .addCase(addNewOrder.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.error.message;
-      })
       .addCase(deleteOrder.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
@@ -124,12 +97,7 @@ export const orderSlice = createSlice({
       })
       .addCase(updateOrder.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orders = state.orders.map(order => {
-          if (order.id === action.payload.id) {
-            return action.payload;
-          }
-          return order;
-        });
+        state.orders = action.payload;
       })
       .addCase(updateOrder.rejected, (state, action) => {
         state.isLoading = false;

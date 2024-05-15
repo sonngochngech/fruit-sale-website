@@ -10,36 +10,17 @@ import {
 const OrderManagement = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.orders.orders);
-  const [showUpdateOrderForm, setShowUpdateOrderForm] = useState(false);
-  const [updateOrder, setUpdateOrderLocal] = useState(null);
-  const [filteredOrders, setFilteredOrders] = useState(orders);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     dispatch(fetchOrders());
   }, [dispatch]);
 
-  useEffect(() => {
-    setFilteredOrders(orders);
-  }, [orders]);
-
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
     const filtered = orders.filter((order) =>
       order.title.toLowerCase().includes(event.target.value.toLowerCase())
     );
-    setFilteredOrders(filtered);
-  };
-
-  const handleUpdate = (orderId) => {
-    const orderToUpdate = orders.find((order) => order.id === orderId);
-    setUpdateOrderLocal(orderToUpdate);
-    setShowUpdateOrderForm(true);
-  };
-
-  const handleCloseUpdateOrderForm = () => {
-    setShowUpdateOrderForm(false);
-    setUpdateOrderLocal(null);
   };
 
   const handleDelete = (orderId) => {
@@ -78,18 +59,8 @@ const OrderManagement = () => {
           </div>
         </div>
       </div>
-
-      {showUpdateOrderForm && (
-        <div className="order-edit-form">
-          <UpdateOrderForm
-            orderToUpdate={updateOrder}
-            onClose={handleCloseUpdateOrderForm}
-          />
-        </div>
-      )}
       <OrderCard
-        orders={filteredOrders}
-        onEdit={handleUpdate}
+        orders={orders}
         onDelete={handleDelete}
       />
     </div>

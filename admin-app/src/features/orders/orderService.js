@@ -4,22 +4,12 @@ import { base_url, config } from "../../utils/axiosConfig";
 // Lấy danh sách đơn hàng
 const showList = async () => {
   try {
-    const response = await axios.get(`${base_url}orders`);
+    const response = await axios.get(`${base_url}orders/getAllOrders`, config);
     return response.data;
   } catch (error) {
     throw new Error(error.message);
   }
 }
-
-// Thêm đơn hàng mới
-const addOrder = async (newOrderData) => {
-  try {
-    const response = await axios.post(`${base_url}orders`, newOrderData, config);
-    return response.data;
-  } catch (error) {
-    throw new Error(error.message); 
-  }
-};
 
 // Xóa đơn hàng
 const removeOrder = async (orderId) => {
@@ -36,9 +26,10 @@ const removeOrder = async (orderId) => {
 };
 
 // Cập nhật thông tin đơn hàng
-const updateOrder = async (orderId, updatedOrderData) => {
+const updateOrder = async (orderId, newStatus) => {
   try {
-    const response = await axios.patch(`${base_url}orders/${orderId}`, updatedOrderData);
+    console.log(newStatus);
+    const response = await axios.put(`${base_url}orders/${orderId}/update`, newStatus, config);
     return response.data; // Trả về thông tin đơn hàng đã được chỉnh sửa
   } catch (error) {
     throw new Error(error.message); // Xử lý các lỗi khác (ví dụ: lỗi mạng, lỗi không xác định)
@@ -47,7 +38,6 @@ const updateOrder = async (orderId, updatedOrderData) => {
 
 const orderService = {
   showList,
-  addOrder,
   removeOrder,
   updateOrder
 };

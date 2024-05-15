@@ -13,6 +13,7 @@ import UserList from './pages/user/UserManagement';
 import ProductList from './pages/product/ProductManagement';
 import CategoryList from './pages/category/CategoryManagement';
 import OrderList from './pages/order/OrderManagement';
+import ProductDetailForm from './pages/product/ProductDetailForm';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/users" element={<UserList />} />
                 <Route path="/products" element={<ProductList />} />
+                <Route path="/products/:productId" element={<ProductDetailForm />} />
                 <Route path="/categories" element={<CategoryList />} />
                 <Route path="/orders" element={<OrderList />} />
             </Routes>

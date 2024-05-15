@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewProduct, addProductImage } from "../../features/products/productSlice";
+import { addNewProduct } from "../../features/products/productSlice";
 import { fetchCategories } from "../../features/categories/categorySlice";
 import Modal from "react-bootstrap/Modal";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "./CreateProductForm.css";
 
 const CreateProductForm = ({ onClose }) => {
   const [newProduct, setNewProduct] = useState({
@@ -11,14 +14,14 @@ const CreateProductForm = ({ onClose }) => {
     description: "",
     amount: 0,
     price: 0,
-    CategoryId: "",
-    files:[]
+    CategoryId: 0,
+    files: []
   });
 
-  const [selectedCategory, setSelectedCategory] = useState(""); // For category selection
-  const [files, setFiles] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
-  const categories = useSelector((state) => state?.categories?.categories);
+  const categories = useSelector((state) => state?.categories?.categories || []);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -33,31 +36,43 @@ const CreateProductForm = ({ onClose }) => {
     setFiles(Array.from(event.target.files));
   };
 
-  const handleCategoryChange = (event) => {
-    const { value } = event.target;
-    setSelectedCategory(value);
-    setNewProduct((prevData) => ({ ...prevData, CategoryId: value }));
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setNewProduct((prevData) => ({ ...prevData, CategoryId: categoryId }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(newProduct);
-      await dispatch(addNewProduct(newProduct));
-      
-      dispatch(addProductImage({ productId:32, files: files }));
-      
-      onClose();
+      const newProductData = {
+        ...newProduct,
+        files,
+      };
+      console.log(newProductData);
+      const resultAction = await dispatch(addNewProduct(newProductData));
+      console.log(resultAction);
+      if (resultAction.type === "products/addNewProduct/fulfilled") {
+        toast.success('Đơn hàng đã được tạo thành công!', {
+          position: "top-center"
+        });
+        onClose();
+      } else {
+        throw new Error('Failed to add product');
+      }
     } catch (error) {
       console.error("Error adding product:", error);
     }
   };
+
+  const categoryColors = ["red", "blue", "green"]; // Define more colors as needed
+
   return (
     <Modal show={true} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Add new product</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+      <ToastContainer />
         <form onSubmit={handleSubmit}>
           <div className="form-group row">
             <label htmlFor="productName" className="col-sm-3 col-form-label">
@@ -82,20 +97,31 @@ const CreateProductForm = ({ onClose }) => {
               Category
             </label>
             <div className="col-sm-9">
-              <select
-                className="form-control"
-                id="category"
-                value={selectedCategory}
-                onChange={handleCategoryChange}
-                required
-              >
-                <option value="">Select Category</option>
-                {categories.categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
+              <div className="category-dropdown">
+                <button className="btn btn-secondary dropdown-toggle" type="button">
+                  {selectedCategory ? categories.categories.find(cat => cat.id === selectedCategory).name : "Select Category"}
+                </button>
+                <div className="category-dropdown-content">
+                  {categories.categories.map((category, index) => (
+                    <div
+                      key={category.id}
+                      className="category-option"
+                      data-bg-color={categoryColors[index % categoryColors.length]}
+                      onClick={() => handleCategoryChange(category.id)}
+                    >
+                      <input
+                        type="radio"
+                        id={`category-${category.id}`}
+                        name="category"
+                        value={category.id}
+                        checked={selectedCategory === category.id}
+                        onChange={() => handleCategoryChange(category.id)}
+                      />
+                      <label htmlFor={`category-${category.id}`}>{category.name}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -162,16 +188,17 @@ const CreateProductForm = ({ onClose }) => {
                 type="file"
                 className="form-control"
                 id="productImage"
-                name="image" // Use a descriptive name like "image"
-                multiple // Allow selecting multiple images (optional)
+                name="image"
+                multiple
                 onChange={handleUploadImage}
               />
             </div>
-            {newProduct.files.length > 0 && (
+          </div>
+          {files.length > 0 && (
             <div className="form-group row">
               <label className="col-sm-3 col-form-label"></label>
               <div className="col-sm-9">
-                {Array.from(newProduct.files).map((file, i) => (
+                {files.map((file, i) => (
                   <img 
                     key={i} 
                     src={URL.createObjectURL(file)} 
@@ -182,8 +209,6 @@ const CreateProductForm = ({ onClose }) => {
               </div>
             </div>
           )}
-          </div>
-
 
           <div className="form-group">
             <label htmlFor="description">Description</label>
