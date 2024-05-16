@@ -64,7 +64,7 @@ const createFruit=trycatchWrapper(async (req,res)=>{
             amount: req.body.amount,
             price: req.body.price, 
             sales: req.body.sales,
-            CategoryId: req.body.categoryId
+            CategoryId: req.body.CategoryId
         })
         
         if(fruit){
