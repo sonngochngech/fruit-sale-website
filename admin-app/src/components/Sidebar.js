@@ -1,23 +1,27 @@
 import React from "react";
 import { NavLink } from "react-router-dom"; // Import for navigation links
-import '../App.css'
+import "../App.css";
 
 const Sidebar = () => {
   return (
     <div className="sidebar bg-light d-flex flex-column justify-content-between h-100">
       {/* Brand logo and app title */}
       <div className="d-flex align-items-center mb-3 p-3">
-        <a className="navbar-brand me-2" href="#">
-          <img src="logo.png" alt="Logo" width="30" height="30" />
-        </a>
-        <span className="fs-4 fw-bold">Fruit App</span>
+        <NavLink
+          to="/"
+          className="fs-4 fw-bold"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          Fruit Store
+        </NavLink>
       </div>
 
       {/* Navigation links */}
       <ul className="nav flex-column mb-auto">
         <li className="nav-item">
           <NavLink className="nav-link active" exact to="/dashboard">
-            <i className="fas fa-tachometer-alt me-2"></i> {/* Font Awesome icon */}
+            <i className="fas fa-tachometer-alt me-2"></i>{" "}
+            {/* Font Awesome icon */}
             Dashboard
           </NavLink>
         </li>

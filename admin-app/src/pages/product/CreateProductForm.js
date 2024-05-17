@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addNewProduct } from "../../features/products/productSlice";
 import { fetchCategories } from "../../features/categories/categorySlice";
 import Modal from "react-bootstrap/Modal";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Button, Menu, MenuItem, Box } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./CreateProductForm.css";
 
 const CreateProductForm = ({ onClose }) => {
@@ -15,13 +16,16 @@ const CreateProductForm = ({ onClose }) => {
     amount: 0,
     price: 0,
     CategoryId: 0,
-    files: []
+    files: [],
   });
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
-  const categories = useSelector((state) => state?.categories?.categories || []);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const categories = useSelector(
+    (state) => state?.categories?.categories || []
+  );
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -52,19 +56,17 @@ const CreateProductForm = ({ onClose }) => {
       const resultAction = await dispatch(addNewProduct(newProductData));
       console.log(resultAction);
       if (resultAction.type === "products/addNewProduct/fulfilled") {
-        toast.success('Đơn hàng đã được tạo thành công!', {
-          position: "top-center"
+        toast.success("Đơn hàng đã được tạo thành công!", {
+          position: "top-center",
         });
         onClose();
       } else {
-        throw new Error('Failed to add product');
+        throw new Error("Failed to add product");
       }
     } catch (error) {
       console.error("Error adding product:", error);
     }
   };
-
-  const categoryColors = ["red", "blue", "green"]; // Define more colors as needed
 
   return (
     <Modal show={true} onHide={onClose}>
@@ -72,7 +74,7 @@ const CreateProductForm = ({ onClose }) => {
         <Modal.Title>Add new product</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <ToastContainer />
+        <ToastContainer />
         <form onSubmit={handleSubmit}>
           <div className="form-group row">
             <label htmlFor="productName" className="col-sm-3 col-form-label">
@@ -97,31 +99,45 @@ const CreateProductForm = ({ onClose }) => {
               Category
             </label>
             <div className="col-sm-9">
-              <div className="category-dropdown">
-                <button className="btn btn-secondary dropdown-toggle" type="button">
-                  {selectedCategory ? categories.categories.find(cat => cat.id === selectedCategory).name : "Select Category"}
-                </button>
-                <div className="category-dropdown-content">
-                  {categories.categories.map((category, index) => (
-                    <div
-                      key={category.id}
-                      className="category-option"
-                      data-bg-color={categoryColors[index % categoryColors.length]}
-                      onClick={() => handleCategoryChange(category.id)}
+              <Button
+                variant="#e7ebf0"
+                onClick={(e) => setAnchorEl(e.currentTarget)}
+                sx={{
+                  color: '#000', // Thiết lập màu chữ thành đen
+                  bgcolor: '#e7ebf0', // Thiết lập màu nền thành trắng
+                }}
+              >
+                {selectedCategory
+                  ? categories.categories.find(
+                      (cat) => cat.id === selectedCategory
+                    ).name
+                  : "Select Category"}
+              </Button>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
+              >
+                {categories.categories.map((category, index) => (
+                  <MenuItem
+                    key={category.id}
+                    onClick={() => handleCategoryChange(category.id)}
+                  >
+                    <Box
+                      sx={{
+                        padding:1,
+                        borderRadius: 1,
+                        bgcolor: "#e7ebf0",
+                        "&:hover": {
+                          bgcolor: "#bcbec1",
+                        },
+                      }}
                     >
-                      <input
-                        type="radio"
-                        id={`category-${category.id}`}
-                        name="category"
-                        value={category.id}
-                        checked={selectedCategory === category.id}
-                        onChange={() => handleCategoryChange(category.id)}
-                      />
-                      <label htmlFor={`category-${category.id}`}>{category.name}</label>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                    {category.name}
+                    </Box>
+                  </MenuItem>
+                ))}
+              </Menu>
             </div>
           </div>
 
@@ -199,11 +215,15 @@ const CreateProductForm = ({ onClose }) => {
               <label className="col-sm-3 col-form-label"></label>
               <div className="col-sm-9">
                 {files.map((file, i) => (
-                  <img 
-                    key={i} 
-                    src={URL.createObjectURL(file)} 
-                    alt={`Preview of ${file.name}`} 
-                    style={{ maxWidth: "100px", maxHeight: "100px", margin: "5px" }}
+                  <img
+                    key={i}
+                    src={URL.createObjectURL(file)}
+                    alt={`Preview of ${file.name}`}
+                    style={{
+                      maxWidth: "100px",
+                      maxHeight: "100px",
+                      margin: "5px",
+                    }}
                   />
                 ))}
               </div>
