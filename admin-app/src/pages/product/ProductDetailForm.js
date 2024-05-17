@@ -167,31 +167,6 @@ const ProductDetailForm = ({ onClose, product }) => {
               />
             </Grid>
             
-            <Grid item xs={12} container alignItems="center">
-              <Grid item xs={6}>
-                <input
-                  type="file"
-                  id="imageUpload"
-                  name="image"
-                  onChange={handleImageChange}
-                  style={{ display: "none" }}
-                />
-                <label htmlFor="imageUpload">
-                  <IconButton component="span">
-                    <AddPhotoAlternateIcon />
-                  </IconButton>
-                </label>
-              </Grid>
-              <Grid item xs={6}>
-                {newImage && (
-                  <Box>
-                    <img src={URL.createObjectURL(newImage)} alt="Uploaded" style={{ maxWidth: "100px", maxHeight: "100px" }} />
-                    <button onClick={handleAddImage}>Add Image</button>
-                  </Box>
-                )}
-              </Grid>
-            </Grid>
-
             <Grid item xs={12} style={{ textAlign: 'center', marginTop: '20px' }}>
               <Button variant="contained" color="primary" type="submit">
                 Update

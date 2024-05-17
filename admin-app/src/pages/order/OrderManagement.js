@@ -16,7 +16,6 @@ const OrderManagement = () => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-  console.log(orders);
 
   let filteredOrders;
 
