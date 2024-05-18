@@ -22,13 +22,13 @@ function App() {
         <Route path="/reset-password" element={<OpenRoutes><Resetpassword /></OpenRoutes>} />
         
         <Route path="/admin" element={<PrivateRoutes><AdminLayout /></PrivateRoutes>}>
-          <Route index element={<Dashboard />} />
-          <Route path="" element={<Dashboard />} />
-          <Route path="users" element={<UserList />} />
-          <Route path="products" element={<ProductList />} />
-          <Route path="products/:productId" element={<ProductDetailForm />} />
-          <Route path="categories" element={<CategoryManagement />} />
-          <Route path="orders" element={<OrderList />} />
+          <Route index element={<PrivateRoutes><Dashboard /></PrivateRoutes>} />
+          <Route path="" element={<PrivateRoutes><Dashboard /></PrivateRoutes>} />
+          <Route path="users" element={<PrivateRoutes><UserList /></PrivateRoutes>} />
+          <Route path="products" element={<PrivateRoutes><ProductList /></PrivateRoutes>} />
+          <Route path="products/:productId" element={<PrivateRoutes><ProductDetailForm /></PrivateRoutes>} />
+          <Route path="categories" element={<PrivateRoutes><CategoryManagement /></PrivateRoutes>} />
+          <Route path="orders" element={<PrivateRoutes><OrderList /></PrivateRoutes>} />
         </Route>
       </Routes>
       {/* <Route path="/admin/*" element={<PrivateRoutes><AdminLayout /></PrivateRoutes>}>

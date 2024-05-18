@@ -34,7 +34,6 @@ const Dashboard = () => {
         "UserId": 16
     }
 ];
-console.log(orders);
   return (
     <div className="dashboard">
       {/* Truyền dữ liệu orders vào component OrderStatusChart */}

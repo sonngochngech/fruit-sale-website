@@ -1,7 +1,22 @@
 import React from "react";
-import { DropdownButton, Dropdown } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { DropdownButton, Dropdown, DropdownItem } from 'react-bootstrap';
+import { logoutUser } from '../features/users/userSlice';
+import { useDispatch } from 'react-redux';
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()); // Perform logout logic using your Redux action
+      navigate('/login'); // Redirect to login page after successful logout
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -37,7 +52,7 @@ const Header = () => {
             <Dropdown.Item href="#">Profile</Dropdown.Item>
             <Dropdown.Item href="#">Settings</Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item href="#">Logout</Dropdown.Item>
+            <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
           </DropdownButton>
         </div>
       </div>
