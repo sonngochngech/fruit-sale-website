@@ -59,7 +59,7 @@ const OrderManagement = () => {
   let filteredOrders = [];
   if (orders) {
     try {
-      filteredOrders = orders.filter((order) =>
+      filteredOrders = orders.orders.filter((order) =>
         order.email.toLowerCase().includes(searchTerm.toLowerCase())
       );
     } catch (error) {
