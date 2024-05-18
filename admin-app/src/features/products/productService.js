@@ -4,7 +4,7 @@ import { base_url, config } from "../../utils/axiosConfig";
 // Lấy danh sách sản phẩm
 const showList = async () => {
   try {
-    const response = await axios.get(`${base_url}fruits`);
+    const response = await axios.get(`${base_url}fruits`, config);
     return response.data;
   } catch (error) {
     throw new Error(error.message);

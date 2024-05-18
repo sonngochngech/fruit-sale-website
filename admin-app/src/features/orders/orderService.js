@@ -4,6 +4,7 @@ import { base_url, config } from "../../utils/axiosConfig";
 // Lấy danh sách đơn hàng
 const showList = async () => {
   try {
+    console.log(config);
     const response = await axios.get(`${base_url}orders/getAllOrders`, config);
     return response.data;
   } catch (error) {

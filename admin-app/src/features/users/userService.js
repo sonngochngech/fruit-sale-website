@@ -66,12 +66,74 @@ const removeUser = async (userId) => {
     }
   };
 
+
+  const getNotifications=async()=>{
+    try {
+      const response = await axios.get(`${base_url}notifications`, config);
+      if (response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  
+  }
+  
+  const getUnReadNotiCount=async()=>{
+    try {
+      const response = await axios.get(`${base_url}noitifications/unread`, config);
+      if (response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  
+  }
+  
+  const setIsReadNoti=async(notiId)=>{
+    try {
+      const response = await axios.get(`${base_url}notifications/${notiId}/setIsRead`, config);
+      if (response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+  const deleteANoti=async(notiId)=>{
+    try {
+      const response = await axios.delete(`${base_url}notifications/${notiId}/delete`, config);
+      if (response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+  
+  const deleteAllNoti=async()=>{
+    try {
+      const response = await axios.delete(`${base_url}notifications/deleteAll`, config);
+      if (response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+    
 const authService = {
     showList,
     removeUser,
     updateUser,
     login,
     logout,
+    getNotifications,
+   deleteAllNoti,
+  deleteANoti,
+  setIsReadNoti,
+ getUnReadNotiCount
 };
 
 export default authService;

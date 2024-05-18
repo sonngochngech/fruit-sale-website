@@ -14,7 +14,7 @@ import {
 
 const ProductManagement = () => {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products.products);
+  const products = useSelector((state) => state.products?.products);
   const [showCreateProductForm, setShowCreateProductForm] = useState(false);
   const [showUpdateProductForm, setShowUpdateProductForm] = useState(false);
   const [updateProductData, setUpdateProductData] = useState(null);

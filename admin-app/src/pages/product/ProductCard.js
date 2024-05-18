@@ -13,12 +13,12 @@ const ProductCard = ({ products, onDelete }) => {
   const pagesVisited = pageNumber * productsPerPage;
 
   if (!Array.isArray(products) || products.length === 0) {
-    return <div>No products available.</div>;
+    return <div></div>;
   }
 
   const displayProducts = products
-    .slice(pagesVisited, pagesVisited + productsPerPage)
-    .map((product) => (
+    ?.slice(pagesVisited, pagesVisited + productsPerPage)
+    ?.map((product) => (
       <tr key={product.id}>
         <td>{product.id}</td>
         <td>

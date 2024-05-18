@@ -51,6 +51,61 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
+export const getNotifications = createAsyncThunk(
+  "user/notifications",
+  async (thunkAPI) => {
+    try {
+      return await authService.getNotifications();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const getUnreadNotificationCount = createAsyncThunk(
+  "user/notifications/unreadCount",
+  async (thunkAPI) => {
+    try {
+      return await authService.getUnReadNotiCount();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const setIsReadNoti = createAsyncThunk(
+  "user/notifications/setIsReadNoti",
+  async (notiId, thunkAPI) => {
+    try {
+      return await authService.setIsReadNoti(notiId);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const deleteANoti = createAsyncThunk(
+  "user/notifications/deleteNoti",
+  async (notiId, thunkAPI) => {
+    try {
+      return await authService.deleteANoti(notiId);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const deleteAllNoti = createAsyncThunk(
+  "user/notifications/deleteAllNoti",
+  async (thunkAPI) => {
+    try {
+      return await authService.deleteAllNoti();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 // Khởi tạo trạng thái ban đầu của slice
 const initialState = {
   users: [],
@@ -148,6 +203,97 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.error.message;
+      })
+      // noti
+      .addCase(getNotifications.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getNotifications.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.notifications = action.payload.notifications;
+      })
+      .addCase(getNotifications.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        if (state.isSuccess === false) {
+          toast.error("Something went wrong");
+        }
+      })
+      .addCase(getUnreadNotificationCount.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUnreadNotificationCount.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.unreadNotification = action.payload;
+      })
+      .addCase(getUnreadNotificationCount.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        if (state.isSuccess === false) {
+          toast.error("Something went wrong");
+        }
+      })
+      .addCase(setIsReadNoti.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(setIsReadNoti.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.notification = action.payload.notification;
+      })
+      .addCase(setIsReadNoti.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        if (state.isSuccess === false) {
+          toast.error("Something went wrong");
+        }
+      })
+      .addCase(deleteANoti.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteANoti.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        // state.order = action.payload;
+      })
+      .addCase(deleteANoti.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        if (state.isSuccess === false) {
+          toast.error("Something went wrong");
+        }
+      })
+      .addCase(deleteAllNoti.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteAllNoti.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.notifications = null;
+      })
+      .addCase(deleteAllNoti.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        if (state.isSuccess === false) {
+          toast.error("Something went wrong");
+        }
       });
   },
 });

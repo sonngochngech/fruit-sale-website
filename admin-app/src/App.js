@@ -11,12 +11,14 @@ import UserList from './pages/user/UserManagement';
 import ProductList from './pages/product/ProductManagement';
 import CategoryManagement from './pages/category/CategoryManagement';
 import OrderList from './pages/order/OrderManagement';
+import Notification from './pages/notifications/Notification';
 import ProductDetailForm from './pages/product/ProductDetailForm';
 
 function App() {
   return (
     <Router>
       <Routes>
+      <Route path="/" element={<OpenRoutes><Login /></OpenRoutes>} />
         <Route path="/login" element={<OpenRoutes><Login /></OpenRoutes>} />
         <Route path="/forgot-password" element={<OpenRoutes><Forgotpassword /></OpenRoutes>} />
         <Route path="/reset-password" element={<OpenRoutes><Resetpassword /></OpenRoutes>} />
@@ -28,6 +30,7 @@ function App() {
           <Route path="products" element={<PrivateRoutes><ProductList /></PrivateRoutes>} />
           <Route path="products/:productId" element={<PrivateRoutes><ProductDetailForm /></PrivateRoutes>} />
           <Route path="categories" element={<PrivateRoutes><CategoryManagement /></PrivateRoutes>} />
+          <Route path="notifications" element={<PrivateRoutes><Notification /></PrivateRoutes>} />
           <Route path="orders" element={<PrivateRoutes><OrderList /></PrivateRoutes>} />
         </Route>
       </Routes>

@@ -129,7 +129,7 @@ function OrderTableToolbar(props) {
         </Typography>
       ) : (
         <Typography sx={{ flex: "1 1 100%" }} variant="h6" id="tableTitle" component="div">
-          Orders
+          Table order
         </Typography>
       )}
       {numSelected > 0 ? (
