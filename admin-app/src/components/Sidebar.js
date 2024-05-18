@@ -112,39 +112,37 @@ const Sidebar = () => {
       <ul className="nav flex-column mb-auto">
         <li className="nav-item">
           <NavLink className="nav-link active" exact to="/admin/">
-            <i className="fas fa-tachometer-alt me-2"></i>{" "}
-            {/* Font Awesome icon */}
+          <i class="bx bxs-grid-alt"></i>
             Dashboard
           </NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/admin/orders">
-            <i className="fas fa-shopping-cart me-2"></i>
+          <i className="bx bxs-food-menu"></i>
             Orders
           </NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/admin/products">
-            <i className="fas fa-apple-alt me-2"></i>
+          <i className="bx bxs-shopping-bag"></i>
             Products
           </NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/admin/categories">
-            <i className="fas fa-tags me-2"></i>
+          <i className="bx bx-list-check"></i>
             Categories
           </NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/admin/notifications">
-            <i className="fas fa-tags me-2"></i>
+          <i className='bx bxs-bell'></i>
             Notifications
           </NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/admin/notifications">
-            <i className="fas fa-tags me-2"></i>
-            <div onClick={handleLogout}>Logout</div>
+            <div onClick={handleLogout}> <i className="bx bx-log-out"></i> Logout</div>
           </NavLink>
         </li>
       </ul>

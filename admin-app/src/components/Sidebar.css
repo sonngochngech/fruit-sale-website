@@ -91,7 +91,7 @@ body {
     align-items: center;
 }
 
-.sidebar ul li a {
+.sidebar ul li a, .sidebar ul li div {
     color: #fff;
     text-decoration: none;
     display: flex;
@@ -100,14 +100,15 @@ body {
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
 }
 
-.sidebar ul li a:hover {
+.sidebar ul li a:hover, .sidebar ul li div:hover {
     background-color: #fff;
     color: #12171e;
 }
 
-.sidebar ul li a i {
+.sidebar ul li a i, .sidebar ul li div i {
     font-size: 1.5rem;
     margin-right: 1rem;
 }

@@ -21,7 +21,7 @@ const Notification = () => {
         <h2>Notifications</h2>
         <Container class1="blog-wrapper home-wrapper-2 py-5">
           <div className="row">
-            {notificationState?.length == 0 ? (<div>Have no notifications now</div>) : (
+            {notificationState?.length === 0 ? (<div>Have no notifications now</div>) : (
               <div className="col-2">
                 <Dialog />
               </div>

@@ -15,7 +15,7 @@ const showList = async () => {
 // Xóa đơn hàng
 const removeOrder = async (orderId) => {
   try {
-    const response = await axios.delete(`${base_url}orders/${orderId}`);
+    const response = await axios.delete(`${base_url}order/${orderId}/delete`, config);
     if (response.data.success) {
       return response.data.message; // Trả về thông báo thành công từ API
     } else {
