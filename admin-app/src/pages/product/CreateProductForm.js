@@ -1,51 +1,71 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addNewProduct } from "../../features/products/productSlice";
+import { fetchCategories } from "../../features/categories/categorySlice";
 import Modal from "react-bootstrap/Modal";
+import { Button, Menu, MenuItem, Box } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./CreateProductForm.css";
 
 const CreateProductForm = ({ onClose }) => {
   const [newProduct, setNewProduct] = useState({
+    code: "",
     title: "",
-    price: 0,
     description: "",
-    rating: {
-      rate: 0,
-      count: 0,
-    },
-    image: "https://i.pravatar.cc",
-    category: "",
-    images: [],
+    amount: 0,
+    price: 0,
+    CategoryId: 0,
+    files: [],
   });
-  
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const categories = useSelector(
+    (state) => state?.categories?.categories || []
+  );
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewProduct((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleImageUpload = (event) => {
-    const files = event.target.files;
-    if (files) {
-      const imageUrls = [];
-      for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          imageUrls.push(e.target.result);
-          setNewProduct((prevData) => ({
-            ...prevData,
-            images: [...prevData.images, e.target.result],
-          }));
-        };
-        reader.readAsDataURL(files[i]);
-      }
-    }
+  const handleUploadImage = (event) => {
+    setFiles(Array.from(event.target.files));
   };
 
-  const handleSubmit = (event) => {
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setNewProduct((prevData) => ({ ...prevData, CategoryId: categoryId }));
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(addNewProduct(newProduct));
-    onClose();
+    try {
+      const newProductData = {
+        ...newProduct,
+        files,
+      };
+      console.log(newProductData);
+      const resultAction = await dispatch(addNewProduct(newProductData));
+      console.log(resultAction);
+      if (resultAction.type === "products/addNewProduct/fulfilled") {
+        toast.success("Đơn hàng đã được tạo thành công!", {
+          position: "top-center",
+        });
+        onClose();
+      } else {
+        throw new Error("Failed to add product");
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+    }
   };
 
   return (
@@ -54,8 +74,8 @@ const CreateProductForm = ({ onClose }) => {
         <Modal.Title>Add new product</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <ToastContainer />
         <form onSubmit={handleSubmit}>
-          {/* Input fields for product data */}
           <div className="form-group row">
             <label htmlFor="productName" className="col-sm-3 col-form-label">
               Product Name
@@ -79,41 +99,46 @@ const CreateProductForm = ({ onClose }) => {
               Category
             </label>
             <div className="col-sm-9">
-              <select
-                className="form-control"
-                id="category"
-                name="category"
-                value={newProduct.category}
-                onChange={handleInputChange}
+              <Button
+                variant="#e7ebf0"
+                onClick={(e) => setAnchorEl(e.currentTarget)}
+                sx={{
+                  color: '#000', // Thiết lập màu chữ thành đen
+                  bgcolor: '#e7ebf0', // Thiết lập màu nền thành trắng
+                }}
               >
-                <option value="">Select Category</option>
-                <option value="fruit">Fruit</option>
-                <option value="water">Water</option>
-                <option value="electronic">Electronic</option>
-                {/* Add more options as needed */}
-              </select>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="images">Images</label>
-            <input type="file" multiple onChange={handleImageUpload} />
-            {newProduct.images && newProduct.images.length > 0 && (
-              <div className="d-flex flex-wrap mt-2">
-                {newProduct.images.map((imageUrl, index) => (
-                  <img
-                    key={index}
-                    src={imageUrl}
-                    alt={`Image ${index}`}
-                    style={{
-                      maxWidth: "100px",
-                      maxHeight: "100px",
-                      margin: "5px",
-                    }}
-                  />
+                {selectedCategory
+                  ? categories.categories.find(
+                      (cat) => cat.id === selectedCategory
+                    ).name
+                  : "Select Category"}
+              </Button>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
+              >
+                {categories.categories.map((category, index) => (
+                  <MenuItem
+                    key={category.id}
+                    onClick={() => handleCategoryChange(category.id)}
+                  >
+                    <Box
+                      sx={{
+                        padding:1,
+                        borderRadius: 1,
+                        bgcolor: "#e7ebf0",
+                        "&:hover": {
+                          bgcolor: "#bcbec1",
+                        },
+                      }}
+                    >
+                    {category.name}
+                    </Box>
+                  </MenuItem>
                 ))}
-              </div>
-            )}
+              </Menu>
+            </div>
           </div>
 
           <div className="form-group row">
@@ -134,6 +159,77 @@ const CreateProductForm = ({ onClose }) => {
             </div>
           </div>
 
+          <div className="form-group row">
+            <label htmlFor="productAmount" className="col-sm-3 col-form-label">
+              Amount
+            </label>
+            <div className="col-sm-9">
+              <input
+                type="number"
+                className="form-control"
+                id="productAmount"
+                name="amount"
+                value={newProduct.amount}
+                onChange={handleInputChange}
+                placeholder="Enter product amount"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-group row">
+            <label htmlFor="productCode" className="col-sm-3 col-form-label">
+              Product Code
+            </label>
+            <div className="col-sm-9">
+              <input
+                type="text"
+                className="form-control"
+                id="productCode"
+                name="code"
+                value={newProduct.code}
+                onChange={handleInputChange}
+                placeholder="Enter product code"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-group row">
+            <label htmlFor="productImage" className="col-sm-3 col-form-label">
+              Product Image
+            </label>
+            <div className="col-sm-9">
+              <input
+                type="file"
+                className="form-control"
+                id="productImage"
+                name="image"
+                multiple
+                onChange={handleUploadImage}
+              />
+            </div>
+          </div>
+          {files.length > 0 && (
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label"></label>
+              <div className="col-sm-9">
+                {files.map((file, i) => (
+                  <img
+                    key={i}
+                    src={URL.createObjectURL(file)}
+                    alt={`Preview of ${file.name}`}
+                    style={{
+                      maxWidth: "100px",
+                      maxHeight: "100px",
+                      margin: "5px",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="form-group">
             <label htmlFor="description">Description</label>
             <textarea
@@ -149,7 +245,7 @@ const CreateProductForm = ({ onClose }) => {
 
           <div className="text-center">
             <button className="btn btn-primary" type="submit">
-              Save Changes
+              Create new
             </button>
           </div>
         </form>

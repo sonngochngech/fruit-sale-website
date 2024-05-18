@@ -1,56 +1,54 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
-
+import { NavLink } from "react-router-dom";
+import { base_domain } from '../../utils/axiosConfig';
 import "./ProductCard.css";
+import ProductDetailForm from "./ProductDetailForm";
 
-const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
+const ProductCard = ({ products, onDelete }) => {
   const [pageNumber, setPageNumber] = useState(0);
+  const [showDetail, setShowDetail] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const productsPerPage = 10;
   const pagesVisited = pageNumber * productsPerPage;
 
+  if (!Array.isArray(products) || products.length === 0) {
+    return <div></div>;
+  }
+
   const displayProducts = products
-   .slice(pagesVisited, pagesVisited + productsPerPage)
-   .map((product) => (
+    ?.slice(pagesVisited, pagesVisited + productsPerPage)
+    ?.map((product) => (
       <tr key={product.id}>
         <td>{product.id}</td>
-        <td className="name-location-column">
+        <td>
           <div className="d-flex align-items-center">
-            <img
-              src={product.image}
-              alt={product.title}
-              className="product-image"
-              style={{
-                width: "30px",
-                height: "30px",
-                marginRight: "10px",
-              }}
-            />
-            <div className="product-info">
-              <div>{product.title}</div>
-              <div>{product.origin}</div>
-            </div>
+            {product.FruitImages.map((image, index) => (
+              <img
+                key={index}
+                src={base_domain + image.link}
+                alt={`Product ${index}`}
+                className="product-image"
+                style={{ height: '50px', width: '50px' }}
+              />
+            ))}
           </div>
         </td>
-        <td>{product.category}</td>
-        <td>{product.price}</td>
-        <td>{product.price}/5.0</td> {/*need fix*/}
-        {/* <td>{product.unit}</td> */}
-        {/* <td>{product.quantity}</td> */}
+        <td>{product.title}</td>
+        <td>{product.Category?.name}</td>
+        <td>${product.price}</td>
         <td>
           <button
-            className="btn btn-primary"
-            onClick={() => onViewDetail(product.id)}
+            className="btn btn-secondary action-button"
+            onClick={() => {
+              setSelectedProduct(product);
+              setShowDetail(true);
+            }}
           >
             Details
           </button>
           <button
-            className="btn btn-secondary"
-            onClick={() => onEdit(product.id)}
-          >
-            Edit
-          </button>
-          <button
-            className="btn btn-danger"
+            className="btn btn-danger action-button"
             onClick={() => onDelete(product.id)}
           >
             Delete
@@ -61,30 +59,20 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
 
   const pageCount = Math.ceil(products.length / productsPerPage);
 
-  const changePage = ({ selected }) => {
-    setPageNumber(selected);
-  };
-
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * productsPerPage) % products.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
-    setPageNumber(event.selected);
+  const handlePageClick = (data) => {
+    setPageNumber(data.selected);
   };
 
   return (
     <div>
-      <table className="table table-striped">
+      <table className="table table-striped table-hover">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Name / Export Location</th>
+            <th>Image</th>
+            <th>Title</th>
             <th>Category</th>
-            <th>Price/Unit</th>
-            <th>Rate</th>
-            {/* <th>Unit</th>
-            <th>Quantity</th> */}
+            <th>Price</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -111,6 +99,17 @@ const ProductCard = ({ products, onViewDetail, onDelete, onEdit }) => {
         activeClassName="active"
         renderOnZeroPageCount={null}
       />
+
+      {showDetail && (
+        <div className="overlay">
+          <div className="modal-container">
+            <button className="close-btn" onClick={() => setShowDetail(false)}>
+              &times;
+            </button>
+            <ProductDetailForm onClose={() => setShowDetail(false)} newProduct={selectedProduct} product={selectedProduct} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,0 +1,103 @@
+.category-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.category-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.category-dropdown:hover .category-dropdown-content {
+  display: block;
+}
+
+.category-option {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 20px;
+  background-color: var(--bg-color);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  margin: 5px 0;
+}
+
+.category-option input {
+  margin-right: 10px;
+}
+
+.category-option:hover {
+  background-color: var(--hover-color);
+  transform: scale(1.05);
+}
+
+/* Màu đỏ */
+[data-bg-color="red"] {
+  --bg-color: #F44336; /* Đỏ tươi */
+  --hover-color: #DB2821; /* Đỏ thẫm */
+}
+
+/* Màu cam */
+[data-bg-color="orange"] {
+  --bg-color: #FF9800; /* Cam đất */
+  --hover-color: #FF7000; /* Cam cháy */
+}
+
+/* Màu vàng */
+[data-bg-color="yellow"] {
+  --bg-color: #FFD700; /* Vàng kim */
+  --hover-color: #FCD300; /* Vàng chanh */
+}
+
+/* Màu xanh lá */
+[data-bg-color="green"] {
+  --bg-color: #4CAF50; /* Xanh ngọc bích */
+  --hover-color: #3E8E41; /* Xanh lá cây đậm */
+}
+
+/* Màu lục */
+[data-bg-color="teal"] {
+  --bg-color: #008080; /* Lục lam */
+  --hover-color: #006060; /* Lục bảo */
+}
+
+/* Màu xanh dương */
+[data-bg-color="blue"] {
+  --bg-color: #2196F3; /* Xanh lam đậm */
+  --hover-color: #1976D2; /* Xanh lam nhạt */
+}
+
+/* Màu tím */
+[data-bg-color="purple"] {
+  --bg-color: #9C27B0; /* Tím than */
+  --hover-color: #7B1FA2; /* Tím hoa cà */
+}
+
+/* Màu hồng */
+[data-bg-color="pink"] {
+  --bg-color: #F8BBD0; /* Hồng phấn */
+  --hover-color: #E6799F; /* Hồng đậm */
+}
+
+/* Màu xám */
+[data-bg-color="gray"] {
+  --bg-color: #9E9E9E; /* Xám tro */
+  --hover-color: #696969; /* Xám than */
+}
+
+/* Màu đen */
+[data-bg-color="black"] {
+  --bg-color: #212121; /* Đen than */
+  --hover-color: #000000; /* Đen tuyền */
+}
+
+
+/* Add more colors as needed */

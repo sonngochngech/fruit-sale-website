@@ -7,7 +7,6 @@ export const fetchProducts = createAsyncThunk(
   async () => {
     try {
       const products = await productService.showList();
-      console.log(products);
       return products;
     } catch (error) {
       throw new Error(error.message);
@@ -15,14 +14,26 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+export const getProduct = createAsyncThunk(
+  'products/getProduct',
+  async (productId) => {
+    try {
+      const product = await productService.getProduct(productId);
+      return product;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+)
+
 // Action thực hiện thêm sản phẩm mới
 export const addNewProduct = createAsyncThunk(
   'products/addNewProduct',
   async (newProductData) => {
     try {
       const newProduct = await productService.addProduct(newProductData);
-      console.log(newProduct);
-      return newProduct;
+      const products = await productService.showList();
+      return products;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -35,7 +46,8 @@ export const deleteProduct = createAsyncThunk(
   async (productId) => {
     try {
       const message = await productService.removeProduct(productId);
-      return message;
+      const products = await productService.showList();
+      return products;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -48,7 +60,8 @@ export const updateProduct = createAsyncThunk(
   async ({ productId, updatedProductData }) => {
     try {
       const updatedProduct = await productService.updateProduct(productId, updatedProductData);
-      return updatedProduct;
+      const products = await productService.showList();
+      return products;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -58,16 +71,16 @@ export const updateProduct = createAsyncThunk(
 // Khởi tạo trạng thái ban đầu của slice
 const initialState = {
   products: [],
-  isError:false,
-  isSuccess:false,
-  isLoading:false,
-  message:'',
+  isError: false,
+  isSuccess: false,
+  isLoading: false,
+  message: '',
 };
 
 // Tạo slice Redux cho products
 export const productSlice = createSlice({
   name: 'products',
-  initialState:initialState,
+  initialState: initialState,
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload;
@@ -83,7 +96,6 @@ export const productSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.products = action.payload;
-        // console(state.products)
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.isLoading = false;
@@ -97,9 +109,23 @@ export const productSlice = createSlice({
       })
       .addCase(addNewProduct.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products.push(action.payload);
+        state.products = action.payload;
       })
       .addCase(addNewProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(getProduct.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = '';
+      })
+      .addCase(getProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.products = action.payload;
+      })
+      .addCase(getProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.error.message;
@@ -111,12 +137,16 @@ export const productSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products = state.products.filter(product => product.id !== action.payload.productId);
+        state.products = action.payload;
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.errorMessage = action.error.message;
+        if (action.error.message.includes('404')) {
+          state.errorMessage = 'Product not found.';
+        } else {
+          state.errorMessage = action.error.message;
+        }
       })
       .addCase(updateProduct.pending, (state) => {
         state.isLoading = true;
@@ -125,12 +155,7 @@ export const productSlice = createSlice({
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products = state.products.map(product => {
-          if (product.id === action.payload.id) {
-            return action.payload;
-          }
-          return product;
-        });
+        state.products = action.payload;
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.isLoading = false;

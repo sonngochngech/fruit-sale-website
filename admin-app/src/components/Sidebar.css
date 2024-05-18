@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+}
+
+.user-img {
+    width: 50px;
+    border-radius: 50%;
+    border: 1px solid #eee;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 80px;
+    background-color: #12171e;
+    padding: 0.4rem 0.8rem;
+    transition: all 0.4s ease;
+    overflow: hidden;
+}
+
+.sidebar.active {
+    width: 250px;
+}
+
+.sidebar #btn {
+    position: absolute;
+    color: #fff;
+    top: 1rem;
+    left: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: left 0.4s ease;
+    transform: translateX(-50%);
+}
+
+.sidebar.active #btn {
+    left: 90%;
+}
+
+.sidebar .top .logo {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.sidebar.active .top .logo {
+    opacity: 1;
+}
+
+.top .logo i {
+    font-size: 2rem;
+    margin-right: 0.5rem;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.user p {
+    color: #fff;
+    margin-left: 1rem;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    position: relative;
+    height: 50px;
+    margin: 0.8rem 0;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li a, .sidebar ul li div {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+.sidebar ul li a:hover, .sidebar ul li div:hover {
+    background-color: #fff;
+    color: #12171e;
+}
+
+.sidebar ul li a i, .sidebar ul li div i {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.nav-item {
+    display: none;
+    transition: opacity 0.4s ease;
+}
+
+.sidebar.active .nav-item {
+    display: inline;
+    opacity: 1;
+}
+
+.tooltip {
+    position: absolute;
+    left: 100px;
+    background-color: #fff;
+    color: #12171e;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.sidebar ul li:hover .tooltip {
+    opacity: 1;
+}
+
+.sidebar.active ul li .tooltip {
+    display: none;
+}
+
+.main-content {
+    margin-left: 80px;
+    padding: 1rem;
+    transition: margin-left 0.4s ease;
+}
+
+.sidebar.active ~ .main-content {
+    margin-left: 250px;
+}
