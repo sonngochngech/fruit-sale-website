@@ -4,7 +4,7 @@ import { fetchOrders, deleteOrder } from "../features/orders/orderSlice";
 import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { DatePicker } from "@mui/lab";
-// import { LocalizationProvider, AdapterDayjs } from "@mui/lab";
+import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
@@ -17,7 +17,8 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Button,
+  Skeleton,
+  Typography,
 } from "@mui/material";
 
 dayjs.extend(isBetween); // Sử dụng plugin isBetween
@@ -80,7 +81,7 @@ const OrderChart = (orders) => {
     labels: dates,
     datasets: [
       {
-        label: "Số lượng đơn hàng",
+        label: "Quantity of orders",
         data: dates.map((date) => orderCountsByDate[date] || 0),
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         borderColor: "rgba(75, 192, 192, 1)",
@@ -139,10 +140,44 @@ const OrderChart = (orders) => {
 const OrderOverview = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.orders.orders);
+  const [loading, setLoading] = useState(true); // State to track loading status
 
   useEffect(() => {
-    dispatch(fetchOrders());
+    dispatch(fetchOrders())
+      .then(() => setLoading(false)) // Set loading to false when data is fetched successfully
+      .catch((error) => {
+        console.error("Error fetching orders:", error);
+        setLoading(false); // Set loading to false even if there's an error
+      });
   }, [dispatch]);
+
+  // Render skeleton if loading
+  if (loading) {
+    return (
+      <>
+        <div>
+      <h4>Order</h4>
+      <CssBaseline />
+      <Container>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={5}>
+            <Box sx={{ width: 400, height: 400, margin: 0 }}>
+              <Typography variant="h4">Status of orders</Typography>
+              <Skeleton variant="circular" width={300} height={300}  />
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={7}>
+            <Box sx={{ width: '100%' }}>
+              <Typography variant="h4">Quantity of orders</Typography>
+              <Skeleton variant="rectangular" width="100%" height={300} />
+            </Box>
+          </Grid>
+        </Grid>
+      </Container>
+    </div>
+      </>
+    );
+  }
 
   const orderStatuses = orders.orders.reduce((acc, order) => {
     acc[order.status] = (acc[order.status] || 0) + 1;
@@ -191,11 +226,11 @@ const OrderOverview = () => {
             <Grid item xs={12} sm={5}>
               <div style={{ width: 400, height: 400, margin: 0 }}>
                 <h4>Status of orders</h4>
-                <Pie data={data}  options={options}/>
+                <Pie data={data} options={options} />
               </div>
             </Grid>
             <Grid item xs={12} sm={7}>
-                <h4>Quantity of orders</h4>
+              <h4>Quantity of orders</h4>
               <OrderChart orders={orders.orders} />
             </Grid>
           </Grid>
