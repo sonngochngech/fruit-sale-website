@@ -1,53 +1,45 @@
 import React from "react";
-import { NavLink } from "react-router-dom"; // Import for navigation links
+import { Link } from "react-router-dom";
 import "../App.css";
 
 const Sidebar = () => {
   return (
     <div className="sidebar bg-light d-flex flex-column justify-content-between h-100">
-      {/* Brand logo and app title */}
       <div className="d-flex align-items-center mb-3 p-3">
-        <NavLink
-          to="/"
+        <Link
+          to="/admin/"
           className="fs-4 fw-bold"
           style={{ textDecoration: "none", color: "inherit" }}
         >
           Fruit Store
-        </NavLink>
+        </Link>
       </div>
 
-      {/* Navigation links */}
       <ul className="nav flex-column mb-auto">
         <li className="nav-item">
-          <NavLink className="nav-link active" exact to="/dashboard">
-            <i className="fas fa-tachometer-alt me-2"></i>{" "}
-            {/* Font Awesome icon */}
-            Dashboard
-          </NavLink>
+          <Link className="nav-link" to="/admin/">
+            <i className="fas fa-tachometer-alt me-2"></i> Dashboard
+          </Link>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" to="/users">
-            <i className="fas fa-users me-2"></i>
-            Users
-          </NavLink>
+          <Link className="nav-link" to="/admin/users">
+            <i className="fas fa-users me-2"></i> Users
+          </Link>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" to="/orders">
-            <i className="fas fa-shopping-cart me-2"></i>
-            Orders
-          </NavLink>
+          <Link className="nav-link" to="/admin/orders">
+            <i className="fas fa-shopping-cart me-2"></i> Orders
+          </Link>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" to="/products">
-            <i className="fas fa-apple-alt me-2"></i>
-            Products
-          </NavLink>
+          <Link className="nav-link" to="/admin/products">
+            <i className="fas fa-apple-alt me-2"></i> Products
+          </Link>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" to="/categories">
-            <i className="fas fa-tags me-2"></i>
-            Categories
-          </NavLink>
+          <Link className="nav-link" to="/admin/categories">
+            <i className="fas fa-tags me-2"></i> Categories
+          </Link>
         </li>
       </ul>
     </div>

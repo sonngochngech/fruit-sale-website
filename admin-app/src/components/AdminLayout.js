@@ -1,8 +1,9 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = () => {
   return (
     <div className="admin-layout">
       <div className="row">
@@ -15,7 +16,7 @@ const AdminLayout = ({ children }) => {
               <Header />
             </div>
             <div className="col-12">
-              {children}
+              <Outlet />
             </div>
           </div>
         </div>

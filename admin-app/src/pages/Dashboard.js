@@ -38,7 +38,7 @@ console.log(orders);
   return (
     <div className="dashboard">
       {/* Truyền dữ liệu orders vào component OrderStatusChart */}
-      <OrderStatusChart orders={{orders}} />
+      <div>Nothing</div>
     </div>
   );
 };
