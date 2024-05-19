@@ -2,13 +2,16 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch } from 'react-redux';
-import { deleteAllNoti } from '../features/users/userSlice';
+import { deleteAllNoti,getNotifications } from '../features/users/userSlice';
 
 function Dialog() {
     const dispatch=useDispatch();
 
   const handleConfirm=()=>{
-    dispatch(deleteAllNoti());
+    dispatch(deleteAllNoti())
+    .finally(()=>{
+      dispatch(getNotifications())
+    });
     setShow(false);
 
   }

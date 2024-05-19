@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import ReactStars from 'react-rating-stars-component';
 import BreadCrumb from '../components/BreadCrumb';
 import Meta from '../components/Meta';
-import FruitCard from '../components/FruitCard';
 import ReactImageZoom from 'react-image-zoom';
 
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -10,6 +8,7 @@ import Container from '../components/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAFruit} from '../features/fruits/fruitSlice';
 import { addFruitToCart, setPreOrder } from '../features/users/userSlice';
+import { base_domain } from '../utils/axiosConfig';
 
 const SingleFruit = () => {
   const [amount, setAmount] = useState(1);
@@ -17,10 +16,9 @@ const SingleFruit = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const getFruitId = location.pathname.split('/')[2];
-  console.log(getFruitId);
   const dispatch = useDispatch();
   const fruitState = useSelector((state) => state?.fruit?.singlefruit);
-  console.log(fruitState);
+
   const cartState = useSelector((state) => state?.auth?.cartFruits);
   useEffect(() => {
     dispatch(getAFruit(getFruitId));
@@ -49,8 +47,8 @@ const SingleFruit = () => {
         amount,
         price: fruitState?.price,
       })
-    );
-    navigate('/cart');
+    ).then(()=>{navigate('/cart');});
+    
   };
 
   useEffect(() => {
@@ -66,8 +64,8 @@ const SingleFruit = () => {
     height: 600,
     zoomWidth: 600,
 
-    img: "http://localhost:8081/"+fruitState?.FruitImages[0]?.link
-      ? "http://localhost:8081/"+ fruitState?.FruitImages[0]?.link
+    img: base_domain+fruitState?.FruitImages[0]?.link
+      ? base_domain+ fruitState?.FruitImages[0]?.link
       : 'https://img.freepik.com/free-photo/vibrant-collection-healthy-fruit-vegetables-generated-by-ai_24640-80425.jpg',
   };
 
@@ -83,19 +81,7 @@ const SingleFruit = () => {
     navigate('/checkout')
 
   }
-  const copyToClipboard = async (text) => {
-    {
-      /*thay thế chỗ này*/
-    }
-    console.log('text', text);
-    try {
-      await navigator.clipboard.writeText(text);
-      console.log('Copied to clipboard!');
-    } catch (err) {
-      console.error('Failed to copy: ', err);
-    }
-  };
-  const closeModal = () => {};
+ 
   return (
     <>
       <Meta title={'Fruit Name'} />
@@ -105,14 +91,19 @@ const SingleFruit = () => {
           <div className="col-6">
             <div className="main-product-image">
               <div>
-                <ReactImageZoom {...props} />
+                {/* <ReactImageZoom {...props} /> */}
+                <img src={props.img} 
+                onError={(e) => { e.target.src = 'http://localhost:3000/logo.png'; }} 
+                className="img-fluid" 
+                alt="" />
               </div>
             </div>
             <div className="other-product-images d-flex flex-wrap gap-15">
               {fruitState?.FruitImages.map((item, index) => {
-                return (
+                 (
                   <div key={index}>
-                    <img src={"http://localhost:8081/"+item?.link} className="img-fluid" alt="" />
+                    <img src={base_domain+item?.link} 
+                    className="img-fluid" alt="" />
                   </div>
                 );
               })}

@@ -12,6 +12,7 @@ import {
   setPreOrder
 } from '../features/users/userSlice';
 import { useSelector } from 'react-redux';
+import { base_domain } from '../utils/axiosConfig';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -33,30 +34,29 @@ const Cart = () => {
           fruitId: detail.FruitId,
           amount: detail.amount,
         })
-      );
-    });
+      ).finally(()=>{
+        dispatch(getUserCart())
+      });
+    })
 
-    setTimeout(() => {
-      dispatch(getUserCart());
-    }, 200);
   }, [fruitUpdateDetail]);
 
   const deleteACartFruit = (FruitId) => {
-    dispatch(deleteCartFruit(FruitId));
-    setTimeout(() => {
-      dispatch(getUserCart());
-    }, 200);
+    dispatch(deleteCartFruit(FruitId))
+    .finally(()=>{dispatch(getUserCart());});
+    
   };
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < userCartState?.length; index++) {
+      if(checkboxes[userCartState[index]?.Fruit.id])
       sum =
         sum +
         Number(userCartState[index].amount * userCartState[index]?.Fruit.price);
       
     }
     setTotalAmount(sum);
-  }, [userCartState]);
+  }, [userCartState,checkboxes]);
 
   const handleAmountChange = (e, item) => {
     const updatedAmount = e.target.value;
@@ -137,7 +137,7 @@ const Cart = () => {
                 return (
                   <div>
                     {item?.Fruit.isDeleted===1 && (
-                        <p>The fruit is no longer</p>
+                        <p className='mb-0'>The fruit is no longer valid</p>
                     )}
                       <div
                     key={index}
@@ -156,7 +156,8 @@ const Cart = () => {
                       </div>
                       <div className="w-25">
                         <img
-                          src={"http://localhost:8081/"+ item?.Fruit.FruitImages[0]?.link}
+                          src={base_domain+ item?.Fruit.FruitImages[0]?.link}
+                          onError={(e) => { e.target.src = 'http://localhost:3000/logo.png'; }} 
                         
                           className="img-fluid"
                           alt="product"
@@ -230,7 +231,7 @@ const Cart = () => {
               {(totalAmount !== null || totalAmount !== 0) && (
                 <div className="d-flex flex-column align-items-end">
                   <h4>SubTotal: $ {totalAmount}</h4>
-                  <button onClick={handleCheckOut} className="btn btn-warning">
+                  <button onClick={handleCheckOut} className="btn btn-warning" disabled={!totalAmount}>
                     Checkout
                   </button>
         

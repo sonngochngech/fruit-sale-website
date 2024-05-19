@@ -10,7 +10,7 @@ const Layout = () => {
     <>
       <Header />
       <Outlet />
-      <Footer />
+
       <ToastContainer
         position="top-right"
         autoClose={5000}

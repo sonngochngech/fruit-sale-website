@@ -82,7 +82,7 @@ const sendVerifyCode= async(email)=>{
   return (
     <>
       {/* <Meta title={"Sign Up"} /> */}
-      <BreadCrumb title="Sign Up" />
+      {/* <BreadCrumb title="Sign Up" /> */}
       <Container class1="login-wrapper py-5 home-wrapper-2">
         <div className="row">
           <div className="col-12">
