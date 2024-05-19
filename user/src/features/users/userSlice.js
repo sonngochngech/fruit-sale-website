@@ -417,9 +417,6 @@ export const authSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        if (state.isSuccess === false) {
-          toast.error('Something went wrong');
-        }
       })
       .addCase(getUnreadNotificationCount.pending, (state) => {
         state.isLoading = true;
@@ -435,9 +432,6 @@ export const authSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        if (state.isSuccess === false) {
-          toast.error('Something went wrong');
-        }
       })
       .addCase(setIsReadNoti.pending, (state) => {
         state.isLoading = true;

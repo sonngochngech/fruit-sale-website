@@ -24,49 +24,12 @@ function App() {
           <Route path="forgot-password" element={<Forgotpassword />} />
           <Route path="reset-password" element={<Resetpassword />} />
         <Route path="/" element={<PrivateRoutes><Layout /></PrivateRoutes>}>
-          <Route path="fruits" element={<PrivateRoutes><OurStore /></PrivateRoutes>} />
-            <Route
-              path="fruits/:id"
-              element={
-                <PrivateRoutes>
-                  <SingleFruit />
-                </PrivateRoutes>
-              }
-            />
-            <Route
-              path="cart"
-              element={
-                <PrivateRoutes>
-                  <Cart />
-                </PrivateRoutes>
-              }
-            />
-             <Route
-              path="checkout"
-              element={
-                <PrivateRoutes>
-                  <Checkout />
-                </PrivateRoutes>
-              }
-            />
-              <Route
-              path="order"
-              element={
-                <PrivateRoutes>
-                  <Order />
-                </PrivateRoutes>
-              }
-            />
-
-              <Route
-              path="notification"
-              element={
-                <PrivateRoutes>
-                  <Notification />
-                </PrivateRoutes>
-              }
-            />
-         
+          <Route path="fruits" element={<OurStore />} />
+          <Route path="fruits/:id" element={<SingleFruit />}/>
+          <Route path="cart" element={<Cart />}/>
+          <Route path="checkout" element={ <Checkout />}/>
+          <Route   path="order" element={  <Order/>  }  />
+          <Route path="notification" element={ <Notification />}  />
         </Route>
       </Routes>
     </BrowserRouter>

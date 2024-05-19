@@ -7,8 +7,9 @@ import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { createUserOrder, getUserCart } from "../features/users/userSlice";
+import { base_domain } from "../utils/axiosConfig";
 
-const phoneRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/;
+const phoneRegex = /^0\d{9}$/;
 
 const shippingSchema = yup.object({
   address: yup.string().required("Address is required"),
@@ -195,7 +196,8 @@ const Checkout = () => {
                             className="img-fluid"
                             width={100}
                             height={100}
-                            src={"http://localhost:8081/"+ item?.Fruit?.FruitImages[0]?.link}
+                            src={base_domain+ item?.Fruit?.FruitImages[0]?.link}
+                            onError={(e) => { e.target.src = 'http://localhost:3000/logo.png'; }} 
                             alt="fruit"
                           />
                         </div>

@@ -23,10 +23,13 @@ const NotificationCard = (props) => {
 
   }
   const deleteNoti=()=>{
-    dispatch(deleteANoti(id));
-    setTimeout(() => {
+    dispatch(deleteANoti(id))
+    .finally(()=>{
       dispatch(getNotifications());
-    }, 200);
+    });
+   
+    
+    ;
    
   }
   return (

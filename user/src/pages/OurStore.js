@@ -19,13 +19,14 @@ const OurStore = () => {
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const title = queryParams.get('title');
+  const titleq = queryParams.get('title');
   const [grid, setGrid] = useState(4);
   const [params, setParams] = useState({
     sort: '',
     category: '',
     priceStart: 0,
-    priceEnd: 9999999
+    priceEnd: 9999999,
+    title: '',
   })
   const fruitState = useSelector((state) => state.fruit.fruits);
   const [showedFruitState,setShowedFruitState]=useState([]);
@@ -36,12 +37,14 @@ const OurStore = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     getFruitCategories();
+    dispatch(getAllFruits());
   
-    if(title==="" || title===null) dispatch(getAllFruits())
-    else dispatch(searchFruitByName(title));
+    if( titleq===null) setParams({...params, title: ''})
+    else  setParams({...params, title: titleq})
+  
 
 
-  }, [title]);
+  }, [titleq]);
 
  
   useEffect(() => {
@@ -58,7 +61,7 @@ const OurStore = () => {
   };
   useEffect(()=>{
     let filteredFruits;
-     filteredFruits=fruitState?.filter((item)=>(params.category!=="" ? item?.Category.name === params.category: true )&& item.price >= params.priceStart && item.price<=params.priceEnd );
+     filteredFruits=fruitState?.filter((item)=>(params.category!=="" ? item?.Category.name === params.category: true )&& item.price >= params.priceStart && item.price<=params.priceEnd && params.title!=="" ? item?.title.toLowerCase().includes(params.title.toLowerCase()): true);
     
     const sortedFruits = sortFruits(filteredFruits, params.sort);
     setShowedFruitState(sortedFruits);
@@ -128,7 +131,7 @@ const OurStore = () => {
                       className="form-control"
                       id="searchName"
                       placeholder="Name"
-                      onChange={e => handleSeach(e.target.value)}
+                      onChange={e => setParams({...params, title: e.target.value? e.target.value : '' })}
                     />
                     <label htmlFor="searchName">Title</label>
                   </div>

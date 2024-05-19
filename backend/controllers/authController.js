@@ -9,6 +9,8 @@ const {trycatchWrapper}=require("../middlewares/tryCatchWrapper")
 const {  validationResult } = require('express-validator');
 const { sendMail } = require('../services/mailService');
 const{ConnectedIoEvent}=require('../services/IoService');
+const { use } = require("../routes");
+const { profile } = require("console");
 require('dotenv').config()
 
 
@@ -90,10 +92,19 @@ const login=trycatchWrapper(async (req,res)=>{
         }
         // ConnectedIoEvent(user.id);
 
+
+
         
 
         res.status(200).send({
-            user: user,
+            user: {
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                role: user.role,
+                phoneNo:user.phoneNo,
+                profileImage: user.profileImage
+            },
             jwt: generatejwt(user.id)
         })
    
@@ -128,7 +139,14 @@ const register=trycatchWrapper( async (req,res)=>{
     });
 
     return res.status(200).send({
-        user:user,
+        user:{
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role,
+            phoneNo:user.phoneNo,
+            profileImage: user.profileImage
+        },
         jwt: await generatejwt(user.id)
     })
 })
@@ -153,7 +171,14 @@ const verifyPasswordToken=trycatchWrapper( async(req,res)=>{
         }
     })
     return res.status(200).send({
-        user:user,
+        user:{
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role,
+            phoneNo:user.phoneNo,
+            profileImage: user.profileImage
+        },
         jwt: await generatejwt(user.id) 
 
     })
@@ -171,7 +196,14 @@ const updatePassword=trycatchWrapper(async(req,res)=>{
             await currentUser.save();
 
             res.status(200).send({
-                user:currentUser,
+                user:{
+                    email: currentUser.email,
+                    firstName: currentUser.firstName,
+                    lastName: currentUser.lastName,
+                    role: currentUser.role,
+                    phoneNo:currentUser.phoneNo,
+                    profileImage: currentUser.profileImage
+                },
                 jwt: generatejwt(currentUser.id)
             });
         } else {
@@ -192,7 +224,14 @@ const resetPassword=trycatchWrapper(async(req,res)=>{
             await currentUser.save();
 
             res.status(200).send({
-                user:currentUser,
+                user:{
+                    email: currentUser.email,
+                    firstName: currentUser.firstName,
+                    lastName: currentUser.lastName,
+                    role: currentUser.role,
+                    phoneNo:currentUser.phoneNo,
+                    profileImage: currentUser.profileImage
+                },
                 jwt: generatejwt(currentUser.id)
             });
         } else {

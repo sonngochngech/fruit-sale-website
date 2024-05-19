@@ -1,12 +1,8 @@
 import React from 'react';
-import ReactStars from 'react-rating-stars-component';
 import { Link, useLocation } from 'react-router-dom';
-import wish from '../images/wish.svg';
-import addcart from '../images/add-cart.svg';
 import view from '../images/view.svg';
 import { useDispatch } from 'react-redux';
-import { addToWishList } from '../features/fruits/fruitSlice';
-// import { base_url } from "./../utils/axiosConfig";
+import { base_domain, base_url } from "./../utils/axiosConfig";
 const FruitCard = (props) => {
   const { grid, data } = props;
   const dispatch = useDispatch();
@@ -27,13 +23,15 @@ const FruitCard = (props) => {
               </div>
               <div className="product-image">
                 <img
-                  src={"http://localhost:8081/"+ item?.FruitImages[0]?.link}
+                  src={base_domain+ item?.FruitImages[0]?.link}
+                  onError={(e) => { e.target.src = 'http://localhost:3000/logo.png'; }} 
                   className="img-fluid mx-auto"
                   alt="fruit"
                   width={160}
                 />
                   <img
-                  src={"http://localhost:8081/"+ item?.FruitImages[1]?.link}
+                  src={base_domain+ item?.FruitImages[1]?.link}
+                  onError={(e) => { e.target.src = 'http://localhost:3000/banner.jpg'; }} 
                   className="img-fluid mx-auto"
                   alt="fruit"
                   width={160}
@@ -42,13 +40,6 @@ const FruitCard = (props) => {
               <div className="product-details">
                 <h6 className="brand">{item?.code}</h6>
                 <h5 className="product-title">{item?.title}</h5>
-                {/* <ReactStars
-                  count={5}
-                  size={24}
-                  value={item?.rating}
-                  edit={false}
-                  activeColor="#ffd700"
-                /> */}
                 <p
                   className={`description ${
                     grid === 12 ? 'd-block' : 'd-none'

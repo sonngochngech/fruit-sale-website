@@ -11,18 +11,18 @@ const { logoutUser, getNotifications, getUnreadNotificationCount } = require('..
 
 
 const Header = () => {
-  const URL= "http://localhost:8081";
-  const socket=io(URL,{autoConnect:true});
-  socket.on('new notification',()=>{
-    dispatch(getUnreadNotificationCount());
+  // const URL= "https://fruit-sale-v1-2-0.onrender.com";
+  // const socket=io(URL,{autoConnect:true});
+  // socket.on('new notification',()=>{
+  //   dispatch(getUnreadNotificationCount());
 
-    setTimeout(() => {
-      dispatch(getNotifications());
-    }, 200);
+  //   setTimeout(() => {
+  //     dispatch(getNotifications());
+  //   }, 200);
 
 
 
-  })
+  // })
 
   useEffect(()=>{
     dispatch(getUnreadNotificationCount());
@@ -57,12 +57,12 @@ const Header = () => {
     
   },[cartState]);
 
-  useEffect(()=>{
-    console.log("hello",authState.user);
-    if(authState.user.id!==null){
-      socket.emit('authenticated',authState.user);
-    }
-  },[])
+  // useEffect(()=>{
+  //   console.log("hello",authState.user);
+  //   if(authState.user.id!==null){
+  //     socket.emit('authenticated',authState.user);
+  //   }
+  // },[])
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -108,8 +108,8 @@ const Header = () => {
                   value={value}
                   onChange={(e) => setValue(e.target.value)} 
                 />
-                <span className="input-group-text p-3" id="basic-addon2">
-                  <BsSearch className="fs-6" onClick={handleSearch} />
+                <span className="input-group-text p-3" id="basic-addon2" onClick={handleSearch}>
+                  <BsSearch className="fs-6"  />
                 </span>
               </div>
             </div>
@@ -120,7 +120,7 @@ const Header = () => {
                     to="/notification"
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img src="images/compare.svg" alt="compare" />
+                    <img src="http://localhost:3000/images/compare.svg" alt="compare" />
                     <p className="mb-0">
                       Notification
                     </p>
@@ -131,7 +131,7 @@ const Header = () => {
                     to="/cart"
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img src="images/wishlist.svg" alt="wishlist" />
+                    <img src="http://localhost:3000/images/wishlist.svg" alt="wishlist" />
                     <p className="mb-0">
                       Your <br /> cart
                     </p>
@@ -142,7 +142,7 @@ const Header = () => {
                     to="/order"
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img src="images/compare.svg" alt="order" />
+                    <img src="http://localhost:3000/images/compare.svg" alt="order" />
                     <p className="mb-0">Order</p>
                   </Link>
                 </div>
@@ -152,7 +152,7 @@ const Header = () => {
                     onClick={authState?.user !== null ? handleLogout : null}
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img src="images/login01.svg" alt="user" />
+                    <img src="http://localhost:3000/images/login01.svg" alt="user" />
                     {authState?.user === null ? (
                       <p className="mb-0">
                         Log in <br /> My Account
@@ -169,7 +169,7 @@ const Header = () => {
                     to="#"
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img src="images/cart.svg" alt="cart" />
+                    <img src="http://localhost:3000/images/cart.svg" alt="cart" />
                     <div className="d-flex flex-column gap-10">
                       <span className="badge bg-white text-dark">
                         {cartState?.length ? cartState?.length : 0}
@@ -205,7 +205,7 @@ const Header = () => {
                     >
                       
                         
-                      <img src="images/notifications.svg"  width="20" height="20" alt="" />
+                      <img src="http://localhost:3000/images/notification.svg"  width="20" height="20" alt="" />
                       <span className="me-5 d-inline-block">
                        Notification
                       </span>
