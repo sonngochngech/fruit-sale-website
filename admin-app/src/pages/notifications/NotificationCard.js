@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import wish from '../images/wish.svg';
 // import addcart from '../images/add-cart.svg';
-// import trash from '../../images/trash.svg';
+import trash from '../../images/trash.svg';
 import { deleteAllNoti, deleteANoti,getNotifications, setIsReadNoti } from "../../features/users/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -37,7 +37,7 @@ const NotificationCard = (props) => {
         <div className="action-bar position-absolute">
                 <div className="d-flex flex-column gap-15">
                   <button className="border-0 bg-transparent" onClick={deleteNoti}>
-                    <img src={''} alt="trash" />
+                    <img src={trash} alt="trash" />
                   </button>
                 </div>
         </div>

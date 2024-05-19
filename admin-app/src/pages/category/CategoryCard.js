@@ -40,7 +40,7 @@ const CategoryCard = ({ categories, onDelete }) => {
   };
 
   return (
-    <div>
+    <div style={{width:1000}}>
       <table className="table table-striped">
         <thead>
           <tr>

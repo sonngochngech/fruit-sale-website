@@ -47,6 +47,7 @@ const Login = () => {
 
   return (
     <>
+      <div style={{marginLeft:500}}>
       {/* <Meta title={'Login'} /> */}
       <BreadCrumb title="Login" />
       <Container class1="login-wrapper py-5 home-wrapper-2">
@@ -111,6 +112,7 @@ const Login = () => {
         pauseOnHover
         theme="light"
       />
+      </div>
     </>
   );
 };
