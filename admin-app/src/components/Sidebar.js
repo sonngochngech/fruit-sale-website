@@ -112,13 +112,13 @@ const LogoutDialog = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Confirm Logout</DialogTitle>
+      <DialogTitle><b>Confirm Logout</b></DialogTitle>
       <DialogContent>Are you sure you want to logout?</DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleLogout} color="primary">
+        <Button onClick={handleLogout} color="secondary">
           Logout
         </Button>
       </DialogActions>
@@ -195,7 +195,7 @@ const Sidebar = () => {
         </li>
         <li className="nav-item">
         <NavLink className="nav-link" to="/admin/notifications">
-            <div onClick={handleOpenLogoutDialog}> <i className="bx bx-log-out"></i> Logout</div>
+            <div onClick={handleOpenLogoutDialog} style={{margin:0, padding:0}}> <i className="bx bx-log-out" ></i> Logout</div>
             <LogoutDialog open={logoutDialogOpen} onClose={handleCloseLogoutDialog} />
           </NavLink>
         </li>
