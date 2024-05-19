@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { useDispatch } from "react-redux";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { base_domain } from "../utils/axiosConfig";
@@ -79,10 +80,48 @@ const Noti = () => {
   );
 };
 
+const LogoutDialog = ({ open, onClose }) => {
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser());
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Confirm Logout</DialogTitle>
+      <DialogContent>
+        Are you sure you want to logout?
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleLogout} color="primary">
+          Logout
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const Sidebar = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+
+  const handleOpenLogoutDialog = () => {
+    setLogoutDialogOpen(true);
+  };
+
+  const handleCloseLogoutDialog = () => {
+    setLogoutDialogOpen(false);
+  };
 
   const handleLogout = async () => {
     try {
@@ -92,6 +131,7 @@ const Sidebar = () => {
       console.error('Error logging out:', error);
     }
   };
+
   return (
     <div className="sidebar bg-light d-flex flex-column justify-content-between h-100">
       {/* Brand logo and app title */}
@@ -142,7 +182,8 @@ const Sidebar = () => {
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/admin/notifications">
-            <div onClick={handleLogout}> <i className="bx bx-log-out"></i> Logout</div>
+            <div onClick={handleOpenLogoutDialog}> <i className="bx bx-log-out"></i> Logout</div>
+            <LogoutDialog open={logoutDialogOpen} onClose={handleCloseLogoutDialog} />
           </NavLink>
         </li>
       </ul>

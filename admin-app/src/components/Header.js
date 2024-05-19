@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { BsSearch } from 'react-icons/bs';
@@ -8,24 +7,9 @@ import { io } from "socket.io-client";
 import { base_domain } from '../utils/axiosConfig';
 const { logoutUser, getNotifications, getUnreadNotificationCount } = require('../features/users/userSlice');
 
-
-
-
 const Header = () => {
-  const URL= base_domain;
+  const URL= 'https://fruit-sale-react-application.onrender.com/';
   const socket=io(URL,{autoConnect:true});
-  socket.on('new notification',()=>{
-    dispatch(getUnreadNotificationCount());
-
-    setTimeout(() => {
-      dispatch(getNotifications());
-    }, 200);
-  })
-
-  useEffect(()=>{
-    dispatch(getUnreadNotificationCount());
-  },[])
-
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.users);
   const notificationState=useSelector((state)=>state?.users?.unreadNotification);
@@ -39,6 +23,10 @@ const Header = () => {
     }
   },[])
 
+  const handleClick = () => {
+    // Navigate to the notification page
+    navigate('/notifications');
+  };
 
   return (
     <>
@@ -48,33 +36,30 @@ const Header = () => {
             <div className="col-12">
               <div className="menu-bottom d-flex align-items-center gap-30">
                 <div>
-                 <div className="dropdown">
-                 <span
-                            style={{ top: "-10px", left: "2px" }}
-                            className="badge bg-secondary text-white rounded-circle p-2 position-absolute"
-                          >
-                           { notificationState?.notificationCount}
-                          </span>
+                  <div className="dropdown">
+                    <span
+                      style={{ top: "-10px", left: "2px" }}
+                      className="badge bg-secondary text-white rounded-circle p-2 position-absolute"
+                    >
+                      {notificationState?.notificationCount}
+                    </span>
                     <ul
                       className="dropdown-menu"
                       aria-labelledby="dropdownMenuButton1"
-
                     >
-                       {notificationState?.unreadNotification?.map((item, index) => (
-                          <li key={index} className="list-group-item bg-dark">
-                            <Link className="text-white">
-                              {item?.title}
-                            </Link>
-                          </li>
-                        ))}
+                      {notificationState?.unreadNotification?.map((item, index) => (
+                        <li key={index} className="list-group-item bg-dark" onClick={handleClick}>
+                          <NavLink
+                            to="/notifications"
+                            className="fs-4 fw-bold"
+                            style={{ textDecoration: "none", color: "inherit" }}
+                          >
+                            {item?.title}
+                          </NavLink>
+                        </li>
+                      ))}
                     </ul>
                   </div> 
-             
-                </div>
-                <div className="menu-links">
-                  <div className="d-flex align-items-center gap-30">
-                    <NavLink to="/fruits">Our Store</NavLink>
-                  </div>
                 </div>
               </div>
             </div>

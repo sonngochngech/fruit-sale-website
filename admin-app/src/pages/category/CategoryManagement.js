@@ -9,6 +9,7 @@ import {
   addNewCategory,
   deleteCategory,
 } from "../../features/categories/categorySlice";
+import { Skeleton, Box, Typography, Grid, Container } from '@mui/material';
 
 const CategoryManagement = () => {
   const dispatch = useDispatch();
@@ -16,9 +17,15 @@ const CategoryManagement = () => {
   const [showCreateCategoryForm, setShowCreateCategoryForm] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState(categories);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchCategories());
+    dispatch(fetchCategories())
+      .then(() => setLoading(false))
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+        setLoading(false);
+      });
   }, [dispatch]);
 
   useEffect(() => {
@@ -27,7 +34,7 @@ const CategoryManagement = () => {
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
-    const filtered = categories.categories.filter((category) =>
+    const filtered = (categories?.categories || []).filter((category) =>
       category.name.toLowerCase().includes(event.target.value.toLowerCase())
     );
     setFilteredCategories(filtered);
@@ -66,6 +73,32 @@ const CategoryManagement = () => {
       });
   };
 
+  if (loading) {
+    return (
+      <div className="product-management">
+        <h2>Categories</h2>
+        <Container>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={8.5}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Skeleton variant="rectangular" width={344} height={37} />
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={3} sx={{ justifyContent: 'end', alignItems: 'center' }}>
+              <Skeleton variant="rectangular" width={175} height={53} />
+            </Grid>
+            <Grid item xs={12}>
+            <Skeleton variant="rectangular" width="100%" height={64} />
+            </Grid>
+            <Grid item xs={12}>
+              <Skeleton variant="rectangular" width="100%" height={400} />
+            </Grid>
+          </Grid>
+        </Container>
+      </div>
+    );
+  }
+
   return (
     <div className="category-management">
       <h2>Categories</h2>
@@ -101,7 +134,7 @@ const CategoryManagement = () => {
         </div>
       )}
       <CategoryCard 
-        categories={filteredCategories.length > 0 ? filteredCategories : categories.categories } 
+        categories={filteredCategories.length > 0 ? filteredCategories : categories?.categories || [] } 
         onDelete={handleDelete} 
       />
     </div>

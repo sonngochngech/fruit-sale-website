@@ -189,12 +189,12 @@ const OrderOverview = () => {
       {
         data: Object.values(orderStatuses),
         backgroundColor: [
-          "#FF6384", // Color for Delivering
-          "#36A2EB", // Color for Delivered
-          "#FFCE56", // Color for Cancel
-          "#4BC0C0", // Color for Request
+          "#ffc107", // Color for Delivering
+          "#2196f3", // Color for Delivered
+          "#f44336", // Color for Cancel
+          "#4caf50", // Color for Request
         ],
-        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+        hoverBackgroundColor: ["#ffc107", "#2196f3", "#f44336", "#4caf50"],
       },
     ],
   };
