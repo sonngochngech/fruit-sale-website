@@ -100,10 +100,11 @@ const Noti = () => {
 
 const LogoutDialog = ({ open, onClose }) => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser());
+      navigate("/login")
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -193,16 +194,10 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li className="nav-item">
-          {/* <NavLink className="nav-link" to="/admin/notifications"> */}
-            <div onClick={handleOpenLogoutDialog}>
-              {" "}
-              <i className="bx bx-log-out"></i> Logout
-            </div>
-            <LogoutDialog
-              open={logoutDialogOpen}
-              onClose={handleCloseLogoutDialog}
-            />
-          {/* </NavLink> */}
+        <NavLink className="nav-link" to="/admin/notifications">
+            <div onClick={handleOpenLogoutDialog}> <i className="bx bx-log-out"></i> Logout</div>
+            <LogoutDialog open={logoutDialogOpen} onClose={handleCloseLogoutDialog} />
+          </NavLink>
         </li>
       </ul>
     </div>

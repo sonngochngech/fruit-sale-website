@@ -23,7 +23,6 @@ import {
 dayjs.extend(isBetween); // Sử dụng plugin isBetween
 
 const OrderChart = (orders) => {
-  console.log(orders);
   const today = dayjs();
   const [startDate, setStartDate] = useState(today.subtract(13, "day"));
   const [endDate, setEndDate] = useState(today);
