@@ -93,7 +93,7 @@ const SingleFruit = () => {
               <div>
                 {/* <ReactImageZoom {...props} /> */}
                 <img src={props.img} 
-                onError={(e) => { e.target.src = 'http://localhost:3000/logo.png'; }} 
+                onError={(e) => { e.target.src =`${base_domain}logo.png`; }} 
                 className="img-fluid" 
                 alt="" />
               </div>
