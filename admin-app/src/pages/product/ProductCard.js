@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import { NavLink } from "react-router-dom";
-import { base_domain } from '../../utils/axiosConfig';
+import { base_domain } from "../../utils/axiosConfig";
 import "./ProductCard.css";
 import ProductDetailForm from "./ProductDetailForm";
+import { Box } from "@mui/material";
 
 const ProductCard = ({ products, onDelete }) => {
   const [pageNumber, setPageNumber] = useState(0);
@@ -15,6 +16,7 @@ const ProductCard = ({ products, onDelete }) => {
   if (!Array.isArray(products) || products.length === 0) {
     return <div></div>;
   }
+  console.log(products);
 
   const displayProducts = products
     ?.slice(pagesVisited, pagesVisited + productsPerPage)
@@ -29,14 +31,15 @@ const ProductCard = ({ products, onDelete }) => {
                 src={base_domain + image.link}
                 alt={`Product ${index}`}
                 className="product-image"
-                style={{ height: '50px', width: '50px' }}
               />
             ))}
           </div>
         </td>
         <td>{product.title}</td>
+        <td>{product.code}</td>
         <td>{product.Category?.name}</td>
         <td>${product.price}</td>
+        <td>{product.amount}</td>
         <td>
           <button
             className="btn btn-secondary action-button"
@@ -64,15 +67,17 @@ const ProductCard = ({ products, onDelete }) => {
   };
 
   return (
-    <div>
+    <div className="table-container" style={{width: 1000}}>
       <table className="table table-striped table-hover">
         <thead>
           <tr>
             <th>ID</th>
             <th>Image</th>
             <th>Title</th>
+            <th>Code</th>
             <th>Category</th>
             <th>Price</th>
+            <th>Amount</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -106,7 +111,11 @@ const ProductCard = ({ products, onDelete }) => {
             <button className="close-btn" onClick={() => setShowDetail(false)}>
               &times;
             </button>
-            <ProductDetailForm onClose={() => setShowDetail(false)} newProduct={selectedProduct} product={selectedProduct} />
+            <ProductDetailForm
+              onClose={() => setShowDetail(false)}
+              newProduct={selectedProduct}
+              product={selectedProduct}
+            />
           </div>
         </div>
       )}

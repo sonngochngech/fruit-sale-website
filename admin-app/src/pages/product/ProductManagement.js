@@ -95,19 +95,19 @@ const ProductManagement = () => {
         <h2>Products</h2>
         <Container>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={8.5}>
+            <Grid item xs={12} md={9}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Skeleton variant="rectangular" width={344} height={37} />
+                <Skeleton variant="rectangular" width={450} height={40} />
               </Box>
             </Grid>
             <Grid item xs={12} md={3} sx={{ justifyContent: 'end', alignItems: 'center' }}>
-              <Skeleton variant="rectangular" width={175} height={53} />
+              <Skeleton variant="rectangular" width={190} height={53} />
             </Grid>
             <Grid item xs={12}>
-            <Skeleton variant="rectangular" width="100%" height={64} />
+            <Skeleton variant="rectangular" width={1050} height={64} />
             </Grid>
             <Grid item xs={12}>
-              <Skeleton variant="rectangular" width="100%" height={400} />
+              <Skeleton variant="rectangular" width={1050} height={400} />
             </Grid>
           </Grid>
         </Container>

@@ -158,17 +158,17 @@ const OrderOverview = () => {
       <h4>Order</h4>
       <CssBaseline />
       <Container>
-        <Grid container spacing={3}>
+        <Grid container spacing={30}>
           <Grid item xs={12} sm={5}>
             <Box sx={{ width: 400, height: 400, margin: 0 }}>
               <Typography variant="h4">Status of orders</Typography>
-              <Skeleton variant="circular" width={300} height={300}  />
+              <Skeleton variant="circular" width={400} height={400}  />
             </Box>
           </Grid>
           <Grid item xs={12} sm={7}>
             <Box sx={{ width: '100%' }}>
               <Typography variant="h4">Quantity of orders</Typography>
-              <Skeleton variant="rectangular" width="100%" height={300} />
+              <Skeleton variant="rectangular" width={500} height={442} />
             </Box>
           </Grid>
         </Grid>

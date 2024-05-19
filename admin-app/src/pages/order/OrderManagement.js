@@ -38,17 +38,17 @@ const OrderManagement = () => {
         <h2>Orders</h2>
         <Container>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Skeleton variant="rectangular" width={261} height={37} />
+                <Skeleton variant="rectangular" width={435} height={37} />
                 <Skeleton variant="rectangular" width={77.85} height={37} sx={{ ml: 2 }} />
               </Box>
             </Grid>
             <Grid item xs={12}>
-            <Skeleton variant="rectangular" width="100%" height={64} />
+            <Skeleton variant="rectangular" width={1100} height={100} />
             </Grid>
             <Grid item xs={12}>
-              <Skeleton variant="rectangular" width="100%" height={500} />
+              <Skeleton variant="rectangular" width={1100} height={500} />
             </Grid>
           </Grid>
         </Container>
