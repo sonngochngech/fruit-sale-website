@@ -58,7 +58,13 @@ const ProductDetailForm = ({ onClose, product }) => {
           updatedProductData: updatedProduct,
         })
       );
-      await dispatch(fetchProducts());
+      await dispatch(fetchProducts()).then(() => {
+        toast.success('Successful change!');
+      })
+      .catch((error) => {
+        console.error("Error updating order:", error);
+      });
+      
       onClose();
     } catch (error) {
       // Xử lý lỗi và hiển thị thông báo

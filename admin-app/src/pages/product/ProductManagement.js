@@ -93,6 +93,7 @@ const ProductManagement = () => {
     return (
       <div className="product-management">
         <h2>Products</h2>
+        <ToastContainer/>
         <Container>
           <Grid container spacing={3}>
             <Grid item xs={12} md={9}>

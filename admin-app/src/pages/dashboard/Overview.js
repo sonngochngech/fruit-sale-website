@@ -150,7 +150,7 @@ const OrderOverview = () => {
   }, [dispatch]);
 
   // Render skeleton if loading
-  if (loading || orders === undefined) {
+  if (loading || orders.orders === undefined) {
     return (
       <>
         <div>
