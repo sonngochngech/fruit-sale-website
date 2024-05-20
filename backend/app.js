@@ -16,7 +16,7 @@ const socketIo=require('socket.io')
 const server=http.createServer(app)
 const io = socketIo(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: ["http://localhost:3000", "http://localhost:3001","https://fruit-sale-react-application.onrender.com"],
       credentials: true
     }
   });

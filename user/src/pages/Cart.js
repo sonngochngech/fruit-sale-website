@@ -157,7 +157,7 @@ const Cart = () => {
                       <div className="w-25">
                         <img
                           src={base_domain+ item?.Fruit.FruitImages[0]?.link}
-                          onError={(e) => { e.target.src = 'http://localhost:3000/logo.png'; }} 
+                          onError={(e) => { e.target.src = `${base_domain}logo.png`; }} 
                         
                           className="img-fluid"
                           alt="product"

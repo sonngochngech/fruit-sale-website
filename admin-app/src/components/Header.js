@@ -8,13 +8,26 @@ import { base_domain } from '../utils/axiosConfig';
 const { logoutUser, getNotifications, getUnreadNotificationCount } = require('../features/users/userSlice');
 
 const Header = () => {
-  const URL= 'https://fruit-sale-react-application.onrender.com/';
-  const socket=io(URL,{autoConnect:true});
+
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.users);
   const notificationState=useSelector((state)=>state?.users?.unreadNotification);
   const [total, setTotal] = useState(null);
   const navigate = useNavigate();
+  const URL= 'https://fruit-sale-react-application.onrender.com/';
+  const socket=io(URL,{autoConnect:true});
+  socket.on('new notification',()=>{
+    dispatch(getUnreadNotificationCount())
+    .finally(()=>{
+      dispatch(getNotifications());
+    });
+  })
+
+  useEffect(()=>{
+    dispatch(getUnreadNotificationCount());
+  },[])
+
+  
 
   useEffect(()=>{
     console.log("hello",userState.users);

@@ -83,7 +83,7 @@ const Order = () => {
                                 <p>{fruit?.isDeleted===1 && '(The fruit is no longer)'}</p>
                                 <img
                                   src={base_domain + fruit?.FruitImages[0]?.link}
-                                  onError={(e) => { e.target.src = 'http://localhost:3000/logo.png'; }} 
+                                  onError={(e) => { e.target.src = `${base_domain}logo.png`; }} 
                                   width={50}
                                 />
                                 <p>Quantity: {fruit?.OrderItem?.amount}</p>

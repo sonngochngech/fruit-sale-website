@@ -7,6 +7,7 @@ const { Op } = require('sequelize');
 const {trycatchWrapper}=require("../middlewares/tryCatchWrapper")
 const {  validationResult } = require('express-validator');
 const IoService =require('../services/IoService');
+const crypto = require("crypto")
 const getAllFruits=trycatchWrapper(async (req,res)=>{
     const fruits=await Fruit.findAll({
         where:{
@@ -58,7 +59,7 @@ const createFruit=trycatchWrapper(async (req,res)=>{
 
         let images=[];
         const fruit=await Fruit.create({
-            code:req.body.code,
+            code:crypto.randomInt(100000, 999999).toString(),
             title: req.body.title,
             description: req.body.description,
             amount: req.body.amount,

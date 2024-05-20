@@ -1,7 +1,6 @@
 const {body}=require("express-validator")
 
 const createFruitValidator = [
-    body('code').notEmpty().withMessage('Code is required'),
     body('title').notEmpty().withMessage('Title is required'),
     body('description').notEmpty().withMessage('Description is required'),
     body('amount').optional().notEmpty().isInt().withMessage('Amount must be a valid integer'),

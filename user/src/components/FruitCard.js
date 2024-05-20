@@ -24,14 +24,14 @@ const FruitCard = (props) => {
               <div className="product-image">
                 <img
                   src={base_domain+ item?.FruitImages[0]?.link}
-                  onError={(e) => { e.target.src = 'http://localhost:3000/logo.png'; }} 
+                  onError={(e) => { e.target.src = `${base_domain}logo.png`; }} 
                   className="img-fluid mx-auto"
-                  alt="fruit"
+                  alt="fruit"S
                   width={160}
                 />
                   <img
                   src={base_domain+ item?.FruitImages[1]?.link}
-                  onError={(e) => { e.target.src = 'http://localhost:3000/banner.jpg'; }} 
+                  onError={(e) => { e.target.src = `${base_domain}banner.jpg`; }} 
                   className="img-fluid mx-auto"
                   alt="fruit"
                   width={160}
