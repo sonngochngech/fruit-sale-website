@@ -31,7 +31,7 @@ const ProductCard = ({ products, onDelete }) => {
                 alt={`Product ${index}`}
                 className="product-image"
                 onError={(e) => {
-                  e.target.src = '../../images/image_replace.jpg';
+                  e.target.src = 'http://localhost:3000/image/image_replace.jpg';
                 }}
               />
             ))}

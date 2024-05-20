@@ -45,7 +45,6 @@ const Noti = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("hello", userState.users);
     if (userState.users.id !== null) {
       socket.emit("authenticated", userState.users);
     }
@@ -66,12 +65,16 @@ const Noti = () => {
         >
           <i className="bx bxs-bell"></i>
         </div>
-        <span
-          style={{ top: "-10px", left: "2px" }}
-          className="badge bg-secondary text-white rounded-circle p-2 position-absolute"
-        >
-          {notificationState?.notificationCount}
-        </span>
+          <span
+            style={{
+              top: "-10px",
+              left: "10px",
+              display: "inline-block",
+            }}
+            className="badge bg-danger text-white rounded-circle p-2 position-absolute"
+          >
+            {notificationState?.notificationCount}
+          </span>
         {isDropdownOpen && (
           <ul
             className="dropdown-menu"
@@ -104,7 +107,7 @@ const LogoutDialog = ({ open, onClose }) => {
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser());
-      navigate("/login")
+      navigate("/login");
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -112,7 +115,9 @@ const LogoutDialog = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle><b>Confirm Logout</b></DialogTitle>
+      <DialogTitle>
+        <b>Confirm Logout</b>
+      </DialogTitle>
       <DialogContent>Are you sure you want to logout?</DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
@@ -194,9 +199,18 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li className="nav-item">
-        <NavLink className="nav-link" to="/admin/notifications">
-            <div onClick={handleOpenLogoutDialog} style={{margin:0, padding:0}}> <i className="bx bx-log-out" ></i> Logout</div>
-            <LogoutDialog open={logoutDialogOpen} onClose={handleCloseLogoutDialog} />
+          <NavLink className="nav-link" to="/admin/notifications">
+            <div
+              onClick={handleOpenLogoutDialog}
+              style={{ margin: 0, padding: 0 }}
+            >
+              {" "}
+              <i className="bx bx-log-out"></i> Logout
+            </div>
+            <LogoutDialog
+              open={logoutDialogOpen}
+              onClose={handleCloseLogoutDialog}
+            />
           </NavLink>
         </li>
       </ul>
