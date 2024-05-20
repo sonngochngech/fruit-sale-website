@@ -20,6 +20,7 @@ export const addNewCategory = createAsyncThunk(
   'categories/addNewCategory',
   async (newCategoryData) => {
     try {
+      console.log("hello")
       const newCategory = await categoryService.addCategory(newCategoryData);
       const categories = await categoryService.showList();
       return categories;

@@ -209,6 +209,9 @@ const ProductDetailForm = ({ onClose, product }) => {
                       }?w=150&h=150&fit=crop&auto=format`}
                       alt={`Product ${index}`}
                       loading="lazy"
+                      onError={(e) => {
+                        e.target.src = '../../images/image_replace.jpg';
+                      }}
                     />
                   </ImageListItem>
                 ))}

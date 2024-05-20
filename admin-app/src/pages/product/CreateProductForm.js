@@ -4,7 +4,7 @@ import { addNewProduct } from "../../features/products/productSlice";
 import { fetchCategories } from "../../features/categories/categorySlice";
 import Modal from "react-bootstrap/Modal";
 import { Button, Menu, MenuItem, Box } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./CreateProductForm.css";
 
@@ -56,9 +56,7 @@ const CreateProductForm = ({ onClose }) => {
       const resultAction = await dispatch(addNewProduct(newProductData));
       console.log(resultAction);
       if (resultAction.type === "products/addNewProduct/fulfilled") {
-        toast.success("Đơn hàng đã được tạo thành công!", {
-          position: "top-center",
-        });
+        toast.success("Created successfully");
         onClose();
       } else {
         throw new Error("Failed to add product");
@@ -74,7 +72,6 @@ const CreateProductForm = ({ onClose }) => {
         <Modal.Title>Add new product</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <ToastContainer />
         <form onSubmit={handleSubmit}>
           <div className="form-group row">
             <label htmlFor="productName" className="col-sm-3 col-form-label">

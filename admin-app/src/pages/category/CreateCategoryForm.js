@@ -21,15 +21,14 @@ const CreateCategoryForm = ({ onClose }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-      console.log(newCategory);
-      await dispatch(addNewCategory(newCategory).then(() => {
-        toast.success('Successful change!');
-      })
-      .catch((error) => {
-        console.error("Error updating order:", error);
-      }));
-      onClose();
-    // }
+    console.log(newCategory);
+    try {
+      await dispatch(addNewCategory(newCategory));
+      toast.success('Created successfully!');
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+    onClose();
   };
 
   return (
