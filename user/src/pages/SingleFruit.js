@@ -7,8 +7,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Container from '../components/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAFruit} from '../features/fruits/fruitSlice';
-import { addFruitToCart, setPreOrder } from '../features/users/userSlice';
-import { base_domain } from '../utils/axiosConfig';
+import { addFruitToCart, setPreOrder, updateCartFruit } from '../features/users/userSlice';
+import { base_domain, base_domain_client } from '../utils/axiosConfig';
 
 const SingleFruit = () => {
   const [amount, setAmount] = useState(1);
@@ -44,7 +44,7 @@ const SingleFruit = () => {
     dispatch(
       addFruitToCart({
         fruitId: fruitState?.id,
-        amount,
+        amount: parseInt(amount),
         price: fruitState?.price,
       })
     ).then(()=>{navigate('/cart');});
@@ -74,7 +74,7 @@ const SingleFruit = () => {
     const preOrder=[];
     preOrder.push({
       Fruit: fruitState,
-      FruitId: fruitState.id,
+      FruitId: fruitState?.id,
       amount: amount
     })
     dispatch(setPreOrder(preOrder))
@@ -93,7 +93,7 @@ const SingleFruit = () => {
               <div>
                 {/* <ReactImageZoom {...props} /> */}
                 <img src={props.img} 
-                onError={(e) => { e.target.src =`${base_domain}logo.png`; }} 
+                onError={(e) => { e.target.src =`${base_domain_client}logo.png`; }} 
                 className="img-fluid" 
                 alt="" />
               </div>
@@ -171,12 +171,6 @@ const SingleFruit = () => {
                 <div className="d-flex align-items-center gap-15">
                 </div>
                 <div className="d-flex gap-10 flex-column  my-3">
-                  <h3 className="product-heading">Shipping & Returns :</h3>
-                  <p className="product-data">
-                    Free shipping and returns available on all orders! <br /> We
-                    ship all US domestic orders within
-                    <b>5-10 business days!</b>
-                  </p>
                 </div>
               </div>
             </div>

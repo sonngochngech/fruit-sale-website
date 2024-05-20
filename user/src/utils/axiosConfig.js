@@ -13,3 +13,5 @@ export const config = {
 };
 
 export const base_domain="https://fruit-sale-v1-2-0.onrender.com/"
+
+export const base_domain_client="https://fruit-sale-react-application.onrender.com/"

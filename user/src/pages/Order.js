@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { getAnUserOrders,cancelOrder } from "../features/users/userSlice";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import { base_domain } from "../utils/axiosConfig";
+import { base_domain, base_domain_client } from "../utils/axiosConfig";
 
 const Order = () => {
 
@@ -31,11 +31,14 @@ const Order = () => {
   
 
   const handleCancelOrder=(id)=>{
-    dispatch(cancelOrder(id));
-
-    setTimeout(() => {
+    dispatch(cancelOrder(id))
+    .finally(()=>{
       dispatch(getAnUserOrders());
-    }, 200);
+    });
+
+   
+      
+   
 
   
 
@@ -83,7 +86,7 @@ const Order = () => {
                                 <p>{fruit?.isDeleted===1 && '(The fruit is no longer)'}</p>
                                 <img
                                   src={base_domain + fruit?.FruitImages[0]?.link}
-                                  onError={(e) => { e.target.src = `${base_domain}logo.png`; }} 
+                                  onError={(e) => { e.target.src = `${base_domain_client}logo.png`; }} 
                                   width={50}
                                 />
                                 <p>Quantity: {fruit?.OrderItem?.amount}</p>

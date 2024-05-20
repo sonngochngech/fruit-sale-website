@@ -21,9 +21,10 @@ function App() {
       <Routes>
           <Route path="signup" element={<OpenRoutes><Signup /></OpenRoutes>} ></Route>
           <Route path="login" element={<OpenRoutes><Login /></OpenRoutes>}></Route>
-          <Route path="forgot-password" element={<Forgotpassword />} />
-          <Route path="reset-password" element={<Resetpassword />} />
+          <Route path="forgot-password" element={<OpenRoutes><Forgotpassword /></OpenRoutes>} />
+        
         <Route path="/" element={<PrivateRoutes><Layout /></PrivateRoutes>}>
+            <Route path="reset-password" element={<Resetpassword />} />
           <Route path="fruits" element={<OurStore />} />
           <Route path="fruits/:id" element={<SingleFruit />}/>
           <Route path="cart" element={<Cart />}/>
