@@ -12,7 +12,7 @@ const { logoutUser, getNotifications, getUnreadNotificationCount } = require('..
 
 
 const Header = () => {
-  const URL= "https://fruit-sale-v1-2-0.onrender.com";
+  const URL= "https://fruit-sale-react-application.onrender.com/";
   const socket=io(URL,{autoConnect:true});
   socket.on('new notification',()=>{
     dispatch(getUnreadNotificationCount())
@@ -55,7 +55,7 @@ const Header = () => {
   },[cartState]);
 
   useEffect(()=>{
-    console.log("hello",authState.user);S
+    console.log("hello",authState.user);
     if(authState.user.id!==null){
       socket.emit('authenticated',authState.user);
     }
@@ -65,7 +65,7 @@ const Header = () => {
     dispatch(logoutUser()).finally(
       ()=>{
         navigate('/login');
-        window.location.reload();S
+        window.location.reload();
       }
     );
    
