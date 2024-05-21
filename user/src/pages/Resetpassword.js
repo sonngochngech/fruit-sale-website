@@ -6,6 +6,7 @@ import Container from "../components/Container";
 import { base_url,config } from "../utils/axiosConfig";
 import { toast } from 'react-toastify';
 
+
 const Resetpassword = () => {
   const [password, setPassword] = useState("");
   const [repassword, setRePassword] = useState("");
@@ -14,6 +15,7 @@ const Resetpassword = () => {
     try {
       e.preventDefault();
       if(password!==repassword){
+        console.log("hello");
         toast.error("Password and confirm password must be same ")
       }else{
         const response= await axios.put(

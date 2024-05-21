@@ -247,7 +247,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isError === true) {
-          toast.error('User Create failed');
+          toast.error('Your credential is wrong');
           toast.error(action.error);
         }
       })
@@ -330,7 +330,7 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.deleteCartFruit = action.payload;
         if (state.isSuccess) {
-          toast.success('Fruit delete from cart successfully!');
+          toast.success('Fruit is deleted from cart successfully!');
         }
       })
       .addCase(deleteCartFruit.rejected, (state, action) => {
@@ -339,7 +339,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error('Something went wrong');
+          toast.error('Failed to delete cart');
         }
       })
       .addCase(updateCartFruit.pending, (state) => {
@@ -360,7 +360,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error('Something went wrong');
+          toast.error('Failed to update cart');
         }
       })
       .addCase(createUserOrder.pending, (state) => {
@@ -381,7 +381,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error('Something went wrong');
+          toast.error('failed to checkout');
         }
       })
       .addCase(cancelOrder.pending, (state) => {
@@ -399,7 +399,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error('Something went wrong');
+          toast.error('failed to cancel order');
         }
       })
       // noti
@@ -468,7 +468,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error('Something went wrong');
+          toast.error('Failed to delete the notification');
         }
       })
       .addCase(deleteAllNoti.pending, (state) => {
@@ -486,7 +486,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isSuccess === false) {
-          toast.error('Something went wrong');
+          toast.error('Failed to delete all notifications');
         }
       })
       ;

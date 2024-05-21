@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { createUserOrder, getUserCart } from "../features/users/userSlice";
-import { base_domain } from "../utils/axiosConfig";
+import { base_domain, base_domain_client } from "../utils/axiosConfig";
 
 const phoneRegex = /^0\d{9}$/;
 
@@ -197,7 +197,7 @@ const Checkout = () => {
                             width={100}
                             height={100}
                             src={base_domain+ item?.Fruit?.FruitImages[0]?.link}
-                            onError={(e) => { e.target.src = `${base_domain}logo.png`; }} 
+                            onError={(e) => { e.target.src = `${base_domain_client}logo.png`; }} 
                             alt="fruit"
                           />
                         </div>

@@ -86,7 +86,7 @@ const createFruit=trycatchWrapper(async (req,res)=>{
           }
          deleteUploadedFiles(req.files);
         res.status(500).send({
-            error: 'An error occured when trying to sign in.'
+            error: 'Server is error'
         })
     }
 })

@@ -5,7 +5,7 @@ const app=express()
 const IoService=require("./services/IoService")
 const router=require("./routes");
 
-
+require('dotenv').config()
 app.use(express.json())
 app.use(cors())
 
@@ -16,7 +16,7 @@ const socketIo=require('socket.io')
 const server=http.createServer(app)
 const io = socketIo(server, {
     cors: {
-      origin: ["http://localhost:3000", "http://localhost:3001","https://fruit-sale-react-application.onrender.com"],
+      origin: ["http://localhost:3000", "http://localhost:3001","https://fruit-sale-react-application-main.onrender.com",process.env.ADMIN_DOMAIN],
       credentials: true
     }
   });

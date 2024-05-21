@@ -22,7 +22,7 @@ const addFruitToCart=trycatchWrapper(async(req,res)=>{
         }
     })
     if(cart){
-        cart.amount= cart.amount+ amount;
+        cart.amount= cart.amount + amount;
         await cart.save();
     }
     else{

@@ -12,11 +12,11 @@ import {
   setPreOrder
 } from '../features/users/userSlice';
 import { useSelector } from 'react-redux';
-import { base_domain } from '../utils/axiosConfig';
+import { base_domain, base_domain_client } from '../utils/axiosConfig';
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [fruitUpdateDetail, setFruitUpdateDetail] = useState({});
   const [checkboxes, setCheckboxes] = useState([]);
 
@@ -26,37 +26,41 @@ const Cart = () => {
   useEffect(() => {
     dispatch(getUserCart());
   }, []);
-  useEffect(() => {
-    Object.keys(fruitUpdateDetail).forEach((FruitId) => {
-      const detail = fruitUpdateDetail[FruitId];
-      dispatch(
-        updateCartFruit({
-          fruitId: detail.FruitId,
-          amount: detail.amount,
-        })
-      ).finally(()=>{
-        dispatch(getUserCart())
-      });
-    })
+  // useEffect(() => {
+  //   Object.keys(fruitUpdateDetail).forEach((FruitId) => {
+  //     const detail = fruitUpdateDetail[FruitId];
+  //     dispatch(
+  //       updateCartFruit({
+  //         fruitId: detail.FruitId,
+  //         amount: detail.amount,
+  //       })
+  //     ).finally(()=>{
+  //       dispatch(getUserCart())
+  //     });
+  //   })
 
-  }, [fruitUpdateDetail]);
+  // }, [fruitUpdateDetail]);
 
   const deleteACartFruit = (FruitId) => {
     dispatch(deleteCartFruit(FruitId))
-    .finally(()=>{dispatch(getUserCart());});
-    
+      .finally(() => { dispatch(getUserCart()); });
+
   };
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < userCartState?.length; index++) {
-      if(checkboxes[userCartState[index]?.Fruit.id])
-      sum =
-        sum +
-        Number(userCartState[index].amount * userCartState[index]?.Fruit.price);
-      
+      if (checkboxes[userCartState[index]?.Fruit.id]) {
+        let fAmount = fruitUpdateDetail[userCartState[index].Fruit.id]?.amount ? fruitUpdateDetail[userCartState[index].Fruit.id]?.amount : userCartState[index]?.amount
+        sum =
+          sum +
+          Number(fAmount * userCartState[index]?.Fruit.price);
+
+      }
+
+
     }
     setTotalAmount(sum);
-  }, [userCartState,checkboxes]);
+  }, [userCartState, checkboxes, fruitUpdateDetail]);
 
   const handleAmountChange = (e, item) => {
     const updatedAmount = e.target.value;
@@ -75,7 +79,7 @@ const Cart = () => {
         FruitId: item.FruitId,
         amount: updatedAmount,
       };
-      
+
       setFruitUpdateDetail((prevState) => ({
         ...prevState,
         [item.FruitId]: updatedFruit,
@@ -94,28 +98,52 @@ const Cart = () => {
     return amountErrors[itemId] || '';
   };
 
-  const handleCheckboxChange=(event)=>{
-    const {name}=event.target;
-    setCheckboxes({
-      ...checkboxes,
-      [name]: !checkboxes[name]
-    })
+  const handleCheckboxChange = (event) => {
+    const { name } = event.target;
+
+
+    console.log(fruitUpdateDetail[name]);
+    if (!checkboxes[name] && fruitUpdateDetail[name]) {
+      dispatch(updateCartFruit(
+        {
+          fruitId: fruitUpdateDetail[name].FruitId,
+          amount: fruitUpdateDetail[name].amount,
+        }
+      )).finally(() => {
+        dispatch(getUserCart())
+          .finally(() => {
+            setCheckboxes({
+              ...checkboxes,
+              [name]: !checkboxes[name]
+            })
+          });
+      })
+    }else{
+      setCheckboxes({
+        ...checkboxes,
+        [name]: !checkboxes[name]
+      })  
+
+    }
   }
-  useEffect(()=>{
+  useEffect(() => {
     console.log(checkboxes);
     // handleCheckOut();
 
 
-  },[checkboxes])
+  }, [checkboxes])
   const handleCheckOut = () => {
+
     const idList = Object.entries(checkboxes)
       .filter(([_, isChecked]) => isChecked)
       .map(([id, _]) => parseInt(id));
-    const preOrder= userCartState?.filter(item=>idList.includes(item.FruitId));
+
+    const preOrder = userCartState?.filter(item => idList.includes(item.FruitId));
     console.log(preOrder);
     dispatch(setPreOrder(preOrder));
     navigate('/checkout');
-    
+
+
   };
 
   return (
@@ -136,90 +164,93 @@ const Cart = () => {
                 const amountError = getAmountError(item.FruitId);
                 return (
                   <div>
-                    {item?.Fruit.isDeleted===1 && (
-                        <p className='mb-0'>The fruit is no longer valid</p>
+                    {item?.Fruit.isDeleted === 1 && (
+                      <p className='mb-0'>The fruit is no longer valid</p>
                     )}
-                      <div
-                    key={index}
-                    className="cart-data py-3 mb-2 d-flex justify-content-between align-items-center"
-                  >
-                    <div className="cart-col-1 gap-15 d-flex align-items-center ">
-                      <div className="w-25">
-                        <input 
-                          type="checkbox"
-                          name={item.FruitId}
-                          disabled={item?.Fruit.isDeleted === 1}
-                          checked={!!checkboxes[`${item.FruitId}`]}
-                          onChange={handleCheckboxChange}
+                    <div
+                      key={index}
+                      className="cart-data py-3 mb-2 d-flex justify-content-between align-items-center"
+                    >
+                      <div className="cart-col-1 gap-15 d-flex align-items-center ">
+                        <div className="w-25">
+                          <input
+                            type="checkbox"
+                            name={item.FruitId}
+                            disabled={item?.Fruit.isDeleted === 1}
+                            checked={!!checkboxes[`${item.FruitId}`]}
+                            onChange={handleCheckboxChange}
 
-                        ></input>
+                          ></input>
+                        </div>
+                        <div className="w-25">
+                          <img
+                            src={base_domain + item?.Fruit.FruitImages[0]?.link}
+                            onError={(e) => { e.target.src = `${base_domain_client}logo.png`; }}
+
+                            className="img-fluid"
+                            alt="product"
+                            width={100}
+                            height={100}
+                          />
+                        </div>
+                        <div className="w-50">
+                          <p>{item?.Fruit?.title}</p>
+                        </div>
                       </div>
-                      <div className="w-25">
-                        <img
-                          src={base_domain+ item?.Fruit.FruitImages[0]?.link}
-                          onError={(e) => { e.target.src = `${base_domain}logo.png`; }} 
-                        
-                          className="img-fluid"
-                          alt="product"
-                          width={100}
-                          height={100}
-                        />
+                      <div className="cart-col-2">
+                        <h5 className="price">$ {item?.Fruit?.price}</h5>
                       </div>
-                      <div className="w-50">
-                        <p>{item?.Fruit?.title}</p>
-                      </div>
-                    </div>
-                    <div className="cart-col-2">
-                      <h5 className="price">$ {item?.Fruit?.price}</h5>
-                    </div>
-                    <div className="cart-col-3 d-flex align-items-center gap-15">
-                      <div>
-                        <input
-                          className="form-control e"
-                          type="number"
-                          name=""
-                          min={1}
-                          max={100}
-                          id=""
-                          value={
-                            fruitUpdateDetail?.amount
-                              ? fruitUpdateDetail?.amount
-                              : item?.amount
-                          }
-                        
-                          disabled={item?.Fruit.isDeleted === 1}
-                          onChange={(e) => handleAmountChange(e, item)}
-                        />
-                        {amountError && (
-                          <p
-                            style={{
-                              color: 'red',
-                              fontSize: '12px',
-                              margin: 0,
+                      <div className="cart-col-3 d-flex align-items-center gap-15">
+                        <div>
+                          <input
+                            className="form-control e"
+                            type="number"
+                            name=""
+                            min={1}
+                            max={100}
+                            id=""
+                            value={
+                              fruitUpdateDetail[item.FruitId]?.amount
+                                ? fruitUpdateDetail[item.FruitId]?.amount
+                                : item.amount
+                            }
+
+                            disabled={item?.Fruit.isDeleted === 1}
+                            onChange={(e) => handleAmountChange(e, item)}
+                          />
+                          {amountError && (
+                            <p
+                              style={{
+                                color: 'red',
+                                fontSize: '12px',
+                                margin: 0,
+                              }}
+                            >
+                              {amountError}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <AiFillDelete
+                            onClick={() => {
+                              deleteACartFruit(item?.FruitId);
                             }}
-                          >
-                            {amountError}
-                          </p>
-                        )}
+                            className="text-danger "
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <AiFillDelete
-                          onClick={() => {
-                            deleteACartFruit(item?.FruitId);
-                          }}
-                          className="text-danger "
-                        />
+                      <div className="cart-col-4">
+                        <h5 className="price">
+                          $ {item?.Fruit?.price *
+                            (fruitUpdateDetail[item.FruitId]?.amount
+                              ? fruitUpdateDetail[item.FruitId]?.amount
+                              : item.amount)}
+                        </h5>
                       </div>
-                    </div>
-                    <div className="cart-col-4">
-                      <h5 className="price">
-                        $ {item?.Fruit?.price * item?.amount}
-                      </h5>
                     </div>
                   </div>
-                    </div>
 
-                
+
                 );
               })}
           </div>
@@ -234,7 +265,7 @@ const Cart = () => {
                   <button onClick={handleCheckOut} className="btn btn-warning" disabled={!totalAmount}>
                     Checkout
                   </button>
-        
+
                 </div>
               )}
             </div>

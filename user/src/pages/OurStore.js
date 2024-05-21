@@ -61,7 +61,12 @@ const OurStore = () => {
   };
   useEffect(()=>{
     let filteredFruits;
-     filteredFruits=fruitState?.filter((item)=>(params.category!=="" ? item?.Category.name === params.category: true )&& item.price >= params.priceStart && item.price<=params.priceEnd && params.title!=="" ? item?.title.toLowerCase().includes(params.title.toLowerCase()): true);
+     filteredFruits = fruitState?.filter((item) => 
+      (params.category !== "" ? item?.Category.name === params.category : true) && 
+      item.price >= params.priceStart && 
+      item.price <= params.priceEnd && 
+      (params.title !== "" ? item?.title.toLowerCase().includes(params.title.toLowerCase()) : true)
+    );
     
     const sortedFruits = sortFruits(filteredFruits, params.sort);
     setShowedFruitState(sortedFruits);
@@ -89,16 +94,6 @@ const OurStore = () => {
           <div className="col-3">
             <div className="filter-card mb-3">
               <h3 className="filter-title">Shop By Categories</h3>
-              {/* {productCategoriesState &&
-                productCategoriesState?.map((item, index) => {
-                  return (
-                    <div>
-                      <ul key={index} className="ps-0">
-                        <li>{item?.title}</li>
-                      </ul>
-                    </div>
-                  );
-                })} */}
                 <select
                     name=""
                     defaultValue={""}
@@ -135,17 +130,6 @@ const OurStore = () => {
                     />
                     <label htmlFor="searchName">Title</label>
                   </div>
-                  {/* <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id=""
-                    />
-                    <label className="form-check-label" htmlFor="">
-                      Out of Stock(0)
-                    </label>
-                  </div> */}
                 </div>
                 <h5 className="sub-title">Price</h5>
                 <div className="d-flex align-items-center gap-10">
@@ -170,33 +154,6 @@ const OurStore = () => {
                     <label htmlFor="floatingInput1">To</label>
                   </div>
                 </div>
-                {/* <h5 className="sub-title">Colors</h5>
-                <div></div>
-                <h5 className="sub-title">Size</h5>
-                <div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="color-1"
-                    />
-                    <label className="form-check-label" htmlFor="color-1">
-                      S (2)
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="color-2"
-                    />
-                    <label className="form-check-label" htmlFor="color-2">
-                      M (2)
-                    </label>
-                  </div>
-                </div> */}
               </div>
             </div>
 

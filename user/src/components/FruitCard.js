@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import view from '../images/view.svg';
 import { useDispatch } from 'react-redux';
-import { base_domain, base_url } from "./../utils/axiosConfig";
+import { base_domain, base_domain_client, base_url } from "./../utils/axiosConfig";
 const FruitCard = (props) => {
   const { grid, data } = props;
   const dispatch = useDispatch();
@@ -24,14 +24,14 @@ const FruitCard = (props) => {
               <div className="product-image">
                 <img
                   src={base_domain+ item?.FruitImages[0]?.link}
-                  onError={(e) => { e.target.src = `${base_domain}logo.png`; }} 
+                  onError={(e) => { e.target.src = `${base_domain_client}logo.png`; }} 
                   className="img-fluid mx-auto"
-                  alt="fruit"S
+                  alt="fruit"
                   width={160}
                 />
                   <img
                   src={base_domain+ item?.FruitImages[1]?.link}
-                  onError={(e) => { e.target.src = `${base_domain}banner.jpg`; }} 
+                  onError={(e) => { e.target.src = `${base_domain_client}banner.jpg`; }} 
                   className="img-fluid mx-auto"
                   alt="fruit"
                   width={160}

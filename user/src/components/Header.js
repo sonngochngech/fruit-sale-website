@@ -5,14 +5,18 @@ import { BsSearch } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { io } from "socket.io-client";
-import { base_domain } from '../utils/axiosConfig';
+import { base_domain, base_domain_client } from '../utils/axiosConfig';
 const { logoutUser, getNotifications, getUnreadNotificationCount } = require('../features/users/userSlice');
 
 
 
 
 const Header = () => {
+<<<<<<< HEAD
   const URL= "https://fruit-sale-react-application.onrender.com/";
+=======
+  const URL= "https://fruit-sale-v1-main.onrender.com";
+>>>>>>> 0dd31e42a8ea8f0afa522571434e162663206067
   const socket=io(URL,{autoConnect:true});
   socket.on('new notification',()=>{
     dispatch(getUnreadNotificationCount())
@@ -121,7 +125,7 @@ const Header = () => {
                     to="/notification"
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img src={`${base_domain}images/compare.svg`} alt="compare" />
+                    <img src={`${base_domain_client}images/compare.svg`} alt="compare" />
                     <p className="mb-0">
                       Notification
                     </p>
@@ -132,7 +136,7 @@ const Header = () => {
                     to="/cart"
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img src={`${base_domain}images/wishlist.svg`} alt="wishlist" />
+                    <img src={`${base_domain_client}images/wishlist.svg`} alt="wishlist" />
                     <p className="mb-0">
                       Your <br /> cart
                     </p>
@@ -143,7 +147,7 @@ const Header = () => {
                     to="/order"
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img src={`${base_domain}images/compare.svg`} alt="order" />
+                    <img src={`${base_domain_client}images/compare.svg`} alt="order" />
                     <p className="mb-0">Order</p>
                   </Link>
                 </div>
@@ -153,7 +157,7 @@ const Header = () => {
                     onClick={authState?.user !== null ? handleLogout : null}
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img src={`${base_domain}images/login01.svg`} alt="user" />
+                    <img src={`${base_domain_client}images/login01.svg`} alt="user" />
                     {authState?.user === null ? (
                       <p className="mb-0">
                         Log in <br /> My Account
@@ -170,7 +174,7 @@ const Header = () => {
                     to="#"
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img src={`${base_domain}images/cart.svg`} alt="cart" />
+                    <img src={`${base_domain_client}images/cart.svg`} alt="cart" />
                     <div className="d-flex flex-column gap-10">
                       <span className="badge bg-white text-dark">
                         {cartState?.length ? cartState?.length : 0}
@@ -206,7 +210,7 @@ const Header = () => {
                     >
                       
                         
-                      <img src={`${base_domain}images/notification.svg`} width="20" height="20" alt="" />
+                      <img src={`${base_domain_client}images/notification.svg`} width="20" height="20" alt="" />
                       <span className="me-5 d-inline-block">
                        Notification
                       </span>
