@@ -14,7 +14,7 @@ const Header = () => {
   const notificationState=useSelector((state)=>state?.users?.unreadNotification);
   const [total, setTotal] = useState(null);
   const navigate = useNavigate();
-  const URL= 'https://fruit-sale-react-application.onrender.com/';
+  const URL= 'https://fruit-sale-v1-main.onrender.com';
   const socket=io(URL,{autoConnect:true});
   socket.on('new notification',()=>{
     dispatch(getUnreadNotificationCount())
