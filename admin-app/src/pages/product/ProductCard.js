@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import { NavLink } from "react-router-dom";
-import { base_domain } from "../../utils/axiosConfig";
+import { base_domain, base_domain_client } from "../../utils/axiosConfig";
 import "./ProductCard.css";
 import ProductDetailForm from "./ProductDetailForm";
 
