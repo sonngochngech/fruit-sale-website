@@ -98,6 +98,7 @@ const login=trycatchWrapper(async (req,res)=>{
 
         res.status(200).send({
             user: {
+                id: user.id,
                 email: user.email,
                 firstName: user.firstName,
                 lastName: user.lastName,
@@ -140,6 +141,7 @@ const register=trycatchWrapper( async (req,res)=>{
 
     return res.status(200).send({
         user:{
+            id: user.id,
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
@@ -172,6 +174,7 @@ const verifyPasswordToken=trycatchWrapper( async(req,res)=>{
     })
     return res.status(200).send({
         user:{
+            id: user.id,
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
@@ -197,6 +200,7 @@ const updatePassword=trycatchWrapper(async(req,res)=>{
 
             res.status(200).send({
                 user:{
+                    id: currentUser.id,
                     email: currentUser.email,
                     firstName: currentUser.firstName,
                     lastName: currentUser.lastName,
@@ -225,6 +229,7 @@ const resetPassword=trycatchWrapper(async(req,res)=>{
 
             res.status(200).send({
                 user:{
+                    id: currentUser.id,
                     email: currentUser.email,
                     firstName: currentUser.firstName,
                     lastName: currentUser.lastName,
