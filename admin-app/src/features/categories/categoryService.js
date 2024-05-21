@@ -15,6 +15,7 @@ const showList = async () => {
 const addCategory = async (newCategoryData) => {
   try {
     const response = await axios.post(`${base_url}categories/create`, newCategoryData, config);
+    console.log(response.data)
     return response.data;
   } catch (error) {
     throw new Error(error.message); 

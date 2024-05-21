@@ -55,8 +55,8 @@ const Forgotpassword = () => {
       if (response.status === 200) {
         localStorage.setItem("customer", JSON.stringify(response.data?.user));
         localStorage.setItem("jwt",response.data?.jwt);
-        navigate('/reset-password');
-        window.location.reload();
+        navigate('/admin');
+        // window.location.reload();
       } else {
         toast.error(response.data.error);
       }
@@ -65,7 +65,7 @@ const Forgotpassword = () => {
     }
   };
   return (
-    <>
+    <div style={{marginLeft:500}}>
       {/* <Meta title={"Forgot Password"} /> */}
       <BreadCrumb title="Forgot Password" />
       <Container class1="login-wrapper py-5 home-wrapper-2">
@@ -137,7 +137,7 @@ const Forgotpassword = () => {
         pauseOnHover
         theme="light"
       />
-    </>
+    </div>
   );
 };
 

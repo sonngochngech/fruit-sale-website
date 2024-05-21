@@ -1,31 +1,35 @@
 .pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    padding: 0;
-  }
-  
-  .pagination__item {
-    margin: 0 5px;
-  }
-  
-  .pagination__link {
-    text-decoration: none;
-    color: #333;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .pagination__link:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .pagination__link--active {
-    background-color: #007bff;
-    color: #fff;
-    border: 1px solid #007bff;
-  }
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
 
-  
+.pagination__item {
+  margin: 0 5px;
+}
+
+.pagination__link {
+  text-decoration: none;
+  color: #333;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.pagination__link:hover {
+  background-color: #f0f0f0;
+}
+
+.pagination__link--active {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+}
+
+.product-image {
+  width: 100px; 
+  height: 100px;
+  object-fit: cover;
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrders, deleteOrder } from "../../features/orders/orderSlice";
+import { fetchOrders } from "../../features/orders/orderSlice";
 import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { DatePicker } from "@mui/lab";
@@ -150,29 +150,29 @@ const OrderOverview = () => {
   }, [dispatch]);
 
   // Render skeleton if loading
-  if (loading) {
+  if (loading || orders.orders === undefined) {
     return (
       <>
         <div>
-      <h4>Order</h4>
-      <CssBaseline />
-      <Container>
-        <Grid container spacing={30}>
-          <Grid item xs={12} sm={5}>
-            <Box sx={{ width: 400, height: 400, margin: 0 }}>
-              <Typography variant="h4">Status of orders</Typography>
-              <Skeleton variant="circular" width={400} height={400}  />
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={7}>
-            <Box sx={{ width: '100%' }}>
-              <Typography variant="h4">Quantity of orders</Typography>
-              <Skeleton variant="rectangular" width={500} height={442} />
-            </Box>
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
+          <h4>Order</h4>
+          <CssBaseline />
+          <Container>
+            <Grid container spacing={30}>
+              <Grid item xs={12} sm={5}>
+                <Box sx={{ width: 400, height: 400, margin: 0 }}>
+                  <Typography variant="h4">Status of orders</Typography>
+                  <Skeleton variant="circular" width={400} height={400} />
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={7}>
+                <Box sx={{ width: "100%" }}>
+                  <Typography variant="h4">Quantity of orders</Typography>
+                  <Skeleton variant="rectangular" width={500} height={442} />
+                </Box>
+              </Grid>
+            </Grid>
+          </Container>
+        </div>
       </>
     );
   }

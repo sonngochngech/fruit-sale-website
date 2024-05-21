@@ -23,8 +23,6 @@ const getProduct = async (productId) => {
 // Thêm sản phẩm mới cùng với hình ảnh
 const addProduct = async (newProductData) => {
   try {
-    console.log(newProductData.CategoryId);
-
     const formData = new FormData();
     formData.append('title', newProductData.title);
     formData.append('description', newProductData.description);

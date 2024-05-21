@@ -67,6 +67,7 @@ const CategoryManagement = () => {
     dispatch(deleteCategory(categoryId))
       .then(() => {
         dispatch(fetchCategories());
+        toast.warning('Deleted Successfully');
       })
       .catch((error) => {
         console.error("Error deleting category:", error);

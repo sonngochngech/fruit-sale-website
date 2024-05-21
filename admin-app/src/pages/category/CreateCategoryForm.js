@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addNewCategory } from "../../features/categories/categorySlice";
 import Modal from "react-bootstrap/Modal";
 import AlertMessage from "./AlertMessage"; // Import component AlertMessage
+import { toast } from "react-toastify";
 
 const CreateCategoryForm = ({ onClose }) => {
   const [newCategory, setNewCategory] = useState({
@@ -20,16 +21,14 @@ const CreateCategoryForm = ({ onClose }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // const isCategoryExist = categories.some((category) => category.name === newCategory.name);
-    // if (isCategoryExist) {
-    //   // Hiển thị thông báo nếu category đã tồn tại
-    //   setShowAlert(true);
-    // } else {
-      // Thêm mới category nếu chưa tồn tại
-      console.log(newCategory);
+    console.log(newCategory);
+    try {
       await dispatch(addNewCategory(newCategory));
-      onClose();
-    // }
+      toast.success('Created successfully!');
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+    onClose();
   };
 
   return (
