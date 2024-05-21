@@ -122,8 +122,9 @@ const createOrder=async (req,res)=>{
             }
         });
         const admins = users ? users.map(admin => admin.id) : [];
+        console.log(admins)
         try{
-            await ioService.sendNotification([admins],`A order ${order.code} is created`)
+            await ioService.sendNotification(admins,`A order ${order.code} is created`)
         }catch(error){
             console.log(error);
         }
@@ -207,14 +208,15 @@ const updateStatusOrder=trycatchWrapper(async (req,res)=>{
             }
         });
         const admins = users ? users.map(admin => admin.id) : [];
+        console.log(admins);
          if(user.role !=="Admin"){
             try{
-                await ioService.sendNotification([admins],`A order ${order.code} is updated`)
+                await ioService.sendNotification(admins,`A order ${order.code} is updated`)
             }catch(error){
                 console.log(error);
             }
          
-            await notiService.createNoti(`A order ${order.code} is updated`,'sfgsfsdgsdg ssdgf sdfsdf dsfsdf sdf',[admins])
+            await notiService.createNoti(`A order ${order.code} is updated`,'sfgsfsdgsdg ssdgf sdfsdf dsfsdf sdf',admins)
          }else{
             try{
                 await ioService.sendNotification([...admins,order.UserId],`A order ${order.code} is updated`)
