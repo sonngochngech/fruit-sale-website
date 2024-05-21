@@ -30,9 +30,9 @@ const Header = () => {
   
 
   useEffect(()=>{
-    console.log("hello",userState.users);
-    if(userState.users.id!==null){
-      socket.emit('authenticated',userState.users);
+    console.log("hello",userState.user);
+    if(userState.user.id!==null){
+      socket.emit('authenticated',userState.user);
     }
   },[])
 
