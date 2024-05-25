@@ -5,7 +5,8 @@ import { BsSearch } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { io } from "socket.io-client";
-import { base_domain, base_domain_client } from '../utils/axiosConfig';
+import { base_domain, base_domain_client, base_URL } from '../utils/axiosConfig';
+// import WalletCard from './WalletCard';
 const { logoutUser, getNotifications, getUnreadNotificationCount } = require('../features/users/userSlice');
 
 
@@ -13,7 +14,7 @@ const { logoutUser, getNotifications, getUnreadNotificationCount } = require('..
 
 const Header = () => {
 
-  const URL= "https://fruit-sale-v1-main.onrender.com";
+  const URL= base_URL;
   const socket=io(URL,{autoConnect:true});
   socket.on('new notification',()=>{
     dispatch(getUnreadNotificationCount())
@@ -82,10 +83,7 @@ const Header = () => {
             </div>
             <div className="col-6">
               <p className="text-end text-white mb-0">
-                Hotline:
-                <a className="text-white" href="tel:+91 8264954234">
-                  00000000000
-                </a>
+                {/* <WalletCard/> */}
               </p>
             </div>
           </div>

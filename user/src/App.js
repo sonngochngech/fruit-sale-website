@@ -14,6 +14,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Order from './pages/Order';
 import Notification from './pages/Notification';
+import USDTPayment from './pages/USDTPayment';
 function App() {
   return (
     <>
@@ -29,8 +30,9 @@ function App() {
           <Route path="fruits/:id" element={<SingleFruit />}/>
           <Route path="cart" element={<Cart />}/>
           <Route path="checkout" element={ <Checkout />}/>
-          <Route   path="order" element={  <Order/>  }  />
+          <Route path="order" element={  <Order/>  }  />
           <Route path="notification" element={ <Notification />}  />
+          <Route path="payment/:id" element={<USDTPayment/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

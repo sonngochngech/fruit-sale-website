@@ -9,6 +9,13 @@ import * as yup from "yup";
 import { createUserOrder, getUserCart } from "../features/users/userSlice";
 import { base_domain, base_domain_client } from "../utils/axiosConfig";
 
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+
 const phoneRegex = /^0\d{9}$/;
 
 const shippingSchema = yup.object({
@@ -19,6 +26,22 @@ const shippingSchema = yup.object({
 
 const Checkout = () => {
   const dispatch = useDispatch();
+
+  const [payment, setPayment] =useState(1);
+  const orderState = useSelector((state) => state?.auth?.order);
+  const [hasOrderBeenPlaced, setHasOrderBeenPlaced] = useState(false);
+  
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (hasOrderBeenPlaced && orderState?.id) {
+      navigate(`/payment/${orderState.id}`);
+    }
+  }, [hasOrderBeenPlaced, orderState, navigate]);
+
+  const handleChange = (event) => {
+    setPayment(event.target.value);
+  };
   
   
   const preOrderState = useSelector((state) => {
@@ -26,7 +49,6 @@ const Checkout = () => {
   });
   const [totalAmount, setTotalAmount] = useState(null);
 
-  const navigate = useNavigate();
 
   useEffect(() => {
   console.log(preOrderState);
@@ -60,13 +82,13 @@ const Checkout = () => {
           amount: preOrder?.amount}}),
         productCost: totalAmount,
         shippingCost: 5,
-
-    
       })
-    );
-    setTimeout(() => {
-      navigate("/fruits");
-    }, 2000);
+    )
+    .then(() => {
+      if(payment===1) navigate('/fruits');
+      else  setHasOrderBeenPlaced(true);
+    })
+      
   };
 
   return (
@@ -157,6 +179,7 @@ const Checkout = () => {
                   <div className="error ms-2 my-1">
                     {formik.touched.phoneNo && formik.errors.phoneNo}
                   </div>
+
                 </div>
                 <div className="w-100">
                   <div className="d-flex justify-content-between align-items-center">
@@ -234,6 +257,23 @@ const Checkout = () => {
               <h5 className="total-price">
                 $ {totalAmount ? totalAmount + 5 : "0"}
               </h5>
+            </div>
+            <div className="d-flex justify-content-between align-items-center border-bootom py-4">
+            <Box sx={{ minWidth: 480 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Payment</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={payment}
+                label="Age"
+                onChange={handleChange}
+              >
+                <MenuItem value={1}>By Cash</MenuItem>
+                <MenuItem value={2}>By USDT</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
             </div>
           </div>
         </div>

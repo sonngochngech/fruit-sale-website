@@ -5,6 +5,7 @@ import { AiFillDelete } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import Container from '../components/Container';
 import { useDispatch } from 'react-redux';
+
 import {
   getUserCart,
   deleteCartFruit,

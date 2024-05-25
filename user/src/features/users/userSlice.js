@@ -48,6 +48,17 @@ export const getAnUserOrders = createAsyncThunk(
   }
 );
 
+export const getAnUserSpecificOrder=createAsyncThunk(
+  'user/order/detail',
+  async (orderId,thunkAPI) => {
+    try {
+      return await authService.getSpecificUserOrder(orderId);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+)
+
 export const addFruitToCart = createAsyncThunk(
   'user/cart/add',
   async (cartData, thunkAPI) => {
@@ -107,6 +118,28 @@ export const cancelOrder=createAsyncThunk(
   async(id,thunkAPI)=>{
     try{
       return await authService.cancelOrder(id)
+    }catch(error){
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+)
+
+export const pay=createAsyncThunk(
+  'user/order/pay',
+  async(paymentData,thunkAPI)=>{
+    try{
+      return await authService.pay(paymentData)
+    }catch(error){
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+)
+
+export const getAddress=createAsyncThunk(
+  'user/payment',
+  async(thunkAPI)=>{
+    try{
+      return await authService.getAddress()
     }catch(error){
       return thunkAPI.rejectWithValue(error);
     }
@@ -273,6 +306,24 @@ export const authSlice = createSlice({
         state.message = action.error;
         toast.error('Logout failed'); // Thông báo thất bại
       })
+      .addCase(getAddress.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+        state.message = '';
+      })
+      .addCase(getAddress.fulfilled, (state,action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.paymentAddress = action.payload.adminAddress;
+      })
+      .addCase(getAddress.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
       .addCase(getAnUserOrders.pending, (state) => {
         state.isLoading = true;
       })
@@ -283,6 +334,39 @@ export const authSlice = createSlice({
         state.orders = action.payload.orders;
       })
       .addCase(getAnUserOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(getAnUserSpecificOrder.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAnUserSpecificOrder.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.order = action.payload.order;
+      })
+      .addCase(getAnUserSpecificOrder.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(pay.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(pay.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.paymentTurn = action.payload.paymentTurn;
+        if (state.isSuccess === true) {
+          toast.info('paid Successfully');
+        }
+      })
+      .addCase(pay.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
@@ -370,7 +454,8 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.order = action.payload;
+        state.order = action.payload.order;
+        state.orderItems=action.payload.orderItems;
         if (state.isSuccess) {
           toast.success('Successfully checkout!');
         }
