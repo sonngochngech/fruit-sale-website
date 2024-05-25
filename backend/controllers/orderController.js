@@ -150,7 +150,7 @@ const createOrder=async (req,res)=>{
 
 
 const deleteOrder=trycatchWrapper(async (req,res)=>{
-    const  orderId=res.params.orderId;
+    const  orderId=req.params.orderId;
 
     const order=await Order.findByPk(orderId);
 

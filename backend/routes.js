@@ -6,6 +6,7 @@ const OrderController=require("./controllers/orderController")
 const CategoryController=require("./controllers/categoryController")
 const cartController=require("./controllers/shoppingCartController")
 const notiController=require("./controllers/notificationController")
+const paymentController=require("./controllers/paymentController")
 const AuthValidator=require("./validators/authValidator")
 const FruitValidator=require("./validators/fruitValidator")
 const OrderValidator=require("./validators/orderValidator")
@@ -57,7 +58,7 @@ const router = express.Router();
     router.post("/api/categories/create",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.createCategory);
 
     router.delete("/api/categories/:categoryId/delete",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.deleteCategory);
-
+    router.delete("/api/categories/:categoryId/update",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.updateCategory);
 
     //order API
     router.get("/api/orders/getUserOrderList",AuthMiddleware.isAuthenticated,OrderController.getUserOrderList);
@@ -90,6 +91,12 @@ const router = express.Router();
     router.delete("/api/notifications/deleteAll",AuthMiddleware.isAuthenticated,notiController.deleteAllNotifications);
     router.get("/api/notifications/:notiId/setIsRead",AuthMiddleware.isAuthenticated,AuthMiddleware.isNotiOwner,notiController.updateIsRead);
     router.delete("/api/notifications/:notiId/delete",AuthMiddleware.isAuthenticated,AuthMiddleware.isNotiOwner,notiController.deleteNotification);
+
+
+    //payment API
+    router.post("/api/payment/add",AuthMiddleware.isAuthenticated,paymentController.pay);
+    router.post("/api/payment/changePaymentAddress",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,paymentController.changePaymentAddress);
+    router.get("/api/payment/getPaymentAddress",AuthMiddleware.isAuthenticated,paymentController.getAddress);
  
     
 

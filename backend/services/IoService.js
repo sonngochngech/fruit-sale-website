@@ -12,7 +12,7 @@ async function removeSocket({socket}){
 }
 
 async function EmitEvent(userIds,event,message){
-    console.log("hello you  1");
+    console.log("hello you",userIds);
     for(userId of userIds){
             const socketList= await  global.InMemorySocketStore.findSocketIdsByUserId(userId);
             console.log(socketList);

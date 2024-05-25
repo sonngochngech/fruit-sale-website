@@ -44,6 +44,18 @@ const getUserOrder = async () => {
   }
 };
 
+const getSpecificUserOrder=async(orderId)=>{
+  try {
+    const response = await axios.get(`${base_url}orders/${orderId}`, config);
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+
+}
+
 const addToCart = async (cartData) => {
   const response = await axios.post(`${base_url}carts/add`, cartData, config);
   if (response.data) {
@@ -157,6 +169,27 @@ const deleteAllNoti=async()=>{
   }
 }
 
+const pay=async(paymentData)=>{
+  try{
+    const response = await axios.post(`${base_url}payment/add`,paymentData, config);
+    if (response.data) {
+      return response.data;
+    }
+  }catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+const getAddress=async()=>{
+  try{
+    const response = await axios.get(`${base_url}payment/getPaymentAddress`, config);
+    if (response.data) {
+      return response.data;
+    }
+  }catch (error) {
+    throw new Error(error.message);
+  }
+}
 
 
 const logout = async () => {
@@ -189,7 +222,10 @@ export const authService = {
   deleteAllNoti,
   deleteANoti,
   setIsReadNoti,
- getUnReadNotiCount
+ getUnReadNotiCount,
+ getSpecificUserOrder,
+ pay,
+ getAddress
 
 
 
