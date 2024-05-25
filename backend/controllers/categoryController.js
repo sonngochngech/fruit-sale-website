@@ -41,6 +41,21 @@ const deleteCategory=trycatchWrapper(async(req,res)=>{
     })
 })
 
+const updateCategory=trycatchWrapper(async(req,res)=>{
+    const category=await Category.findByPk(req.params.categoryId);
+    if(!category){
+        return res.status(400).send({
+            error:"Category is not found"
+        })
+    }
+    category.name=req.body.name;
+    await category.save();
+    return res.status(200).send({
+        message:"Category is updated successfully"
+    })
 
-module.exports={createCategory,getCategories,deleteCategory}
+})
+
+
+module.exports={createCategory,getCategories,deleteCategory,updateCategory}
 
