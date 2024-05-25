@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import { NavLink } from "react-router-dom";
-import { base_domain } from "../../utils/axiosConfig";
+import { base_domain, base_domain_client } from "../../utils/axiosConfig";
 import "./ProductCard.css";
 import ProductDetailForm from "./ProductDetailForm";
 
@@ -30,9 +30,7 @@ const ProductCard = ({ products, onDelete }) => {
                 src={base_domain + image.link}
                 alt={`Product ${index}`}
                 className="product-image"
-                onError={(e) => {
-                  e.target.src = '../../images/image_replace.jpg';
-                }}
+                onError={(e) => { e.target.src = `${base_domain_client}banner.jpg`; }} 
               />
             ))}
           </div>

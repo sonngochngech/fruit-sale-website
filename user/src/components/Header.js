@@ -12,7 +12,8 @@ const { logoutUser, getNotifications, getUnreadNotificationCount } = require('..
 
 
 const Header = () => {
-  const URL= "https://fruit-sale-react-application.onrender.com/";
+
+  const URL= "https://fruit-sale-v1-main.onrender.com";
   const socket=io(URL,{autoConnect:true});
   socket.on('new notification',()=>{
     dispatch(getUnreadNotificationCount())
