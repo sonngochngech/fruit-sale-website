@@ -58,6 +58,7 @@ const Header = () => {
 
   useEffect(()=>{
     console.log("hello",authState.user);
+    console.log("hello",authState.user);
     if(authState.user.id!==null){
       socket.emit('authenticated',authState.user);
     }
@@ -67,6 +68,7 @@ const Header = () => {
     dispatch(logoutUser()).finally(
       ()=>{
         navigate('/login');
+        window.location.reload();
         window.location.reload();
       }
     );

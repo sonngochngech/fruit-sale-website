@@ -65,16 +65,16 @@ const Noti = () => {
         >
           <i className="bx bxs-bell"></i>
         </div>
-          <span
-            style={{
-              top: "-10px",
-              left: "10px",
-              display: "inline-block",
-            }}
-            className="badge bg-danger text-white rounded-circle p-2 position-absolute"
-          >
-            {notificationState?.notificationCount}
-          </span>
+        <span
+          style={{
+            top: "-10px",
+            left: "10px",
+            display: "inline-block",
+          }}
+          className="badge bg-danger text-white rounded-circle p-2 position-absolute"
+        >
+          {notificationState?.notificationCount}
+        </span>
         {isDropdownOpen && (
           <ul
             className="dropdown-menu"
@@ -83,8 +83,11 @@ const Noti = () => {
           >
             {notificationState?.unreadNotification?.length > 0 ? (
               notificationState.unreadNotification.map((item, index) => (
-                <li key={index} className="list-group-item bg-dark">
-                  <a href="#" className="text-white">
+                <li
+                  key={index}
+                  className="list-group-item list-group-item-action"
+                >
+                  <a href="notifications" className="text-dark text-truncate">
                     {item?.title}
                   </a>
                 </li>
@@ -190,6 +193,12 @@ const Sidebar = () => {
           <NavLink className="nav-link" to="/admin/categories">
             <i className="bx bx-list-check"></i>
             Categories
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/admin/paymentAccount">
+          <i class='bx bx-credit-card-alt'></i>
+            Add Payment Account
           </NavLink>
         </li>
         <li className="nav-item">

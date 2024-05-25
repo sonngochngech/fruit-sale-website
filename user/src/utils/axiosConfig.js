@@ -19,3 +19,4 @@ export const base_domain_client="https://fruit-sale-react-application-main.onren
 // export const base_domain="http://localhost:8081/"
 // export const base_URL="http://localhost:8081"
 // export const base_domain_client="http://localhost:3000/"
+

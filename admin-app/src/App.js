@@ -13,6 +13,7 @@ import CategoryManagement from './pages/category/CategoryManagement';
 import OrderList from './pages/order/OrderManagement';
 import Notification from './pages/notifications/Notification';
 import ProductDetailForm from './pages/product/ProductDetailForm';
+import PaymentAccount from './pages/payment/PaymentAccount';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="categories" element={<PrivateRoutes><CategoryManagement /></PrivateRoutes>} />
           <Route path="notifications" element={<PrivateRoutes><Notification /></PrivateRoutes>} />
           <Route path="orders" element={<PrivateRoutes><OrderList /></PrivateRoutes>} />
+          <Route path="paymentAccount" element={<PrivateRoutes><PaymentAccount /></PrivateRoutes>} />
         </Route>
       </Routes>
       {/* <Route path="/admin/*" element={<PrivateRoutes><AdminLayout /></PrivateRoutes>}>
