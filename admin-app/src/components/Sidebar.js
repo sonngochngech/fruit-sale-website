@@ -196,6 +196,12 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li className="nav-item">
+          <NavLink className="nav-link" to="/admin/paymentAccount">
+          <i class='bx bx-credit-card-alt'></i>
+            Add Payment Account
+          </NavLink>
+        </li>
+        <li className="nav-item">
           <NavLink className="nav-link" to="/admin/notifications">
             <i className="bx bxs-bell"></i>
             Notifications
