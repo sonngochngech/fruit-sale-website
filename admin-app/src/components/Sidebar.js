@@ -25,11 +25,10 @@ const Noti = () => {
   const URL = base_domain;
   const socket = io(URL, { autoConnect: true });
   socket.on("new notification", () => {
-    dispatch(getUnreadNotificationCount());
-
-    setTimeout(() => {
+    dispatch(getUnreadNotificationCount())
+    .then(()=>{
       dispatch(getNotifications());
-    }, 200);
+    });
   });
 
   useEffect(() => {
@@ -45,8 +44,8 @@ const Noti = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userState.users.id !== null) {
-      socket.emit("authenticated", userState.users);
+    if (userState.user.id !== null) {
+      socket.emit("authenticated", userState.user);
     }
   }, []);
 

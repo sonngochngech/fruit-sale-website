@@ -109,6 +109,7 @@ export const deleteAllNoti = createAsyncThunk(
 // Khởi tạo trạng thái ban đầu của slice
 const initialState = {
   users: [],
+  user:getCustomerFromLocalStorage,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -148,7 +149,7 @@ export const userSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isError === true) {
-          toast.error("User Create failed");
+          toast.error("failed to login");
           toast.error(action.error);
         }
       })
