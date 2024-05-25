@@ -30,7 +30,14 @@ const NotificationCard = (props) => {
    
   }
   return (
-    <div className="blog-card">
+    <div className="blog-card" style={{
+      width: '400px',
+      height: '300px',
+      overflow: 'hidden',
+      borderRadius: '10px',
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+      padding: '20px'
+    }}>
       <div className="card-image">
       </div>
       <div className="blog-content product-card position-relative">
@@ -41,15 +48,33 @@ const NotificationCard = (props) => {
                   </button>
                 </div>
         </div>
-        <p className="date">{date}</p>
-        <h5 className="title">{title}</h5>
+        <p className="date" style={{
+          fontSize: '14px',
+          color: '#666'
+        }}>{date}</p>
+        <h5 className="title" style={{
+          fontSize: '18px',
+          fontWeight: 'bold',
+          marginBottom: '10px'
+        }}>{title}</h5>
         <p
           className="desc"
+          style={{
+            fontSize: '16px',
+            color: '#333',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}
           dangerouslySetInnerHTML={{
             __html: showFullDescription? description: description?.substr(0, 5) + "...",
           }}
         ></p>
-        <button type="button" className={showFullDescription?"btn btn-info":"btn btn-warning"} onClick={handleOnClick}>
+        <button type="button" className={showFullDescription?"btn btn-info":"btn btn-warning"} onClick={handleOnClick} style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          borderRadius: '5px'
+        }}>
           {showFullDescription?"Close":"Read more"}
           </button>
        
