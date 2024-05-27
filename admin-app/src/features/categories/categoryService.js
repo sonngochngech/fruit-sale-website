@@ -27,12 +27,12 @@ const removeCategory = async (categoryId) => {
     try {
       const response = await axios.delete(`${base_url}categories/${categoryId}/delete`, config);
       if (response.data.success) {
-        return response.data.message; // Trả về thông báo thành công từ API
+        return response.data.message; 
       } else {
-        throw new Error(response.data.message); // Xử lý lỗi từ API
+        throw new Error(response.data.message); 
       }
     } catch (error) {
-      throw new Error(error.message); // Xử lý các lỗi khác (ví dụ: lỗi mạng, lỗi không xác định)
+      throw new Error(error.message); 
     }
 };
 
@@ -41,12 +41,11 @@ const updateCategory = async (categoryData) => {
   try {
     const response = await axios.delete(`${base_url}categories/${categoryData.id}/update`, {"name":categoryData.name}, config);
     if (response.data.success) {
-      return response.data; // Trả về dữ liệu danh mục đã cập nhật từ API
-    } else {
-      throw new Error(response.data.message); // Xử lý lỗi từ API
+      return response.data; 
+      throw new Error(response.data.message); 
     }
   } catch (error) {
-    throw new Error(error.message); // Xử lý các lỗi khác (ví dụ: lỗi mạng, lỗi không xác định)
+    throw new Error(error.message); 
   }
 };
 
