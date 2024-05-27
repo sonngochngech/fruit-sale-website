@@ -36,10 +36,25 @@ const removeCategory = async (categoryId) => {
     }
 };
 
+// Cập nhật danh mục
+const updateCategory = async (categoryData) => {
+  try {
+    const response = await axios.delete(`${base_url}categories/${categoryData.id}/update`, {"name":categoryData.name}, config);
+    if (response.data.success) {
+      return response.data; // Trả về dữ liệu danh mục đã cập nhật từ API
+    } else {
+      throw new Error(response.data.message); // Xử lý lỗi từ API
+    }
+  } catch (error) {
+    throw new Error(error.message); // Xử lý các lỗi khác (ví dụ: lỗi mạng, lỗi không xác định)
+  }
+};
+
 const categoryService = {
     showList,
     addCategory,
-    removeCategory
+    removeCategory,
+    updateCategory
 };
 
 export default categoryService;

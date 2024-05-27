@@ -8,6 +8,7 @@ import {
   fetchCategories,
   addNewCategory,
   deleteCategory,
+  updateCategory
 } from "../../features/categories/categorySlice";
 import { Skeleton, Box, Typography, Grid, Container } from '@mui/material';
 
@@ -74,6 +75,22 @@ const CategoryManagement = () => {
       });
   };
 
+  const handleUpdate = (categoryId) => {
+    const categoryToUpdate = categories.categories.find(category => category.id === categoryId);
+    const updatedName = prompt("Enter new name for the category:", categoryToUpdate.name);
+    if (updatedName) {
+      const updatedCategory = { ...categoryToUpdate, name: updatedName };
+      dispatch(updateCategory(updatedCategory))
+        .then(() => {
+          dispatch(fetchCategories());
+          toast.success('Updated Successfully');
+        })
+        .catch((error) => {
+          console.error("Error updating category:", error);
+        });
+    }
+  };
+
   if (loading) {
     return (
       <div className="categories-management">
@@ -137,6 +154,7 @@ const CategoryManagement = () => {
       <CategoryCard 
         categories={filteredCategories.length > 0 ? filteredCategories : categories?.categories || [] } 
         onDelete={handleDelete} 
+        onUpdate={handleUpdate}
       />
     </div>
   );
