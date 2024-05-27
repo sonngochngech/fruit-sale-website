@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../features/users/userSlice";
 import { useSelector } from "react-redux";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast  } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const loginSchema = yup.object({
@@ -34,13 +34,38 @@ const Login = () => {
 
     onSubmit: (values) => {
       dispatch(loginUser(values))
-        .unwrap() // Unwrap the promise returned by loginUser
-        .then(() => {
-          navigate("/admin");
-          window.location.reload();
+        .unwrap()
+        .then((user) => {
+          if (user.user.role === "Admin") {
+            localStorage.setItem('customer', JSON.stringify(user));
+            navigate("/admin");
+            window.location.reload();
+          } else {
+            localStorage.setItem('customer', null);
+            toast.error("Unauthorized: You do not have admin privileges.", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
         })
         .catch((error) => {
           console.log("Login error:", error);
+          toast.error("Login failed: " + error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         });
     },
   });
