@@ -1,19 +1,31 @@
+// paymentAccountSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { base_url, config } from '../../utils/axiosConfig';
-import axios from 'axios';
+import paymentService from './paymentService';
 
-// Async thunk for posting payment account
+// Thunk để gọi API thêm tài khoản thanh toán
 export const addPaymentAccount = createAsyncThunk(
   'paymentAccount/addPaymentAccount',
-  async (accountNumber) => {
+  async (accountNumber, { rejectWithValue }) => {
     try {
-        const response = await axios.post(`${base_url}payment`, accountNumber, config);
-        return response.data;    
+      const response = await paymentService.addPaymentAccount(accountNumber);
+      console.log(response);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error);
     }
-    catch (error) {
-        throw new Error(error.message); 
-    }
+  }
+);
 
+// Thunk để gọi API lấy địa chỉ thanh toán
+export const getPaymentAddress = createAsyncThunk(
+  'paymentAccount/getPaymentAddress',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await paymentService.getPaymentAddress();
+      return response;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
 
@@ -21,6 +33,7 @@ const paymentAccountSlice = createSlice({
   name: 'paymentAccount',
   initialState: {
     accountNumber: '',
+    paymentAddress: '',
     status: 'idle',
     error: null,
   },
@@ -36,16 +49,26 @@ const paymentAccountSlice = createSlice({
       })
       .addCase(addPaymentAccount.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        // Clear the input field after successful submission
-        state.accountNumber = '';
+        state.accountNumber = action.payload.accountNumber;
+        state.error = null;
       })
       .addCase(addPaymentAccount.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message;
+        state.error = action.payload;
+      })
+      .addCase(getPaymentAddress.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(getPaymentAddress.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.paymentAddress = action.payload.address;
+        state.error = null;
+      })
+      .addCase(getPaymentAddress.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
       });
   },
 });
-
-export const { setAccountNumber } = paymentAccountSlice.actions;
 
 export default paymentAccountSlice.reducer;

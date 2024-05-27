@@ -1,21 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Button, Box, Typography } from '@mui/material';
-import { setAccountNumber, addPaymentAccount } from '../../features/payments/paymentAccountSlice';
+import { addPaymentAccount, getPaymentAddress } from '../../features/payments/paymentAccountSlice';
 
 const PaymentAccount = () => {
   const dispatch = useDispatch();
+  const [inputAccountNumber, setInputAccountNumber] = useState('');
   const accountNumber = useSelector((state) => state.paymentAccount.accountNumber);
+  const paymentAddress = useSelector((state) => state.paymentAccount.paymentAddress);
   const status = useSelector((state) => state.paymentAccount.status);
   const error = useSelector((state) => state.paymentAccount.error);
 
+  useEffect(() => {
+    dispatch(getPaymentAddress());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (status === 'succeeded') {
+      setInputAccountNumber('');
+    }
+  }, [status]);
+
   const handleInputChange = (e) => {
-    dispatch(setAccountNumber(e.target.value));
+    setInputAccountNumber(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addPaymentAccount(accountNumber));
+    dispatch(addPaymentAccount(inputAccountNumber));
   };
 
   return (
@@ -25,7 +37,7 @@ const PaymentAccount = () => {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '90vh',
-        paddingLeft:'400px',
+        paddingLeft: '400px',
       }}
     >
       <Box
@@ -35,30 +47,29 @@ const PaymentAccount = () => {
           mx: 'auto',
           p: 3,
           backgroundColor: '#ffffff',
-          border:'solid 0.5px',
+          border: 'solid 0.5px',
           borderRadius: 15,
-          // boxShadow: 1,
         }}
       >
-        <Typography variant="h4" component="h1" gutterBottom >
+        <Typography variant="h4" component="h1" gutterBottom>
           Add Payment Account
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             label="Account Number"
-            value={accountNumber}
+            value={inputAccountNumber}
             onChange={handleInputChange}
             fullWidth
             margin="normal"
           />
-          <Button type="submit" variant="contained" color="primary" fullWidth sx={{marginTop: 3}}>
+          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ marginTop: 3 }}>
             Add Account
           </Button>
         </form>
         {status === 'loading' && <p>Loading...</p>}
         {status === 'succeeded' && <p>Account added successfully!</p>}
-        {status === 'failed' && <p style={{color:'red'}}>Error: {error}</p>}
-        
+        {status === 'failed' && <p style={{ color: 'red' }}>Error: {error}</p>}
+
         {/* Dòng hiển thị thông tin Current Account */}
         <Box
           sx={{
@@ -67,14 +78,13 @@ const PaymentAccount = () => {
             borderRadius: 3,
             backgroundColor: '#f9f9f9',
             marginTop: 5,
-            // boxShadow: 1,
           }}
         >
           <Typography variant="h5" component="h2">
             Current Account
           </Typography>
           <Typography variant="body1">
-            {accountNumber || 'No account number entered yet.'}
+            {paymentAddress ? `Payment Address: ${paymentAddress}` : 'Loading payment address...'}
           </Typography>
         </Box>
       </Box>
