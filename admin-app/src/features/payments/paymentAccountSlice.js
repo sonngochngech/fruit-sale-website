@@ -61,7 +61,7 @@ const paymentAccountSlice = createSlice({
       })
       .addCase(getPaymentAddress.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.paymentAddress = action.payload.address;
+        state.paymentAddress = action.payload.adminAddress;
         state.error = null;
       })
       .addCase(getPaymentAddress.rejected, (state, action) => {

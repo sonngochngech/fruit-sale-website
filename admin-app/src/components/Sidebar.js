@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
-import { base_domain } from "../utils/axiosConfig";
+import { base_domain, base_URL } from "../utils/axiosConfig";
 import "boxicons/css/boxicons.min.css";
 import "./Sidebar.css";
 const {
@@ -22,7 +22,7 @@ const {
 } = require("../features/users/userSlice");
 
 const Noti = () => {
-  const URL = base_domain;
+  const URL = base_URL;
   const socket = io(URL, { autoConnect: true });
   socket.on("new notification", () => {
     dispatch(getUnreadNotificationCount())
@@ -44,9 +44,10 @@ const Noti = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(userState.user)
-    if (userState.users.id !== null) {
-      socket.emit("authenticated", userState.user);
+    console.log("I love you");
+    console.log(userState.user.user)
+    if (userState.user.user.id !== null) {
+      socket.emit("authenticated", userState.user.user);
     }
   }, []);
 

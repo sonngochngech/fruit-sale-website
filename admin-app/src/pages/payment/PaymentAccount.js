@@ -7,12 +7,15 @@ const PaymentAccount = () => {
   const dispatch = useDispatch();
   const [inputAccountNumber, setInputAccountNumber] = useState('');
   const accountNumber = useSelector((state) => state.paymentAccount.accountNumber);
-  const paymentAddress = useSelector((state) => state.paymentAccount.paymentAddress);
+  const paymentAddress = useSelector((state) => state?.paymentAccount?.paymentAddress);
   const status = useSelector((state) => state.paymentAccount.status);
   const error = useSelector((state) => state.paymentAccount.error);
 
   useEffect(() => {
-    dispatch(getPaymentAddress());
+    dispatch(getPaymentAddress()).then(()=>{
+      console.log("hello")
+      console.log (paymentAddress);
+    });
   }, [dispatch]);
 
   useEffect(() => {
@@ -27,7 +30,10 @@ const PaymentAccount = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addPaymentAccount(inputAccountNumber));
+    dispatch(addPaymentAccount(inputAccountNumber))
+    .then(()=>{
+      dispatch(getPaymentAddress());
+    });
   };
 
   return (
@@ -42,7 +48,7 @@ const PaymentAccount = () => {
     >
       <Box
         sx={{
-          maxWidth: 400,
+          maxWidth: 500,
           width: '100%',
           mx: 'auto',
           p: 3,

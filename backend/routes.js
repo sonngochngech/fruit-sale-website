@@ -58,7 +58,7 @@ const router = express.Router();
     router.post("/api/categories/create",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.createCategory);
 
     router.delete("/api/categories/:categoryId/delete",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.deleteCategory);
-    router.delete("/api/categories/:categoryId/update",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.updateCategory);
+    router.put("/api/categories/:categoryId/update",AuthMiddleware.isAuthenticated,AuthMiddleware.isAdmin,CategoryController.updateCategory);
 
     //order API
     router.get("/api/orders/getUserOrderList",AuthMiddleware.isAuthenticated,OrderController.getUserOrderList);

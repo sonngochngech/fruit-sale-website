@@ -24,13 +24,13 @@ const CategoryCard = ({ categories, onDelete, onUpdate }) => {
           >
             Delete
           </button>
-          <button
+          {/* <button
             className="btn btn-primary"
             onClick={() => onUpdate(category.id)}
             style={{ marginLeft: "10px" }}
           >
             Update
-          </button>
+          </button> */}
         </td>
       </tr>
     ));
