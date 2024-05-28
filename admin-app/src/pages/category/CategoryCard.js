@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
-
 import "./CategoryCard.css";
 
-const CategoryCard = ({ categories, onDelete }) => {
+const CategoryCard = ({ categories, onDelete, onUpdate }) => {
   const [pageNumber, setPageNumber] = useState(0);
   const categoriesPerPage = 10;
   const pagesVisited = pageNumber * categoriesPerPage;
 
-  // Kiểm tra nếu categories không phải là mảng hoặc categories.rỗng
   if (!Array.isArray(categories) || categories.length === 0) {
     return <div></div>;
   }
 
-  // Lấy danh sách các categories trên trang hiện tại
   const displayCategories = categories
     .slice(pagesVisited, pagesVisited + categoriesPerPage)
     .map((category) => (
@@ -27,20 +24,27 @@ const CategoryCard = ({ categories, onDelete }) => {
           >
             Delete
           </button>
+          <button
+            className="btn btn-primary"
+            onClick={() => onUpdate(category.id)}
+            style={{ marginLeft: "10px" }}
+          >
+            Update
+          </button>
         </td>
       </tr>
     ));
 
-  // Tính số trang
+  // Calculate page count
   const pageCount = Math.ceil(categories.length / categoriesPerPage);
 
-  // Xử lý sự kiện chuyển trang
+  // Handle page change
   const handlePageClick = (event) => {
     setPageNumber(event.selected);
   };
 
   return (
-    <div style={{width:1000}}>
+    <div style={{ width: 1000 }}>
       <table className="table table-striped">
         <thead>
           <tr>

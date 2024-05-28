@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CategoryCard from "./CategoryCard";
 import { useDispatch, useSelector } from "react-redux";
 import CreateCategoryForm from "./CreateCategoryForm";
+import CategoryUpdateForm from "./CategoryUpdateForm"; // Import the update form
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -15,9 +16,11 @@ const CategoryManagement = () => {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state?.categories?.categories);
   const [showCreateCategoryForm, setShowCreateCategoryForm] = useState(false);
+  const [showUpdateCategoryForm, setShowUpdateCategoryForm] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState(categories);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     dispatch(fetchCategories())
@@ -39,7 +42,6 @@ const CategoryManagement = () => {
     );
     setFilteredCategories(filtered);
     if (filtered.length === 0) {
-      // Show toast notification
       toast.warn("No categories found with this search term.");
     }
   };
@@ -74,6 +76,16 @@ const CategoryManagement = () => {
       });
   };
 
+  const handleUpdateCategoryClick = (category) => {
+    setSelectedCategory(category);
+    setShowUpdateCategoryForm(true);
+  };
+
+  const handleCloseUpdateCategoryForm = () => {
+    setShowUpdateCategoryForm(false);
+    setSelectedCategory(null);
+  };
+
   if (loading) {
     return (
       <div className="categories-management">
@@ -89,7 +101,7 @@ const CategoryManagement = () => {
               <Skeleton variant="rectangular" width={190} height={53} />
             </Grid>
             <Grid item xs={12}>
-            <Skeleton variant="rectangular" width={1050} height={64} />
+              <Skeleton variant="rectangular" width={1050} height={64} />
             </Grid>
             <Grid item xs={12}>
               <Skeleton variant="rectangular" width={1050} height={400} />
@@ -125,7 +137,6 @@ const CategoryManagement = () => {
           </button>
         </div>
       </div>
-
       {showCreateCategoryForm && (
         <div className="category-create-form">
           <CreateCategoryForm
@@ -134,9 +145,18 @@ const CategoryManagement = () => {
           />
         </div>
       )}
+      {showUpdateCategoryForm && selectedCategory && (
+        <div className="category-update-form">
+          <CategoryUpdateForm
+            category={selectedCategory}
+            onClose={handleCloseUpdateCategoryForm}
+          />
+        </div>
+      )}
       <CategoryCard 
         categories={filteredCategories.length > 0 ? filteredCategories : categories?.categories || [] } 
-        onDelete={handleDelete} 
+        onDelete={handleDelete}
+        onUpdate={handleUpdateCategoryClick} // Pass the update handler to CategoryCard
       />
     </div>
   );

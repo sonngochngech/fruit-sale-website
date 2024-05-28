@@ -20,7 +20,6 @@ export const addNewCategory = createAsyncThunk(
   'categories/addNewCategory',
   async (newCategoryData) => {
     try {
-      console.log("hello")
       const newCategory = await categoryService.addCategory(newCategoryData);
       const categories = await categoryService.showList();
       return categories;
@@ -37,6 +36,20 @@ export const deleteCategory = createAsyncThunk(
     try {
       const message = await categoryService.removeCategory(categoryId);
       return { categoryId, message };
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+);
+
+// Update category
+export const updateCategory = createAsyncThunk(
+  'categories/updateCategory',
+  async (categoryData) => {
+    try {
+      const updatedCategory = await categoryService.updateCategory(categoryData);
+      const categories = await categoryService.showList();
+      return categories;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -100,6 +113,20 @@ export const categorySlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.error.message;
+      })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.categories = action.payload;
+      })
+      .addCase(updateCategory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(updateCategory.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = '';
       });
   },
 });

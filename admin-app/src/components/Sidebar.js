@@ -44,7 +44,8 @@ const Noti = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userState.user.id !== null) {
+    console.log(userState.user)
+    if (userState.users.id !== null) {
       socket.emit("authenticated", userState.user);
     }
   }, []);

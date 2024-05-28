@@ -16,7 +16,8 @@ export const loginUser = createAsyncThunk(
   "auth/login",
   async (userData, thunkAPI) => {
     try {
-      return await authService.login(userData);
+      const response = await authService.login(userData);
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -140,7 +141,6 @@ export const userSlice = createSlice({
         state.user = action.payload.user;
         if (state.isSuccess === true) {
           localStorage.setItem("jwt", action.payload.jwt);
-          toast.info("User logged in Successfully");
         }
       })
       .addCase(loginUser.rejected, (state, action) => {
